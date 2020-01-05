@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "968052628426",
+    "firebase_url": "https://mad-firebase-cb53d.firebaseio.com",
+    "project_id": "mad-firebase-cb53d",
+    "storage_bucket": "mad-firebase-cb53d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968052628426:android:2fa7db30abc8061f4d4d33",
+        "android_client_info": {
+          "package_name": "com.hhsfbla.mad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968052628426-bfinojh8alo8p1f0p6bsv9j7bi6334uc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hhsfbla.mad",
+            "certificate_hash": "bf06cfe6ac30a7b80d7347df880bcb84c155d633"
+          }
+        },
+        {
+          "client_id": "968052628426-1jl22qaspvgnminmiba4qm25f3kbmnvn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUFGXsrOY90ozmFcJsSvO7-FXfNoUWi-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968052628426-1jl22qaspvgnminmiba4qm25f3kbmnvn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
