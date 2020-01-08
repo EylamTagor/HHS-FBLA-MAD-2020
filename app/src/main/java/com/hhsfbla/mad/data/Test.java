@@ -1,4 +1,4 @@
-package com.hhsfbla.mad;
+package com.hhsfbla.mad.data;
 
 public class Test {
     private int test;
