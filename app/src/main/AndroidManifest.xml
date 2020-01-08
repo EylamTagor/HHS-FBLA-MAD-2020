@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.EventPageActivity"></activity>
+        <activity android:name=".activities.EventPageActivity"/>
         <activity android:name=".activities.EditEventActivity" />
         <activity android:name=".activities.AddEventActivity" />
         <activity android:name=".activities.ProfileActivity" />
@@ -20,9 +20,6 @@
         <activity android:name=".activities.SetupActivity" />
         <activity android:name=".activities.SignupActivity" />
         <activity android:name=".activities.LoginActivity" />
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login" />
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

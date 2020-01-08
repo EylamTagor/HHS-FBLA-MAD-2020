@@ -13,6 +13,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.hhsfbla.mad.R;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -23,7 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 
 public class HomeActivity extends AppCompatActivity {
-
+    private FirebaseUser user;
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
@@ -52,6 +55,12 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        // user setup
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // TODO set the ImageView to the user's pfp, TextViews below it to name/email
+        }
     }
 
     @Override
