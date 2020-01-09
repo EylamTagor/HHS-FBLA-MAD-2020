@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,7 +21,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView welcomeTxtView;
     private Button loginGoogleBtn;
     private Button loginFacebookBtn;
-    private Button loginBtn;
     private FirebaseUser user;
 
     @Override
@@ -34,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null)
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 
+
         welcomeTxtView = findViewById(R.id.welcomeTxtView);
         loginGoogleBtn = findViewById(R.id.loginGoogleBtn);
         loginGoogleBtn.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
-        loginBtn = findViewById(R.id.loginBtn);
     }
 
     public void signIn() {
@@ -72,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back signInButton. Otherwise check
