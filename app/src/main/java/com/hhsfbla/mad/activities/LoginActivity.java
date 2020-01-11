@@ -43,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mAuth = FirebaseAuth.getInstance();
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null)
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
@@ -58,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
-
 
         mCallbackManager = CallbackManager.Factory.create();
         loginFacebookBtn.setReadPermissions("email", "public_profile");
