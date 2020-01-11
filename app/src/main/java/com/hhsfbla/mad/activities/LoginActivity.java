@@ -34,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView welcomeTxtView;
     private Button loginGoogleBtn;
     private LoginButton loginFacebookBtn;
-    private Button loginBtn;
     private FirebaseUser user;
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;
@@ -60,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
 
         loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
 
-        loginBtn = findViewById(R.id.loginBtn);
 
         mCallbackManager = CallbackManager.Factory.create();
         loginFacebookBtn.setReadPermissions("email", "public_profile");
