@@ -1,12 +1,17 @@
 package com.hhsfbla.mad.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -25,6 +30,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import static java.security.AccessController.getContext;
+
 public class HomeActivity extends AppCompatActivity {
     private FirebaseUser user;
     private AppBarConfiguration mAppBarConfiguration;
@@ -39,8 +46,7 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                signOut();
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -60,6 +66,8 @@ public class HomeActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // TODO set the ImageView to the user's pfp, TextViews below it to name/email
+        } else {
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }
     }
 
@@ -75,5 +83,16 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void signOut() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        user = null;
+                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                    }
+                });
     }
 }
