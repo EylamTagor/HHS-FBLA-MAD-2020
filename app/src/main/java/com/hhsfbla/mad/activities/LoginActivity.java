@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 
         welcomeTxtView = findViewById(R.id.welcomeTxtView);
+
         loginGoogleBtn = findViewById(R.id.loginGoogleBtn);
         loginGoogleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
+
         loginBtn = findViewById(R.id.loginBtn);
 
         mCallbackManager = CallbackManager.Factory.create();
@@ -108,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                user = FirebaseAuth.getInstance().getCurrentUser();
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             } else {
                 // Sign in failed. If response is null the user canceled the
