@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hhsfbla.mad.R;
 
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
         Log.d(TAG, "oncreate");
         mAuth = FirebaseAuth.getInstance();
