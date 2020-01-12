@@ -72,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }
-//        Once you have the id for each fragment, put HomeFragmen't ID here instead of R.id.teams (also put in title)
+//        Once you have the id for each fragment, put HomeFragment ID here instead of R.id.teams (also put in title)
 //        navigationView.setCheckedItem(R.id.teams);
 //        setTitle("My Teams");
     }
