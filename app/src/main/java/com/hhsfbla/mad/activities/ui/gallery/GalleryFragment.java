@@ -1,6 +1,7 @@
 package com.hhsfbla.mad.activities.ui.gallery;
 
 import android.os.Bundle;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

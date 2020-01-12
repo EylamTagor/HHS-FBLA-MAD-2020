@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,10 @@ import com.hhsfbla.mad.R;
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
+    private TextView chapter_nameTxtView;
+    private ImageView imageView;
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -31,5 +36,8 @@ public class HomeFragment extends Fragment {
             }
         });
         return root;
+
+
+
     }
 }
