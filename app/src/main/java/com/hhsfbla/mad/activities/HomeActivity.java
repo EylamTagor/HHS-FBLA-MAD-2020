@@ -9,9 +9,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -69,6 +72,9 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }
+//        Once you have the id for each fragment, put HomeFragmen't ID here instead of R.id.teams (also put in title)
+//        navigationView.setCheckedItem(R.id.teams);
+//        setTitle("My Teams");
     }
 
     @Override
@@ -83,6 +89,25 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == 0) {
+            setTitle("");
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.placeholder_fragment, null);
+            ft.commit();
+        } else if (id == 0) {
+
+        }
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void signOut() {
