@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +27,6 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hhsfbla.mad.R;
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -114,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
                 user = FirebaseAuth.getInstance().getCurrentUser();
-//                updateUI();
+                updateUI();
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back signInButton. Otherwise check
@@ -135,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
 //                            Log.d(TAG, "signInWithCredential:success");
-//                            updateUI();
+                            updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
 //                            Log.d(TAG, "signInWithCredential:failure", task.getException());
@@ -147,13 +145,13 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-//    private void updateUI() {
-//        Log.d(TAG, "Update UI");
-//        user = mAuth.getCurrentUser();
-//        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-//        startActivity(intent);
-//        finish();
-//    }
+    private void updateUI() {
+        Log.d(TAG, "Update UI");
+        user = mAuth.getCurrentUser();
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     public void onStart() {
