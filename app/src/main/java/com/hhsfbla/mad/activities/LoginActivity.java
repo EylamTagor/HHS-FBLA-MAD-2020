@@ -3,9 +3,11 @@ package com.hhsfbla.mad.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,12 +39,13 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;
+    private String TAG = "FACELOG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        Log.d(TAG, "oncreate");
         mAuth = FirebaseAuth.getInstance();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -62,23 +65,23 @@ public class LoginActivity extends AppCompatActivity {
         loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
 
         mCallbackManager = CallbackManager.Factory.create();
-        loginFacebookBtn.setReadPermissions("email", "public_profile");
+        loginFacebookBtn.setReadPermissions(Arrays.asList("email", "public_profile"));
         loginFacebookBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-//                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-//                Log.d(TAG, "facebook:onCancel");
+                Log.d(TAG, "facebook:onCancel");
                 // ...
             }
 
             @Override
             public void onError(FacebookException error) {
-//                Log.d(TAG, "facebook:onError", error);
+                Log.d(TAG, "facebook:onError", error);
                 // ...
             }
         });
@@ -102,14 +105,14 @@ public class LoginActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
-
+    Log.d(TAG, "onactivityresult");
         if (requestCode == 0) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
                 user = FirebaseAuth.getInstance().getCurrentUser();
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                updateUI();
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back signInButton. Otherwise check
@@ -129,17 +132,32 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-//                            Log.d(TAG, "signInWithCredential:success");
-                            user = FirebaseAuth.getInstance().getCurrentUser();
-                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                            Log.d(TAG, "signInWithCredential:success");
+                            updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
-//                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-//                            Toast.makeText(FacebookLoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
 
                         // ...
                     }
                 });
+    }
+
+    private void updateUI() {
+        Log.d(TAG, "Update UI");
+        user = mAuth.getCurrentUser();
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        Log.d(TAG, "onstart");
+        user = mAuth.getCurrentUser();
     }
 }
