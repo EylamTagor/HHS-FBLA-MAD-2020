@@ -20,6 +20,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -34,7 +35,7 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     private TextView welcomeTxtView;
-    private Button loginGoogleBtn;
+    private SignInButton loginGoogleBtn;
     private LoginButton loginFacebookBtn;
     private FirebaseUser user;
     private FirebaseAuth mAuth;
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                 signIn();
             }
         });
+        setGooglePlusButtonProperties();
 
         loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
 
@@ -159,5 +161,18 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         Log.d(TAG, "onstart");
         user = mAuth.getCurrentUser();
+    }
+    
+    public void setGooglePlusButtonProperties() {
+        // Find the TextView that is inside of the SignInButton and set its text
+        for (int i = 0; i < loginGoogleBtn.getChildCount(); i++) {
+            View v = loginGoogleBtn.getChildAt(i);
+
+            if (v instanceof TextView) {
+                TextView tv = (TextView) v;
+                tv.setTextSize(24);
+                return;
+            }
+        }
     }
 }
