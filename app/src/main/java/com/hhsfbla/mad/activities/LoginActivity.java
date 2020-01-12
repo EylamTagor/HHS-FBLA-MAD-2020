@@ -106,14 +106,13 @@ public class LoginActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
-    Log.d(TAG, "onactivityresult");
         if (requestCode == 0) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
                 user = FirebaseAuth.getInstance().getCurrentUser();
-                updateUI();
+//                updateUI();
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back signInButton. Otherwise check
@@ -133,12 +132,12 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            updateUI();
+//                            Log.d(TAG, "signInWithCredential:success");
+//                            updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.d(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+//                            Log.d(TAG, "signInWithCredential:failure", task.getException());
+//                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
 
                         // ...
@@ -146,13 +145,13 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI() {
-        Log.d(TAG, "Update UI");
-        user = mAuth.getCurrentUser();
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-        startActivity(intent);
-        finish();
-    }
+//    private void updateUI() {
+//        Log.d(TAG, "Update UI");
+//        user = mAuth.getCurrentUser();
+//        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+//        startActivity(intent);
+//        finish();
+//    }
 
     @Override
     public void onStart() {
