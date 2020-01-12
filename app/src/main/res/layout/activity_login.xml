@@ -10,10 +10,10 @@
     <TextView
         android:id="@+id/welcomeTxtView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="10dp"
+        android:layout_height="108dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="16dp"
         android:text="Welcome!"
         android:textSize="80sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,30 +25,26 @@
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/loginFacebookBtn"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="50dp"
-        android:text="Log In with Facebook"
-        android:textSize="25sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginGoogleBtn" />
 
-    <Button
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/loginGoogleBtn"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginEnd="50dp"
-        android:text="Log In with Google"
-        android:textSize="25sp"
+        android:layout_width="264dp"
+        android:layout_height="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:contextClickable="false"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeTxtView" />
+        app:layout_constraintTop_toBottomOf="@+id/welcomeTxtView"
+        app:layout_constraintVertical_bias="0.3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
