@@ -111,13 +111,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void signOut() {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        user = null;
-                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-                    }
-                });
+//        AuthUI.getInstance()
+//                .signOut(this)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        user = null;
+//                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+//                    }
+//                });
+        startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+
     }
 }
