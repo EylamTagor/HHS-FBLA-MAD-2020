@@ -17,18 +17,11 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/menu_calendar" />
 
-        <item android:title="About FBLA" >
-            <menu>
-                <item
-                    android:id="@+id/nav_about"
-                    android:icon="@drawable/ic_menu_gallery"
-                    android:title="@string/menu_about" />
-                <item
-                    android:id="@+id/nav_contact"
-                    android:icon="@drawable/ic_menu_slideshow"
-                    android:title="@string/menu_contact" />
-            </menu>
-        </item>
+        <item
+            android:id="@+id/nav_my_events"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/menu_my_events" />
+
 
         <item android:title="About Chapter" >
             <menu>
@@ -44,16 +37,23 @@
         </item>
 
 
-
-
-    <menu>
-        <item
-            android:id="@+id/nav_my_events"
-            android:icon="@drawable/ic_menu_share"
-            android:title="@string/menu_my_events" />
-
-    </menu>
+        <item android:title="About FBLA" >
+            <menu>
+                <item
+                    android:id="@+id/nav_about"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/menu_about" />
+                <item
+                    android:id="@+id/nav_contact"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="@string/menu_contact" />
+            </menu>
+        </item>
 
     </group>
+
+
+
+
 
 </menu>
