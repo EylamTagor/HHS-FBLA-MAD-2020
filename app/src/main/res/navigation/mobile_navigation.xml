@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.hhsfbla.mad.activities.ui.home.HomeFragment"
+        android:name="com.hhsfbla.mad.activities.ui.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/nav_send"
-        android:name="com.hhsfbla.mad.activities.ui.send.SendFragment"
+        android:name="com.hhsfbla.mad.activities.ui.SendFragment"
         android:label="@string/menu_send"
         tools:layout="@layout/fragment_send" />
 </navigation>

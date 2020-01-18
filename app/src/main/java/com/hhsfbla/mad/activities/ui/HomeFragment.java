@@ -1,4 +1,4 @@
-package com.hhsfbla.mad.activities.ui.home;
+package com.hhsfbla.mad.activities.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,7 +17,6 @@ import com.hhsfbla.mad.R;
 
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
     private TextView chapter_nameTxtView;
     private ImageView imageView;
 
@@ -25,17 +24,9 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
+
+        return inflater.inflate(R.layout.fragment_home, container, false);
+
 
 
 
