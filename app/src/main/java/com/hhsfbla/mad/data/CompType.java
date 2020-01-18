@@ -18,6 +18,13 @@ public enum CompType {
         public String toString() {
             return "Production";
         }
+    }, PROJECT {
+        public String toString() {
+            return "Project";
+        }
+    }, CASESTUDY {
+        public String toString() {
+            return "Case Study";
+        }
     }
-
 }
