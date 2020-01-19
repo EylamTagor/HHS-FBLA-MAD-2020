@@ -42,7 +42,7 @@
 
     <EditText
         android:id="@+id/chapterText"
-        android:layout_width="128dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:ems="10"

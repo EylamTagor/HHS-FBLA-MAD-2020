@@ -25,6 +25,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.activities.ui.AboutChapterFragment;
+import com.hhsfbla.mad.activities.ui.AboutFragment;
+import com.hhsfbla.mad.activities.ui.CalendarFragment;
+import com.hhsfbla.mad.activities.ui.CompsFragment;
+import com.hhsfbla.mad.activities.ui.ContactFragment;
+import com.hhsfbla.mad.activities.ui.HomeFragment;
+import com.hhsfbla.mad.activities.ui.MyEventsFragment;
+import com.hhsfbla.mad.activities.ui.OfficerFragment;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -64,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
         // user setup
@@ -98,15 +106,62 @@ public class HomeActivity extends AppCompatActivity {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == 0) {
-            setTitle("");
+        if (id == R.id.nav_about) {
+            setTitle("About");
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.placeholder_fragment, null);
+            ft.replace(R.id.placeholder_fragment, new AboutFragment());
             ft.commit();
-        } else if (id == 0) {
+        } else if (id == R.id.nav_calendar) {
+            setTitle("Calendar");
 
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.placeholder_fragment, new CalendarFragment());
+            ft.commit();
         }
+        else if (id == R.id.nav_home) {
+            setTitle("Homepage");
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.placeholder_fragment, new HomeFragment());
+            ft.commit();
+        }
+        else if (id == R.id.nav_comps) {
+            setTitle("FBLA Comps");
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.placeholder_fragment, new CompsFragment());
+            ft.commit();
+        }
+        else if (id == R.id.nav_about_chapter) {
+            setTitle("About Chapter");
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.placeholder_fragment, new AboutChapterFragment());
+            ft.commit();
+        }
+        else if (id == R.id.nav_contact) {
+            setTitle("Contact Us");
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.placeholder_fragment, new ContactFragment());
+            ft.commit();
+        }
+        else if (id == R.id.nav_my_events) {
+            setTitle("My Events");
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.placeholder_fragment, new MyEventsFragment());
+            ft.commit();
+        }
+        else if (id == R.id.nav_officer) {
+            setTitle("Officer Team");
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.placeholder_fragment, new OfficerFragment());
+            ft.commit();
+        }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
