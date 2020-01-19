@@ -44,14 +44,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        profileButton = (ImageButton) findViewById(R.id.profileButton);
-        profileButton = findViewById(R.id.profileButton);
-//        profileButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
-//            }
-//        });
+
         //hello
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -87,13 +80,16 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }
 
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
-        });
+
+        profileButton = (ImageButton) findViewById(R.id.profileButton);
+
+//        profileButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+//            }
+//        });
+
 //        Once you have the id for each fragment, put HomeFragment ID here instead of R.id.teams (also put in title)
 //        navigationView.setCheckedItem(R.id.teams);
 //        setTitle("My Teams");
