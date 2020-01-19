@@ -10,7 +10,7 @@
             android:title="@string/menu_home" />
         <item
             android:id="@+id/nav_comps"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/baseline_emoji_events_24"
             android:title="@string/menu_comps" />
         <item
             android:id="@+id/nav_calendar"
