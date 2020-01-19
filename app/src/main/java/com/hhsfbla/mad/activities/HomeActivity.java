@@ -2,28 +2,29 @@ package com.hhsfbla.mad.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.ui.AboutChapterFragment;
 import com.hhsfbla.mad.activities.ui.AboutFragment;
@@ -33,16 +34,6 @@ import com.hhsfbla.mad.activities.ui.ContactFragment;
 import com.hhsfbla.mad.activities.ui.HomeFragment;
 import com.hhsfbla.mad.activities.ui.MyEventsFragment;
 import com.hhsfbla.mad.activities.ui.OfficerFragment;
-
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.Menu;
-import android.widget.ImageButton;
-
-import static java.security.AccessController.getContext;
 
 public class HomeActivity extends AppCompatActivity {
     private FirebaseUser user;
