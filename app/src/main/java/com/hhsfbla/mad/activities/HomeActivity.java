@@ -60,6 +60,7 @@ public class HomeActivity extends AppCompatActivity {
 //                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
 //            }
 //        });
+        //hello
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
