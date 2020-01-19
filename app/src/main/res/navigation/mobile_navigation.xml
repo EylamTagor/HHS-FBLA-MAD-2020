@@ -12,32 +12,42 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.hhsfbla.mad.activities.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_about_chapter"
+        android:name="com.hhsfbla.mad.activities.ui.AboutChapterFragment"
+        android:label="@string/menu_about_chapter"
+        tools:layout="@layout/fragment_about_chapter" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.hhsfbla.mad.activities.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_about"
+        android:name="com.hhsfbla.mad.activities.ui.AboutFragment"
+        android:label="@string/menu_about"
+        tools:layout="@layout/fragment_about" />
 
     <fragment
-        android:id="@+id/nav_tools"
-        android:name="com.hhsfbla.mad.activities.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        android:id="@+id/nav_calendar"
+        android:name="com.hhsfbla.mad.activities.ui.CalendarFragment"
+        android:label="@string/menu_calendar"
+        tools:layout="@layout/fragment_calendar" />
 
     <fragment
-        android:id="@+id/nav_share"
-        android:name="com.hhsfbla.mad.activities.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
+        android:id="@+id/nav_comps"
+        android:name="com.hhsfbla.mad.activities.ui.CompsFragment"
+        android:label="@string/menu_comps"
+        tools:layout="@layout/fragment_comps" />
+    <fragment
+        android:id="@+id/nav_contact"
+        android:name="com.hhsfbla.mad.activities.ui.ContactFragment"
+        android:label="@string/menu_contact"
+        tools:layout="@layout/fragment_contact" />
 
     <fragment
-        android:id="@+id/nav_send"
-        android:name="com.hhsfbla.mad.activities.ui.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
+        android:id="@+id/nav_my_events"
+        android:name="com.hhsfbla.mad.activities.ui.MyEventsFragment"
+        android:label="@string/menu_my_events"
+        tools:layout="@layout/fragment_my_events" />
+    <fragment
+        android:id="@+id/nav_officer"
+        android:name="com.hhsfbla.mad.activities.ui.OfficerFragment"
+        android:label="@string/menu_officer"
+        tools:layout="@layout/fragment_officer" />
 </navigation>
