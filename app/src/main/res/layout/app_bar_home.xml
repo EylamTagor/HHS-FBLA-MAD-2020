@@ -26,8 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:maxImageSize="40sp"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:backgroundTint="@color/fui_bgPhone"
+        app:maxImageSize="24sp"
+        app:srcCompat="@drawable/plus_icon" />
 
     <include layout="@layout/content_home" />
 
