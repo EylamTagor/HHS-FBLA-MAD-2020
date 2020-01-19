@@ -50,4 +50,5 @@
         android:name="com.hhsfbla.mad.activities.ui.OfficerFragment"
         android:label="@string/menu_officer"
         tools:layout="@layout/fragment_officer" />
+
 </navigation>
