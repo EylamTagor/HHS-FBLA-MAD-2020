@@ -40,17 +40,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.ImageButton;
 
 import static java.security.AccessController.getContext;
 
 public class HomeActivity extends AppCompatActivity {
     private FirebaseUser user;
     private AppBarConfiguration mAppBarConfiguration;
+    private ImageButton profileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        profileButton = findViewById(R.id.profileButton);
+//        profileButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+//            }
+//        });
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -168,15 +178,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void signOut() {
-//        AuthUI.getInstance()
-//                .signOut(this)
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        user = null;
-//                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-//                    }
-//                });
-        startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
-
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        user = null;
+                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                    }
+                });
     }
+
+
 }

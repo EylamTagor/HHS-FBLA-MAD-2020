@@ -14,6 +14,10 @@ public class User {
     private String blurb;  // Officers
     private String phoneNumber;
 
+    public User() {
+        this("", null, "");
+    }
+
     public User(String name, Chapter chapter, String email) {
         this.name = name;
         this.userType = UserType.MEMBER;

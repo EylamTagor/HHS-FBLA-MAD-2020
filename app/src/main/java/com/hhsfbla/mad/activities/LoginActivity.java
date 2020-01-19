@@ -134,6 +134,8 @@ public class LoginActivity extends AppCompatActivity {
                                         Log.d(TAG, document.getId() + " => " + document.getData());
                                         if(document.get("email").equals(user.getEmail())) {
                                             myUser = document.toObject(User.class);
+                                            updateUI();
+                                            return;
                                         }
                                     }
                                     addUser(myUser);
