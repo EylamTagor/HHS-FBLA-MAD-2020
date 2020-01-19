@@ -1,5 +1,7 @@
 package com.hhsfbla.mad.data;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 
 public class User {
