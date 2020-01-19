@@ -19,12 +19,18 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="menu_about">About FBLA</string>
+    <string name="menu_contact">Contact Us</string>
+    <string name="menu_comps">FBLA Comps</string>
+    <string name="menu_calendar">Calendar</string>
+    <string name="menu_about_chapter">About Chapter</string>
+    <string name="menu_my_events">My Events</string>
+    <string name="menu_officer">Officer Team</string>
+
     <string name="fb_login_protocol_scheme">fb824878607959677</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

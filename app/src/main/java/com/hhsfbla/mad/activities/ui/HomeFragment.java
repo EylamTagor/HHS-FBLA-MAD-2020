@@ -1,4 +1,4 @@
-package com.hhsfbla.mad.activities.ui.home;
+package com.hhsfbla.mad.activities.ui;
 
 import android.os.Bundle;
 import android.util.EventLog;
@@ -26,6 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
+
+    private TextView chapter_nameTxtView;
+    private ImageView imageView;
+
     private RecyclerView eventRecyclerView;
     private RecyclerView.Adapter adapter;
 
@@ -33,6 +37,7 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
