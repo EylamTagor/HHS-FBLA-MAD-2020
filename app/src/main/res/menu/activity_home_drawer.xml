@@ -6,54 +6,33 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/home"
+            android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_comps"
-            android:icon="@drawable/baseline_emoji_events_24"
-            android:title="@string/menu_comps" />
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_gallery" />
         <item
-            android:id="@+id/nav_calendar"
-            android:icon="@drawable/calendar"
-            android:title="@string/menu_calendar" />
-
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_slideshow" />
         <item
-            android:id="@+id/nav_my_events"
-            android:icon="@drawable/myevents"
-            android:title="@string/menu_my_events" />
-
-
-        <item android:title="About Chapter" >
-            <menu>
-                <item
-                    android:id="@+id/nav_about_chapter"
-                    android:icon="@drawable/info"
-                    android:title="@string/menu_about_chapter" />
-                <item
-                    android:id="@+id/nav_officer"
-                    android:icon="@drawable/officer"
-                    android:title="@string/menu_officer" />
-            </menu>
-        </item>
-
-
-        <item android:title="About FBLA" >
-            <menu>
-                <item
-                    android:id="@+id/nav_about"
-                    android:icon="@drawable/info"
-                    android:title="@string/menu_about" />
-                <item
-                    android:id="@+id/nav_contact"
-                    android:icon="@drawable/ic_menu_share"
-                    android:title="@string/menu_contact" />
-            </menu>
-        </item>
-
+            android:id="@+id/nav_tools"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/menu_tools" />
     </group>
 
-
-
-
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/menu_share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/menu_send" />
+        </menu>
+    </item>
 
 </menu>
