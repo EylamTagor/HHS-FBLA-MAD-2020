@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -35,7 +36,7 @@ import com.hhsfbla.mad.activities.ui.HomeFragment;
 import com.hhsfbla.mad.activities.ui.MyEventsFragment;
 import com.hhsfbla.mad.activities.ui.OfficerFragment;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private FirebaseUser user;
     private AppBarConfiguration mAppBarConfiguration;
     private ImageButton profileButton;
@@ -72,6 +73,12 @@ public class HomeActivity extends AppCompatActivity {
                 R.id.nav_calendar, R.id.nav_contact, R.id.nav_comps, R.id.nav_my_events, R.id.nav_officer)
                 .setDrawerLayout(drawer)
                 .build();
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
