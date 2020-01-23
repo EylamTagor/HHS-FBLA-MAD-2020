@@ -1,4 +1,4 @@
-package com.hhsfbla.mad.ui;
+package com.hhsfbla.mad.ui.calendar;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -14,24 +14,24 @@ import android.view.ViewGroup;
 
 import com.hhsfbla.mad.R;
 
-public class OfficerFragment extends Fragment {
+public class CalendarFragment extends Fragment {
 
-    private OfficerViewModel mViewModel;
+    private CalendarViewModel mViewModel;
 
-    public static OfficerFragment newInstance() {
-        return new OfficerFragment();
+    public static CalendarFragment newInstance() {
+        return new CalendarFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_officer, container, false);
+        return inflater.inflate(R.layout.fragment_calendar, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(OfficerViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(CalendarViewModel.class);
         // TODO: Use the ViewModel
     }
 

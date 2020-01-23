@@ -12,37 +12,37 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/nav_calendar"
-        android:name="com.hhsfbla.mad.ui.CalendarFragment"
-        android:label="fragment_calendar"
+        android:name="com.hhsfbla.mad.ui.calendar.CalendarFragment"
+        android:label="Calendar"
         tools:layout="@layout/fragment_calendar" />
     <fragment
         android:id="@+id/nav_about"
-        android:name="com.hhsfbla.mad.ui.AboutFragment"
-        android:label="fragment_about"
+        android:name="com.hhsfbla.mad.ui.about.AboutFragment"
+        android:label="About FBLA"
         tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/nav_about_chapter"
-        android:name="com.hhsfbla.mad.ui.AboutChapterFragment"
-        android:label="fragment_about_chapter"
+        android:name="com.hhsfbla.mad.ui.aboutchapter.AboutChapterFragment"
+        android:label="About FBLA Chapter"
         tools:layout="@layout/fragment_about_chapter" />
     <fragment
         android:id="@+id/nav_comps"
-        android:name="com.hhsfbla.mad.ui.CompsFragment"
-        android:label="fragment_comps"
+        android:name="com.hhsfbla.mad.ui.comps.CompsFragment"
+        android:label="Competetive Events"
         tools:layout="@layout/fragment_comps" />
     <fragment
         android:id="@+id/nav_my_events"
-        android:name="com.hhsfbla.mad.ui.MyEventsFragment"
-        android:label="fragment_my_events"
+        android:name="com.hhsfbla.mad.ui.myevents.MyEventsFragment"
+        android:label="My Events"
         tools:layout="@layout/fragment_my_events" />
     <fragment
         android:id="@+id/nav_officer"
-        android:name="com.hhsfbla.mad.ui.OfficerFragment"
-        android:label="fragment_officer"
+        android:name="com.hhsfbla.mad.ui.officer.OfficerFragment"
+        android:label="Officers"
         tools:layout="@layout/fragment_officer" />
     <fragment
         android:id="@+id/nav_contact"
-        android:name="com.hhsfbla.mad.ui.ContactFragment"
-        android:label="fragment_contact"
+        android:name="com.hhsfbla.mad.ui.contact.ContactFragment"
+        android:label="Contact Us"
         tools:layout="@layout/fragment_contact" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.hhsfbla.mad.ui;
+package com.hhsfbla.mad.ui.myevents;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -14,24 +14,24 @@ import android.view.ViewGroup;
 
 import com.hhsfbla.mad.R;
 
-public class AboutChapterFragment extends Fragment {
+public class MyEventsFragment extends Fragment {
 
-    private AboutChapterViewModel mViewModel;
+    private MyEventsViewModel mViewModel;
 
-    public static AboutChapterFragment newInstance() {
-        return new AboutChapterFragment();
+    public static MyEventsFragment newInstance() {
+        return new MyEventsFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_about_chapter, container, false);
+        return inflater.inflate(R.layout.fragment_my_events, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(AboutChapterViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(MyEventsViewModel.class);
         // TODO: Use the ViewModel
     }
 

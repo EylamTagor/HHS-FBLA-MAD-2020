@@ -1,4 +1,4 @@
-package com.hhsfbla.mad.ui;
+package com.hhsfbla.mad.ui.aboutchapter;
 
 import androidx.lifecycle.ViewModel;
 

@@ -1,4 +1,4 @@
-package com.hhsfbla.mad.ui;
+package com.hhsfbla.mad.ui.comps;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -14,24 +14,24 @@ import android.view.ViewGroup;
 
 import com.hhsfbla.mad.R;
 
-public class AboutFragment extends Fragment {
+public class CompsFragment extends Fragment {
 
-    private AboutViewModel mViewModel;
+    private CompsViewModel mViewModel;
 
-    public static AboutFragment newInstance() {
-        return new AboutFragment();
+    public static CompsFragment newInstance() {
+        return new CompsFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_about, container, false);
+        return inflater.inflate(R.layout.fragment_comps, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(AboutViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(CompsViewModel.class);
         // TODO: Use the ViewModel
     }
 

@@ -1,4 +1,4 @@
-package com.hhsfbla.mad.ui;
+package com.hhsfbla.mad.ui.contact;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -14,24 +14,24 @@ import android.view.ViewGroup;
 
 import com.hhsfbla.mad.R;
 
-public class CompsFragment extends Fragment {
+public class ContactFragment extends Fragment {
 
-    private CompsViewModel mViewModel;
+    private ContactViewModel mViewModel;
 
-    public static CompsFragment newInstance() {
-        return new CompsFragment();
+    public static ContactFragment newInstance() {
+        return new ContactFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_comps, container, false);
+        return inflater.inflate(R.layout.fragment_contact, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(CompsViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(ContactViewModel.class);
         // TODO: Use the ViewModel
     }
 
