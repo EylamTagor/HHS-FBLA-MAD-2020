@@ -7,48 +7,42 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.hhsfbla.mad.activities.ui.HomeFragment"
+        android:name="com.hhsfbla.mad.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/nav_about_chapter"
-        android:name="com.hhsfbla.mad.activities.ui.AboutChapterFragment"
-        android:label="@string/menu_about_chapter"
-        tools:layout="@layout/fragment_about_chapter" />
-
-    <fragment
-        android:id="@+id/nav_about"
-        android:name="com.hhsfbla.mad.activities.ui.AboutFragment"
-        android:label="@string/menu_about"
-        tools:layout="@layout/fragment_about" />
-
     <fragment
         android:id="@+id/nav_calendar"
-        android:name="com.hhsfbla.mad.activities.ui.CalendarFragment"
-        android:label="@string/menu_calendar"
+        android:name="com.hhsfbla.mad.ui.CalendarFragment"
+        android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" />
-
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.hhsfbla.mad.ui.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/nav_about_chapter"
+        android:name="com.hhsfbla.mad.ui.AboutChapterFragment"
+        android:label="fragment_about_chapter"
+        tools:layout="@layout/fragment_about_chapter" />
     <fragment
         android:id="@+id/nav_comps"
-        android:name="com.hhsfbla.mad.activities.ui.CompsFragment"
-        android:label="@string/menu_comps"
+        android:name="com.hhsfbla.mad.ui.CompsFragment"
+        android:label="fragment_comps"
         tools:layout="@layout/fragment_comps" />
     <fragment
-        android:id="@+id/nav_contact"
-        android:name="com.hhsfbla.mad.activities.ui.ContactFragment"
-        android:label="@string/menu_contact"
-        tools:layout="@layout/fragment_contact" />
-
-    <fragment
         android:id="@+id/nav_my_events"
-        android:name="com.hhsfbla.mad.activities.ui.MyEventsFragment"
-        android:label="@string/menu_my_events"
+        android:name="com.hhsfbla.mad.ui.MyEventsFragment"
+        android:label="fragment_my_events"
         tools:layout="@layout/fragment_my_events" />
     <fragment
         android:id="@+id/nav_officer"
-        android:name="com.hhsfbla.mad.activities.ui.OfficerFragment"
-        android:label="@string/menu_officer"
+        android:name="com.hhsfbla.mad.ui.OfficerFragment"
+        android:label="fragment_officer"
         tools:layout="@layout/fragment_officer" />
-
+    <fragment
+        android:id="@+id/nav_contact"
+        android:name="com.hhsfbla.mad.ui.ContactFragment"
+        android:label="fragment_contact"
+        tools:layout="@layout/fragment_contact" />
 </navigation>

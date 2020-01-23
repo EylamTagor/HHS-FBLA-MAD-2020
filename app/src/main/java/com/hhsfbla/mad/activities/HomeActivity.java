@@ -2,55 +2,44 @@ package com.hhsfbla.mad.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.activities.ui.AboutChapterFragment;
-import com.hhsfbla.mad.activities.ui.AboutFragment;
-import com.hhsfbla.mad.activities.ui.CalendarFragment;
-import com.hhsfbla.mad.activities.ui.CompsFragment;
-import com.hhsfbla.mad.activities.ui.ContactFragment;
-import com.hhsfbla.mad.activities.ui.HomeFragment;
-import com.hhsfbla.mad.activities.ui.MyEventsFragment;
-import com.hhsfbla.mad.activities.ui.OfficerFragment;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private FirebaseUser user;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.view.Menu;
+
+public class HomeActivity extends AppCompatActivity {
+
     private AppBarConfiguration mAppBarConfiguration;
-    private ImageButton profileButton;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        //hello
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +49,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -68,13 +56,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 R.id.nav_calendar, R.id.nav_contact, R.id.nav_comps, R.id.nav_my_events, R.id.nav_officer)
                 .setDrawerLayout(drawer)
                 .build();
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -86,20 +67,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else {
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }
-
-
-        profileButton = (ImageButton) findViewById(R.id.profileButton);
-
-//        profileButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
-//            }
-//        });
-
-//        Once you have the id for each fragment, put HomeFragment ID here instead of R.id.teams (also put in title)
-//        navigationView.setCheckedItem(R.id.teams);
-//        setTitle("My Teams");
     }
 
     @Override
@@ -114,72 +81,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_about) {
-            setTitle("About");
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.placeholder_fragment, new AboutFragment());
-            ft.commit();
-        } else if (id == R.id.nav_calendar) {
-            setTitle("Calendar");
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.placeholder_fragment, new CalendarFragment());
-            ft.commit();
-        }
-        else if (id == R.id.nav_home) {
-            setTitle("Homepage");
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.placeholder_fragment, new HomeFragment());
-            ft.commit();
-        }
-        else if (id == R.id.nav_comps) {
-            setTitle("FBLA Comps");
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.placeholder_fragment, new CompsFragment());
-            ft.commit();
-        }
-        else if (id == R.id.nav_about_chapter) {
-            setTitle("About Chapter");
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.placeholder_fragment, new AboutChapterFragment());
-            ft.commit();
-        }
-        else if (id == R.id.nav_contact) {
-            setTitle("Contact Us");
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.placeholder_fragment, new ContactFragment());
-            ft.commit();
-        }
-        else if (id == R.id.nav_my_events) {
-            setTitle("My Events");
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.placeholder_fragment, new MyEventsFragment());
-            ft.commit();
-        }
-        else if (id == R.id.nav_officer) {
-            setTitle("Officer Team");
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.placeholder_fragment, new OfficerFragment());
-            ft.commit();
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     public void signOut() {
