@@ -105,20 +105,17 @@ public class LoginActivity extends AppCompatActivity {
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                user = firebaseAuth.getCurrentUser();
+                user = mAuth.getCurrentUser();
                 if (user != null) {
                     updateUI();
 
-//                    if (user.getPhotoUrl() != null) {
-//                        displayImage(user.getPhotoUrl());
-//                    }
                 } else {
 
                 }
             }
         };
         db = FirebaseFirestore.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        user = mAuth.getCurrentUser();
     }
 
     public void signIn() {
@@ -145,8 +142,9 @@ public class LoginActivity extends AppCompatActivity {
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
-                user = FirebaseAuth.getInstance().getCurrentUser();
+                user = mAuth.getCurrentUser();
                 myUser = new User(user.getDisplayName(), null, user.getEmail());
+
 
                 //Checks if user already exists
                 db.collection("users")
@@ -157,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         Log.d(TAG, document.getId() + " => " + document.getData());
-                                        if(document.get("email").equals(user.getEmail())) {
+                                        if(document.getId().equals(user.getUid())) {
                                             myUser = document.toObject(User.class);
                                             updateUI();
                                             return;
@@ -169,6 +167,8 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }
                         });
+                Log.d(TAG, "adding user google");
+                this.addUser(myUser);
 
                     updateUI();
             } else {
@@ -182,20 +182,33 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void addUser(User user) {
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+
+        Log.d(TAG, "adduser method");
+        db.collection("users").document(this.user.getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "success");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "failure");
+            }
+        });
+//        db.collection("users")
+//                .add(user)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Error adding document", e);
+//                    }
+//                });
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
@@ -209,6 +222,10 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
+                            user = mAuth.getCurrentUser();
+                            myUser = new User(user.getDisplayName(), null, user.getEmail());
+                            Log.d(TAG, "adding user facebook");
+                            addUser(myUser);
                             updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
