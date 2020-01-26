@@ -2,10 +2,16 @@ package com.hhsfbla.mad.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +41,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.User;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private LoginButton loginFacebookBtn;
     private FirebaseUser user;
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener authListener;
     private CallbackManager mCallbackManager;
     private String TAG = "FACELOG";
     private FirebaseFirestore db;
@@ -52,12 +60,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mCallbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
         Log.d(TAG, "oncreate");
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+
         if (user != null)
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 
@@ -74,7 +80,6 @@ public class LoginActivity extends AppCompatActivity {
 
         loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
 
-        mCallbackManager = CallbackManager.Factory.create();
         loginFacebookBtn.setReadPermissions(Arrays.asList("email", "public_profile"));
         loginFacebookBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -95,6 +100,25 @@ public class LoginActivity extends AppCompatActivity {
                 // ...
             }
         });
+
+        mAuth = FirebaseAuth.getInstance();
+        authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    updateUI();
+
+//                    if (user.getPhotoUrl() != null) {
+//                        displayImage(user.getPhotoUrl());
+//                    }
+                } else {
+
+                }
+            }
+        };
+        db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     public void signIn() {
@@ -115,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == 0) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
@@ -183,12 +208,12 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-//                            Log.d(TAG, "signInWithCredential:success");
+                            Log.d(TAG, "signInWithCredential:success");
                             updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
-//                            Log.d(TAG, "signInWithCredential:failure", task.getException());
-//                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
 
                         // ...
@@ -209,7 +234,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         Log.d(TAG, "onstart");
+        mAuth.addAuthStateListener(authListener);
         user = mAuth.getCurrentUser();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (authListener != null) {
+            mAuth.removeAuthStateListener(authListener);
+        }
     }
     
     public void setGooglePlusButtonProperties() {
@@ -224,4 +258,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
 }
+
+
