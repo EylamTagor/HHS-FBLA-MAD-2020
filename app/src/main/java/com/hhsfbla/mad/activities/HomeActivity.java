@@ -42,6 +42,8 @@ public class HomeActivity extends AppCompatActivity {
     private ImageButton profileButton;
     private TextView name;
     private TextView email;
+    private ImageButton imageBtn = findViewById(R.id.imageBtn);
+
     private static final String TAG = "DASHBOARD";
 
     @Override
@@ -53,12 +55,20 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signOut();
             }
         });
+        //TODO: lead fab to add event activity, unless we don't want the add event button to be on the member homepage...
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                signOut();
+//            }
+//        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
