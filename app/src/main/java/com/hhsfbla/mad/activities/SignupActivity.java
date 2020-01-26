@@ -46,7 +46,10 @@ public class SignupActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private FirebaseUser fuser;
+    private boolean failed = true;
+
     private static final String TAG = "signupactivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,10 +84,10 @@ public class SignupActivity extends AppCompatActivity {
         Log.d(TAG, "updateui");
         if(findChapterText.getText().toString().matches("") && nameEditTxt.getText().toString().matches("")) {
             Log.d(TAG, "both fields empty");
-            Toast.makeText(SignupActivity.this, "Enter data", Toast.LENGTH_LONG);
+            Toast.makeText(SignupActivity.this, "Enter data", Toast.LENGTH_SHORT).show();
         } else if(!findChapterText.getText().toString().matches("") && !nameEditTxt.getText().toString().matches("")) {
             Log.d(TAG, "both fields full");
-            Toast.makeText(SignupActivity.this, "Enter data", Toast.LENGTH_LONG);
+            Toast.makeText(SignupActivity.this, "Enter data", Toast.LENGTH_SHORT).show();
         } else if(!findChapterText.getText().toString().matches("")) {
             Log.d(TAG, "top field: ");
             db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -97,23 +100,27 @@ public class SignupActivity extends AppCompatActivity {
                             Log.d(TAG, "success getting users after getting chapters");
 
                             for(QueryDocumentSnapshot chapterDoc : queryChapterSnapshots) {
-                                if (chapterDoc.get("name").toString().equals(findChapterText.getText().toString())) {
+                                if (chapterDoc.get("name").toString().equalsIgnoreCase(findChapterText.getText().toString())) {
                                     String id = chapterDoc.getId();
                                     Chapter chapter = chapterDoc.toObject(Chapter.class);
                                     User user = new User(fuser.getDisplayName(), chapter, fuser.getEmail());
                                     chapter.addMember(fuser.getUid());
                                     db.collection("chapters").document(id).set(chapter, SetOptions.merge());
                                     db.collection("users").document(fuser.getUid()).set(user, SetOptions.merge());
+                                    failed = false;
                                 }
                             }
-                            //TODO check if chapter doesnt exist
-//                            Toast.makeText(SignupActivity.this, "Chapter doesn't exist", Toast.LENGTH_LONG);
+                            Log.d(TAG, failed ? "Chapter doesn't exist" : "Chapter exists");
+                            if(failed)
+                                Toast.makeText(SignupActivity.this, "Chapter doesn't exist", Toast.LENGTH_SHORT).show();
+                            sendToNextPage();
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.d(TAG, "failed getting users after getting chapters");
+                            failed = true;
                         }
                     });
                 }
@@ -121,9 +128,9 @@ public class SignupActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Log.d(TAG, "failed getting chapter");
+                    failed = true;
                 }
             });
-            sendToNextPage();
         } else if(!nameEditTxt.getText().toString().matches("")) {
             Log.d(TAG, "bottom field: ");
             Chapter chapter = new Chapter(nameEditTxt.getText().toString());
@@ -135,37 +142,56 @@ public class SignupActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Log.d(TAG, "adding user success");
+                    failed = false;
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Log.d(TAG, "adding user failed");
+                    failed = true;
                 }
             });
-
-            //TODO check if chapter already exists
-
-            db.collection("chapters").document().set(chapter).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d(TAG, "new chapter successfully added");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "new chapter adding failed");
-                }
-            });
+            if(!failed) {
+                //TODO check if chapter already exists
+                db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot chapter : queryDocumentSnapshots) {
+                            if (chapter.get("name").toString().equalsIgnoreCase(nameEditTxt.getText().toString())) {
+                                failed = true;
+                            }
+                        }
+                    }
+                });
+            }
+            if(!failed) {
+                db.collection("chapters").document().set(chapter).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "new chapter successfully added");
+                        failed = false;
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "new chapter adding failed");
+                        failed = true;
+                    }
+                });
+            }
 
             sendToNextPage();
         }
+        failed = true;
     }
 
     private void sendToNextPage() {
-        Log.d(TAG, "Update UI");
-        fuser = auth.getCurrentUser();
-        Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
-        startActivity(intent);
-        finish();
+        if(!failed) {
+            Log.d(TAG, "Update UI");
+            fuser = auth.getCurrentUser();
+            Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
