@@ -1,10 +1,27 @@
 package com.hhsfbla.mad.activities;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Toolbar;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.hhsfbla.mad.R;
 
 public class HomeActivity extends AppCompatActivity {
-<<<<<<< HEAD
-=======
+
     private FirebaseUser user;
     private AppBarConfiguration mAppBarConfiguration;
     private ImageButton profileButton;
@@ -13,8 +30,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        profileButton = (ImageButton) findViewById(R.id.profileButton);
-        profileButton = findViewById(R.id.profileButton);
+//        profileButton = (ImageButton) findViewById(R.id.profileButton);
+//        profileButton = findViewById(R.id.profileButton);
 //        profileButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
