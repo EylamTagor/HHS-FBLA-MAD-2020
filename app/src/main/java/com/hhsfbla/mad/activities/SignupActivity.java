@@ -101,7 +101,7 @@ public class SignupActivity extends AppCompatActivity {
                                     String id = chapterDoc.getId();
                                     Chapter chapter = chapterDoc.toObject(Chapter.class);
                                     User user = new User(fuser.getDisplayName(), chapter, fuser.getEmail());
-                                    chapter.addMember(user);
+                                    chapter.addMember(fuser.getUid());
                                     db.collection("chapters").document(id).set(chapter, SetOptions.merge());
                                     db.collection("users").document(fuser.getUid()).set(user, SetOptions.merge());
                                 }
@@ -129,7 +129,7 @@ public class SignupActivity extends AppCompatActivity {
             Chapter chapter = new Chapter(nameEditTxt.getText().toString());
             User user = new User(fuser.getDisplayName(), chapter, fuser.getEmail());
             user.setUserType(UserType.ADVISOR);
-            chapter.addMember(user);
+            chapter.addMember(fuser.getUid());
 
             db.collection("users").document(fuser.getUid()).set(user, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override

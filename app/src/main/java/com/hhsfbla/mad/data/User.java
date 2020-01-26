@@ -58,8 +58,12 @@ public class User {
         this.email = email;
     }
 
-    public ArrayList<ChapterEvent> getMyEvents() {
-        return myEvents;
+    public ArrayList<String> getMyEvents() {
+        ArrayList<String> names = new ArrayList<String>();
+        for(ChapterEvent event : myEvents) {
+            names.add(event.getName());
+        }
+        return names;
     }
 
     public void setMyEvents(ArrayList<ChapterEvent> myEvents) {

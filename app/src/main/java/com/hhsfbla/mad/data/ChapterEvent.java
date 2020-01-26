@@ -5,20 +5,24 @@ import java.util.ArrayList;
 public class ChapterEvent {
 
     private String name;
-    private ArrayList<User> attendees;
+    private ArrayList<String> attendees;
     private String date;
     private String location;
     private String description;
+
+    public ChapterEvent() {
+        this("", "", "", "");
+    }
 
     public ChapterEvent(String name, String date, String location, String description) {
         this.name = name;
         this.date = date;
         this.location = location;
         this.description = description;
-        attendees = new ArrayList<User>();
+        attendees = new ArrayList<String>();
     }
 
-    public void addAttendee(User user) {
+    public void addAttendee(String user) {
         attendees.add(user);
     }
 
@@ -36,11 +40,11 @@ public class ChapterEvent {
         this.name = name;
     }
 
-    public ArrayList<User> getAttendees() {
+    public ArrayList<String> getAttendees() {
         return attendees;
     }
 
-    public void setAttendees(ArrayList<User> attendees) {
+    public void setAttendees(ArrayList<String> attendees) {
         this.attendees = attendees;
     }
 

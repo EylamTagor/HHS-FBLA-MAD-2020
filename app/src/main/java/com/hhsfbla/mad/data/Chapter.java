@@ -6,7 +6,7 @@ public class Chapter {
 
     private User creator;
     private String name;
-    private ArrayList<User> users;
+    private ArrayList<String> users;
     private ArrayList<ChapterEvent> events;
 
     private String instagramTag;
@@ -95,11 +95,11 @@ public class Chapter {
 
     public Chapter(String name) {
         this.name = name;
-        users = new ArrayList<User>();
+        users = new ArrayList<String>();
         events = new ArrayList<ChapterEvent>();
     }
 
-    public void addMember(User user) {
+    public void addMember(String user) {
         users.add(user);
     }
 
@@ -132,20 +132,14 @@ public class Chapter {
     }
 
     public ArrayList<String> getUsers() {
-        ArrayList<String> emails = new ArrayList<String>();
-        for(User user : users) {
-            emails.add(user.getEmail());
-        }
-        return emails;
+        return users;
     }
 
-    public void setUsers(ArrayList<User> users) {
+    public void setUsers(ArrayList<String> users) {
         this.users = users;
     }
 
-    public ArrayList<String> getEvents() {
-        ArrayList<String> names = new ArrayList<String>();
-        
+    public ArrayList<ChapterEvent> getEvents() {
         return events;
     }
 
