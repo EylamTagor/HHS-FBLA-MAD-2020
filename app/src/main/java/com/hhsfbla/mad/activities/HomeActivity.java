@@ -111,6 +111,10 @@ public class HomeActivity extends AppCompatActivity {
                         startActivity(new Intent(HomeActivity.this, LoginActivity.class));
                     }
                 });
+//        FirebaseAuth.getInstance().signOut();
+//        user = null;
+//        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+
     }
 
 }
