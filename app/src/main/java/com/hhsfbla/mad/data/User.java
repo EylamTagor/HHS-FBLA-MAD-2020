@@ -34,8 +34,8 @@ public class User {
         this.name = name;
     }
 
-    public Chapter getChapter() {
-        return chapter;
+    public String getChapter() {
+        return chapter.getName();
     }
 
     public void setChapter(Chapter chapter) {
@@ -81,4 +81,6 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+
 }

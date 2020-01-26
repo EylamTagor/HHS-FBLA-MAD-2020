@@ -93,6 +93,7 @@
         android:id="@+id/profilePic"
         android:layout_width="128dp"
         android:layout_height="128dp"
+        android:scaleType="centerCrop"
         android:layout_marginTop="128dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

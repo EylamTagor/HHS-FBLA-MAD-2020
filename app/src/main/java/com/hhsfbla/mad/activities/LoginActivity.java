@@ -1,15 +1,9 @@
 package com.hhsfbla.mad.activities;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,8 +16,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,35 +26,30 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.User;
 
-import java.io.InputStream;
 import java.util.Arrays;
-import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     private TextView welcomeTxtView;
     private SignInButton loginGoogleBtn;
     private LoginButton loginFacebookBtn;
-    private FirebaseUser user;
+    private FirebaseUser fuser;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener authListener;
     private CallbackManager mCallbackManager;
     private String TAG = "FACELOG";
     private FirebaseFirestore db;
-    private User myUser;
     private GoogleSignInClient mGoogleSignInClient;
     static final int GOOGLE_SIGN_IN = 123;
     @Override
@@ -72,8 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Log.d(TAG, "oncreate");
 
-        if (user != null)
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+//        if (fuser != null)
+//            addUser();
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -98,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         loginFacebookBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+//                Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
@@ -119,31 +106,20 @@ public class LoginActivity extends AppCompatActivity {
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                user = mAuth.getCurrentUser();
-                if (user != null) {
-                    updateUI();
-
-                } else {
-
-                }
+                fuser = mAuth.getCurrentUser();
+//                if (fuser != null) {
+//                    addUser();
+//
+//                } else {
+//
+//                }
             }
         };
         db = FirebaseFirestore.getInstance();
-        user = mAuth.getCurrentUser();
+        fuser = mAuth.getCurrentUser();
     }
 
     public void signIn() {
-//        // Choose authentication providers
-//        List<AuthUI.IdpConfig> providers = Arrays.asList(
-//                new AuthUI.IdpConfig.GoogleBuilder().build());
-//
-//        // Create and launch sign-in intent
-//        startActivityForResult(
-//                AuthUI.getInstance()
-//                        .createSignInIntentBuilder()
-//                        .setAvailableProviders(providers)
-//                        .build(),
-//                0);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
     }
@@ -151,7 +127,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //Facebook
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        //Google
         if (requestCode == GOOGLE_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -164,31 +142,13 @@ public class LoginActivity extends AppCompatActivity {
                 // ...
             }
         }
-        if (requestCode == 0) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-
-            if (resultCode == Activity.RESULT_OK) {
-                // Successfully signed in
-                user = mAuth.getCurrentUser();
-                myUser = new User(user.getDisplayName(), null, user.getEmail());
-
-                Log.d(TAG, "adding user google");
-                this.addUser(myUser);
-
-                    updateUI();
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back signInButton. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
-            }
-        }
     }
 
 
-    private void addUser(User user) {
-
-        //Checks if user already exists
+    private void addUser() {
+        Log.d(TAG, "adduser method");
+        Log.d(TAG, "fuser email: " + fuser.getEmail());
+        //Checks if fuser already exists
         db.collection("users")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -196,44 +156,31 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
                                 if(document.getId().equals(mAuth.getCurrentUser().getUid())) {
-                                    myUser = document.toObject(User.class);
                                     updateUI();
+                                    Log.d(TAG, "return");
                                     return;
                                 }
                             }
+//                            User user = new User(fuser.getDisplayName(), null, fuser.getEmail());
+//                            db.collection("users").document(fuser.getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                @Override
+//                                public void onSuccess(Void aVoid) {
+////                Log.d(TAG, "success");
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+////                Log.d(TAG, "failure");
+//                                }
+//                            });
+                            sendtoSignup();
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
                     }
                 });
-        Log.d(TAG, "adduser method");
-        db.collection("users").document(this.user.getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "success");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "failure");
-            }
-        });
-//        db.collection("users")
-//                .add(user)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Error adding document", e);
-//                    }
-//                });
+
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
@@ -245,16 +192,14 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            user = mAuth.getCurrentUser();
-                            myUser = new User(user.getDisplayName(), null, user.getEmail());
-                            Log.d(TAG, "adding user facebook");
-                            addUser(myUser);
-                            updateUI();
+                            // Sign in success, update UI with the signed-in fuser's information
+//                            Log.d(TAG, "signInWithCredential:success");
+                            fuser = mAuth.getCurrentUser();
+//                            Log.d(TAG, "adding fuser facebook");
+                            addUser();
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.d(TAG, "signInWithCredential:failure", task.getException());
+                            // If sign in fails, display a message to the fuser.
+//                            Log.d(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
 
@@ -265,8 +210,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI() {
         Log.d(TAG, "Update UI");
-        user = mAuth.getCurrentUser();
+        fuser = mAuth.getCurrentUser();
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void sendtoSignup() {
+        Log.d(TAG, "sendtosignup");
+        fuser = mAuth.getCurrentUser();
+        Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
         startActivity(intent);
         finish();
     }
@@ -274,10 +227,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // Check if fuser is signed in (non-null) and update UI accordingly.
         Log.d(TAG, "onstart");
         mAuth.addAuthStateListener(authListener);
-        user = mAuth.getCurrentUser();
+        fuser = mAuth.getCurrentUser();
     }
 
     @Override
@@ -310,15 +263,13 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success, update UI with the signed-in fuser's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            myUser = new User(user.getDisplayName(), null, user.getEmail());
-                            addUser(myUser);
-                            updateUI();
+                            fuser = mAuth.getCurrentUser();
+                            addUser();
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            // If sign in fails, display a message to the fuser.
+//                            Log.w(TAG, "signInWithCredential:failure", task.getException());
 //                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                         }
 

@@ -89,10 +89,12 @@ public class Chapter {
 
     };
 
+    public Chapter() {
+        this("");
+    }
 
-    public Chapter(String name, User creator) {
+    public Chapter(String name) {
         this.name = name;
-        this.creator = creator;
         users = new ArrayList<User>();
         events = new ArrayList<ChapterEvent>();
     }
@@ -129,15 +131,21 @@ public class Chapter {
         this.creator = creator;
     }
 
-    public ArrayList<User> getUsers() {
-        return users;
+    public ArrayList<String> getUsers() {
+        ArrayList<String> emails = new ArrayList<String>();
+        for(User user : users) {
+            emails.add(user.getEmail());
+        }
+        return emails;
     }
 
     public void setUsers(ArrayList<User> users) {
         this.users = users;
     }
 
-    public ArrayList<ChapterEvent> getEvents() {
+    public ArrayList<String> getEvents() {
+        ArrayList<String> names = new ArrayList<String>();
+        
         return events;
     }
 
@@ -169,7 +177,9 @@ public class Chapter {
         this.description = description;
     }
 
-    public static Competition[] getComps() {
-        return comps;
-    }
+//    public static Competition[] getComps() {
+//        return comps;
+//    }
+
+
 }

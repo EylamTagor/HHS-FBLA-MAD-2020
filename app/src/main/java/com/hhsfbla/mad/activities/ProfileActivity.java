@@ -3,9 +3,6 @@ package com.hhsfbla.mad.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,9 +10,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -28,11 +29,13 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView name;
     private TextView email;
     private TextView chapter;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         backButton = findViewById(R.id.backBtn);
         name = findViewById(R.id.nameTextField);
@@ -42,7 +45,17 @@ public class ProfileActivity extends AppCompatActivity {
 
         name.setText(user.getDisplayName());
         email.setText(user.getEmail());
-//        chapter.setText(user.);
+        String photo = String.valueOf(user.getPhotoUrl());
+        Picasso.get().load(photo).into(profilePic);
+
+        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.get("chapter") != null)
+                    chapter.setText(documentSnapshot.get("chapter").toString());
+            }
+        });
+        backButton.setBackgroundColor(255);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,17 +63,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        profilePic.setImageDrawable(LoadImageFromWebOperations(user.getPhotoUrl().toString()));
-        Log.d("HIHIHI", user.getPhotoUrl().toString());
     }
 
-    public Drawable LoadImageFromWebOperations(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
-    }
 }
