@@ -9,26 +9,27 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hhsfbla.mad.R;
-
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.Menu;
-import android.widget.ImageButton;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -36,10 +37,21 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseUser user;
     ImageButton imageBtn = findViewById(R.id.imageBtn);
 
+    private static final String TAG = "DASHBOARD";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+//        profileButton = (ImageButton) findViewById(R.id.profileButton);
+//        profileButton = findViewById(R.id.profileButton);
+//        profileButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+//            }
+//        });
+        //hello
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -66,6 +78,7 @@ public class HomeActivity extends AppCompatActivity {
                 R.id.nav_calendar, R.id.nav_contact, R.id.nav_comps, R.id.nav_my_events, R.id.nav_officer)
                 .setDrawerLayout(drawer)
                 .build();
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -77,6 +90,11 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }
+
+//        Once you have the id for each fragment, put HomeFragment ID here instead of R.id.teams (also put in title)
+//        navigationView.setCheckedItem(R.id.teams);
+//        setTitle("My Teams");
+
     }
 
     @Override
@@ -94,6 +112,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void signOut() {
+        Log.d(TAG, "SIGN OUT: " + user.getEmail());
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -102,7 +121,10 @@ public class HomeActivity extends AppCompatActivity {
                         startActivity(new Intent(HomeActivity.this, LoginActivity.class));
                     }
                 });
-    }
+//        FirebaseAuth.getInstance().signOut();
+//        user = null;
+//        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
 
+    }
 
 }
