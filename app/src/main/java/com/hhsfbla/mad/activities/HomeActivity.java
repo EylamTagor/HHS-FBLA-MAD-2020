@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,7 +36,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseUser user;
-    ImageButton imageBtn = findViewById(R.id.imageBtn);
+    private ImageButton imageBtn = findViewById(R.id.imageBtn);
 
     private static final String TAG = "DASHBOARD";
     @Override
