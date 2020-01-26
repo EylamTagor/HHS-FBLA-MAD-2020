@@ -28,11 +28,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.ImageButton;
 
 public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseUser user;
+    ImageButton imageBtn = findViewById(R.id.imageBtn);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +43,20 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signOut();
             }
         });
+        //TODO: lead fab to add event activity, unless we don't want the add event button to be on the member homepage...
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                signOut();
+//            }
+//        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
