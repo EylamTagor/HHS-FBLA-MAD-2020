@@ -18,9 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
-import java.net.URL;
-
 public class ProfileActivity extends AppCompatActivity {
 
     private FirebaseUser user;

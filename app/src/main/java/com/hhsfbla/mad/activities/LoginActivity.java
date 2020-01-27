@@ -59,8 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Log.d(TAG, "oncreate");
 
-//        if (fuser != null)
-//            addUser();
+        if (fuser != null)
+            addUser();
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                // ...
+                Toast.makeText(LoginActivity.this, "Facebook Login Failed", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -107,12 +107,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 fuser = mAuth.getCurrentUser();
-//                if (fuser != null) {
-//                    addUser();
-//
-//                } else {
-//
-//                }
+                if (fuser != null) {
+                    addUser();
+
+                } else {
+
+                }
             }
         };
         db = FirebaseFirestore.getInstance();
@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
-                // ...
+                Toast.makeText(LoginActivity.this, "Google Sign In Failed", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -162,18 +162,6 @@ public class LoginActivity extends AppCompatActivity {
                                     return;
                                 }
                             }
-//                            User user = new User(fuser.getDisplayName(), null, fuser.getEmail());
-//                            db.collection("users").document(fuser.getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                @Override
-//                                public void onSuccess(Void aVoid) {
-////                Log.d(TAG, "success");
-//                                }
-//                            }).addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-////                Log.d(TAG, "failure");
-//                                }
-//                            });
                             sendtoSignup();
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
@@ -200,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the fuser.
 //                            Log.d(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "A user with this email exists already", Toast.LENGTH_SHORT).show();
                         }
 
                         // ...
@@ -271,6 +259,8 @@ public class LoginActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the fuser.
 //                            Log.w(TAG, "signInWithCredential:failure", task.getException());
 //                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "A user with this email exists already", Toast.LENGTH_SHORT).show();
+
                         }
 
                         // ...

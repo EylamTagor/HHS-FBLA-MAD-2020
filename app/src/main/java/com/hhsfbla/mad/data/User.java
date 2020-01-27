@@ -13,6 +13,7 @@ public class User {
     private ArrayList<ChapterEvent> myEvents;
     private String blurb;  // Officers
     private String phoneNumber;
+    private ArrayList<Competition> comps;
 
     public User() {
         this("", null, "");
@@ -24,6 +25,7 @@ public class User {
         this.chapter = chapter;
         this.email = email;
         myEvents = new ArrayList<ChapterEvent>();
+        comps = new ArrayList<Competition>();
     }
 
     public String getName() {
@@ -86,5 +88,11 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public ArrayList<Competition> getComps() {
+        return comps;
+    }
 
+    public void setComps(ArrayList<Competition> comps) {
+        this.comps = comps;
+    }
 }

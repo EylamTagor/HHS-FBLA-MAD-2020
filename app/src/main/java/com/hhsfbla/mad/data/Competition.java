@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Competition {
 
-    private ArrayList<User> competitors;
+    private ArrayList<String> competitors;
     private CompType compType;
     private String name;
     private String description;
@@ -15,7 +15,7 @@ public class Competition {
         this.compType = compType;
     }
 
-    public void addCompetitor(User user) {
+    public void addCompetitor(String user) {
         competitors.add(user);
     }
 
@@ -23,11 +23,11 @@ public class Competition {
         competitors.remove(user);
     }
 
-    public ArrayList<User> getCompetitors() {
+    public ArrayList<String> getCompetitors() {
         return competitors;
     }
 
-    public void setCompetitors(ArrayList<User> competitors) {
+    public void setCompetitors(ArrayList<String> competitors) {
         this.competitors = competitors;
     }
 
