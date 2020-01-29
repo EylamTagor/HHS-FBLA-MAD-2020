@@ -1,7 +1,5 @@
 package com.hhsfbla.mad.data;
 
-import com.google.firebase.auth.FirebaseUser;
-
 import java.util.ArrayList;
 
 public class User {
@@ -10,7 +8,7 @@ public class User {
     private Chapter chapter;
     private UserType userType;
     private String email;
-    private ArrayList<ChapterEvent> myEvents;
+    private ArrayList<Event> myEvents;
     private String blurb;  // Officers
     private String phoneNumber;
     private ArrayList<Competition> comps;
@@ -24,7 +22,7 @@ public class User {
         this.userType = UserType.MEMBER;
         this.chapter = chapter;
         this.email = email;
-        myEvents = new ArrayList<ChapterEvent>();
+        myEvents = new ArrayList<Event>();
         comps = new ArrayList<Competition>();
     }
 
@@ -62,13 +60,13 @@ public class User {
 
     public ArrayList<String> getMyEvents() {
         ArrayList<String> names = new ArrayList<String>();
-        for(ChapterEvent event : myEvents) {
+        for(Event event : myEvents) {
             names.add(event.getName());
         }
         return names;
     }
 
-    public void setMyEvents(ArrayList<ChapterEvent> myEvents) {
+    public void setMyEvents(ArrayList<Event> myEvents) {
         this.myEvents = myEvents;
     }
 
