@@ -82,6 +82,7 @@ public class HomeActivity extends AppCompatActivity {
         profileButton = header.findViewById(R.id.profileButton);
         email = header.findViewById(R.id.email_drawer);
         name = header.findViewById(R.id.name_drawer);
+
         // user setup
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {

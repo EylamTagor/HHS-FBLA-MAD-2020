@@ -7,7 +7,7 @@ public class Chapter {
     private User creator;
     private String name;
     private ArrayList<String> users;
-    private ArrayList<Event> events;
+    private ArrayList<ChapterEvent> events;
 
     private String instagramTag;
     private String facebookPage;
@@ -96,7 +96,7 @@ public class Chapter {
     public Chapter(String name) {
         this.name = name;
         users = new ArrayList<String>();
-        events = new ArrayList<Event>();
+        events = new ArrayList<ChapterEvent>();
     }
 
     public void addMember(String user) {
@@ -107,11 +107,11 @@ public class Chapter {
         users.remove(user);
     }
 
-    public void addEvent(Event event) {
+    public void addEvent(ChapterEvent event) {
         events.add(event);
     }
 
-    public void removeEvent(Event event) {
+    public void removeEvent(ChapterEvent event) {
         events.remove(event);
     }
 
@@ -139,11 +139,11 @@ public class Chapter {
         this.users = users;
     }
 
-    public ArrayList<Event> getEvents() {
+    public ArrayList<ChapterEvent> getEvents() {
         return events;
     }
 
-    public void setEvents(ArrayList<Event> events) {
+    public void setEvents(ArrayList<ChapterEvent> events) {
         this.events = events;
     }
 

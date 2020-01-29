@@ -2,7 +2,7 @@ package com.hhsfbla.mad.data;
 
 import java.util.ArrayList;
 
-public class Event {
+public class ChapterEvent {
 
     private String name;
     private ArrayList<String> attendees;
@@ -10,11 +10,11 @@ public class Event {
     private String location;
     private String description;
 
-    public Event() {
+    public ChapterEvent() {
         this("", "", "", "");
     }
 
-    public Event(String name, String date, String location, String description) {
+    public ChapterEvent(String name, String date, String location, String description) {
         this.name = name;
         this.date = date;
         this.location = location;
