@@ -1,15 +1,7 @@
 package com.hhsfbla.mad.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -27,13 +19,20 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.data.Chapter;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -42,6 +41,11 @@ public class HomeActivity extends AppCompatActivity {
     private ImageButton profileButton;
     private TextView name;
     private TextView email;
+
+    private FirebaseFirestore db;
+
+    //initialize chapter list from firestore
+    private static List<Chapter> chapterList;
 
     private static final String TAG = "DASHBOARD";
 
@@ -58,7 +62,7 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signOut();
+                startActivity(new Intent(HomeActivity.this, SignupActivity.class));
             }
         });
 
@@ -86,7 +90,7 @@ public class HomeActivity extends AppCompatActivity {
         if (user != null) {
             // TODO set the ImageView to the user's pfp, TextViews below it to name/email
             email.setText(user.getEmail());
-            if(!user.getDisplayName().isEmpty()) {
+            if (!user.getDisplayName().isEmpty()) {
                 name.setText(user.getDisplayName());
             } else {
                 Log.d(TAG, "name not working");
@@ -107,6 +111,21 @@ public class HomeActivity extends AppCompatActivity {
 //        navigationView.setCheckedItem(R.id.teams);
 //        setTitle("My Teams");
 
+        //initialize chapters from firestore
+        db = FirebaseFirestore.getInstance();
+        if (chapterList == null) {
+            chapterList = new ArrayList<>();
+
+            db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
+                        chapterList.add(queryDocumentSnapshots.getDocuments().get(i).toObject(Chapter.class));
+                    }
+                }
+            });
+
+        }
     }
 
     @Override
@@ -139,4 +158,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    public static List<Chapter> getChapterList() {
+        return chapterList;
+    }
 }

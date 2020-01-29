@@ -1,48 +1,31 @@
 package com.hhsfbla.mad.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.SearchView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
-import com.hhsfbla.mad.data.User;
-import com.hhsfbla.mad.data.UserType;
+import com.hhsfbla.mad.recyclerview_stuff.ChapterAdapter;
+
+import java.util.List;
 
 public class SignupActivity extends AppCompatActivity {
+    private RecyclerView recyclerView;
+    private SearchView searchView;
+    private ChapterAdapter adapter;
+    private List<Chapter> chapterList;
 
-
-    private ImageButton backBtn;
-    private TextView areyouTxtView;
-    private RadioButton advisorRadioBtn;
-    private RadioButton officerRadioBtn;
-    private RadioButton studentRadioBtn;
-    private Button okBtn;
-    private TextView createTxtView;
-    private EditText nameEditTxt;
-    private EditText findChapterText;
-    private Button nextBtn;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private FirebaseUser fuser;
@@ -58,135 +41,23 @@ public class SignupActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         fuser = auth.getCurrentUser();
 
-        backBtn = findViewById(R.id.backBtn);
-        okBtn = findViewById(R.id.okBtn);
-        createTxtView = findViewById(R.id.createTxtView);
-        nameEditTxt = findViewById(R.id.nameEditTxt);
-        findChapterText = findViewById(R.id.find_chapter_edit_text);
+        searchView = findViewById(R.id.searchChapters);
+        recyclerView = findViewById(R.id.chapterList);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        okBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "clicked");
-                updateUI();
-            }
-        });
+        chapterList = HomeActivity.getChapterList();
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-            }
-        });
+        adapter = new ChapterAdapter(this, chapterList);
+        recyclerView.setAdapter(adapter);
     }
 
     public void updateUI() {
-        Log.d(TAG, "updateui");
-        if(findChapterText.getText().toString().matches("") && nameEditTxt.getText().toString().matches("")) {
-            Log.d(TAG, "both fields empty");
-            Toast.makeText(SignupActivity.this, "Enter data", Toast.LENGTH_SHORT).show();
-        } else if(!findChapterText.getText().toString().matches("") && !nameEditTxt.getText().toString().matches("")) {
-            Log.d(TAG, "both fields full");
-            Toast.makeText(SignupActivity.this, "Enter data", Toast.LENGTH_SHORT).show();
-        } else if(!findChapterText.getText().toString().matches("")) {
-            Log.d(TAG, "top field: ");
-            db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(final QuerySnapshot queryChapterSnapshots) {
-                    Log.d(TAG, "getting chapters success");
-                    db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Log.d(TAG, "success getting users after getting chapters");
 
-                            for(QueryDocumentSnapshot chapterDoc : queryChapterSnapshots) {
-                                if (chapterDoc.get("name").toString().equalsIgnoreCase(findChapterText.getText().toString())) {
-                                    String id = chapterDoc.getId();
-                                    Chapter chapter = chapterDoc.toObject(Chapter.class);
-                                    User user = new User(fuser.getDisplayName(), chapter, fuser.getEmail());
-                                    chapter.addMember(fuser.getUid());
-                                    db.collection("chapters").document(id).set(chapter, SetOptions.merge());
-                                    db.collection("users").document(fuser.getUid()).set(user, SetOptions.merge());
-                                    failed = false;
-                                }
-                            }
-                            Log.d(TAG, failed ? "Chapter doesn't exist" : "Chapter exists");
-                            if(failed)
-                                Toast.makeText(SignupActivity.this, "Chapter doesn't exist", Toast.LENGTH_SHORT).show();
-                            sendToNextPage();
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "failed getting users after getting chapters");
-                            failed = true;
-                        }
-                    });
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "failed getting chapter");
-                    failed = true;
-                }
-            });
-        } else if(!nameEditTxt.getText().toString().matches("")) {
-            Log.d(TAG, "bottom field: ");
-            Chapter chapter = new Chapter(nameEditTxt.getText().toString());
-            User user = new User(fuser.getDisplayName(), chapter, fuser.getEmail());
-            user.setUserType(UserType.ADVISOR);
-            chapter.addMember(fuser.getUid());
-
-            db.collection("users").document(fuser.getUid()).set(user, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d(TAG, "adding user success");
-                    failed = false;
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "adding user failed");
-                    failed = true;
-                }
-            });
-            if(!failed) {
-                //TODO check if chapter already exists
-                db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot chapter : queryDocumentSnapshots) {
-                            if (chapter.get("name").toString().equalsIgnoreCase(nameEditTxt.getText().toString())) {
-                                failed = true;
-                            }
-                        }
-                    }
-                });
-            }
-            if(!failed) {
-                db.collection("chapters").document().set(chapter).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "new chapter successfully added");
-                        failed = false;
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "new chapter adding failed");
-                        failed = true;
-                    }
-                });
-            }
-
-            sendToNextPage();
-        }
-        failed = true;
     }
 
     private void sendToNextPage() {
-        if(!failed) {
+        if (!failed) {
             Log.d(TAG, "Update UI");
             fuser = auth.getCurrentUser();
             Intent intent = new Intent(SignupActivity.this, HomeActivity.class);

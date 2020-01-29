@@ -12,6 +12,7 @@ public class Chapter {
     private String instagramTag;
     private String facebookPage;
     private String description;
+    private String location;
 
     private static final Competition[] comps = {
             new Competition("3-D Animation", "", CompType.TECH),
@@ -90,13 +91,14 @@ public class Chapter {
     };
 
     public Chapter() {
-        this("");
+        this("", "");
     }
 
-    public Chapter(String name) {
+    public Chapter(String name, String location) {
         this.name = name;
         users = new ArrayList<String>();
         events = new ArrayList<ChapterEvent>();
+        this.location = location;
     }
 
     public void addMember(String user) {
@@ -171,7 +173,15 @@ public class Chapter {
         this.description = description;
     }
 
-//    public static Competition[] getComps() {
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    //    public static Competition[] getComps() {
 //        return comps;
 //    }
 
