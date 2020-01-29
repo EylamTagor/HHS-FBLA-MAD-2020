@@ -27,31 +27,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePic" />
 
-    <EditText
+    <TextView
         android:id="@+id/emailText"
         android:layout_width="64dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Email:"
+        android:text="@string/email"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.57" />
+        app:layout_constraintVertical_bias="0.577" />
 
-    <EditText
+    <TextView
         android:id="@+id/chapterText"
-        android:layout_width="80dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Chapter:"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailText"
-        app:layout_constraintVertical_bias="0.22000003" />
+        app:layout_constraintVertical_bias="0.231" />
 
     <EditText
         android:id="@+id/emailTextField"
@@ -75,16 +77,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailTextField"
-        app:layout_constraintVertical_bias="0.232" />
+        app:layout_constraintVertical_bias="0.188" />
 
-    <EditText
+    <TextView
         android:id="@+id/nameText"
-        android:layout_width="64dp"
+        android:layout_width="70sp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name:"
+        android:text="@string/name"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/emailText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePic" />
@@ -93,11 +96,38 @@
         android:id="@+id/profilePic"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:scaleType="centerCrop"
         android:layout_marginTop="128dp"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@color/colorAccent" />
+
+    <Button
+        android:id="@+id/sign_outBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="Sign Out"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.862"
+        tools:layout_editor_absoluteX="124dp" />
+
+    <Button
+        android:id="@+id/doneBtn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Done"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteX="289dp"
+        tools:layout_editor_absoluteY="24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
