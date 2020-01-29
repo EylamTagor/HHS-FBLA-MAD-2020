@@ -1,5 +1,6 @@
 package com.hhsfbla.mad.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.hhsfbla.mad.R;
 import com.squareup.picasso.Picasso;
 
+
 public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -58,7 +60,7 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signOut();
+                startActivity(new Intent(HomeActivity.this, AddEventActivity.class));
             }
         });
 
@@ -103,6 +105,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
             }
         });
+
 //        Once you have the id for each fragment, put HomeFragment ID here instead of R.id.teams (also put in title)
 //        navigationView.setCheckedItem(R.id.teams);
 //        setTitle("My Teams");
@@ -123,20 +126,6 @@ public class HomeActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void signOut() {
-        Log.d(TAG, "SIGN OUT: " + user.getEmail());
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        user = null;
-                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-                    }
-                });
-//        FirebaseAuth.getInstance().signOut();
-//        user = null;
-//        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
 
-    }
 
 }
