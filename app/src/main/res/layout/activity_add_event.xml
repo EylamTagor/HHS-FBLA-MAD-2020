@@ -77,9 +77,11 @@
         android:layout_height="64dp"
         android:layout_marginStart="64dp"
         android:layout_marginTop="32dp"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameTxtView"
-        tools:srcCompat="@tools:sample/avatars[14]" />
+        tools:srcCompat="@color/colorGray"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/editBtn"

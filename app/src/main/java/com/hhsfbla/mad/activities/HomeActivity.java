@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -33,6 +34,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
 import com.squareup.picasso.Picasso;
 
@@ -44,6 +47,7 @@ public class HomeActivity extends AppCompatActivity {
     private ImageButton profileButton;
     private TextView name;
     private TextView email;
+    private FirebaseFirestore db;
 
     private static final String TAG = "DASHBOARD";
 
@@ -51,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        db = FirebaseFirestore.getInstance();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -88,11 +92,13 @@ public class HomeActivity extends AppCompatActivity {
         if (user != null) {
             // TODO set the ImageView to the user's pfp, TextViews below it to name/email
             email.setText(user.getEmail());
-            if(!user.getDisplayName().isEmpty()) {
-                name.setText(user.getDisplayName());
-            } else {
-                Log.d(TAG, "name not working");
-            }
+            db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    name.setText(documentSnapshot.get("name").toString());
+
+                }
+            });
             String photo = String.valueOf(user.getPhotoUrl());
             Picasso.get().load(photo).into(profileButton);
         } else {

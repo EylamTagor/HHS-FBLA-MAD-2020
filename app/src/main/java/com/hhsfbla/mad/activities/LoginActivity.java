@@ -206,9 +206,7 @@ public class LoginActivity extends AppCompatActivity {
     private void sendtoSignup() {
         Log.d(TAG, "sendtosignup");
         fuser = mAuth.getCurrentUser();
-        //Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
         startActivity(intent);
         finish();
     }

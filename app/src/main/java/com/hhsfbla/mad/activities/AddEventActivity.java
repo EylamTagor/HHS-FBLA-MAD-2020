@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.hhsfbla.mad.R;
 
@@ -23,6 +24,7 @@ public class AddEventActivity extends AppCompatActivity {
     private EditText timeEditTxt;
     private EditText locaEditTxt;
     private EditText descrEditTxt;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class AddEventActivity extends AppCompatActivity {
         timeEditTxt = findViewById(R.id.timeEditTxt);
         locaEditTxt = findViewById(R.id.locaEditTxt);
         descrEditTxt = findViewById(R.id.descrEditTxt);
+        imageView = findViewById(R.id.imageView);
 
 
         backBtn2.setOnClickListener(new View.OnClickListener() {
