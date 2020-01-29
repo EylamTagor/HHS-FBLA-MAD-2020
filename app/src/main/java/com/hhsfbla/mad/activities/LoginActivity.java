@@ -1,5 +1,6 @@
 package com.hhsfbla.mad.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,7 +42,6 @@ import com.hhsfbla.mad.data.User;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
-    private TextView welcomeTxtView;
     private SignInButton loginGoogleBtn;
     private LoginButton loginFacebookBtn;
     private FirebaseUser fuser;
@@ -68,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        welcomeTxtView = findViewById(R.id.welcomeTxtView);
 
         loginGoogleBtn = findViewById(R.id.loginGoogleBtn);
         loginGoogleBtn.setOnClickListener(new View.OnClickListener() {
@@ -207,7 +206,9 @@ public class LoginActivity extends AppCompatActivity {
     private void sendtoSignup() {
         Log.d(TAG, "sendtosignup");
         fuser = mAuth.getCurrentUser();
-        Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+        //Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
     }
