@@ -3,8 +3,6 @@ package com.hhsfbla.mad.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
-import com.hhsfbla.mad.recyclerview_stuff.ChapterAdapter;
+import com.hhsfbla.mad.adapters.ChapterAdapter;
 
 import java.util.List;
 

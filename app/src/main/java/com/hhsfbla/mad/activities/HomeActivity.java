@@ -26,6 +26,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
+import com.hhsfbla.mad.data.ChapterEvent;
+import com.hhsfbla.mad.data.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -42,6 +44,9 @@ public class HomeActivity extends AppCompatActivity {
 
     //initialize chapter list from firestore
     private static List<Chapter> chapterList;
+    private static List<User> userList;
+    private static List<ChapterEvent> eventList;
+    private static User currentUser;
 
     private static final String TAG = "DASHBOARD";
 
@@ -130,6 +135,37 @@ public class HomeActivity extends AppCompatActivity {
             });
 
         }
+
+        //initialize users from firestore
+        if (userList == null) {
+            userList = new ArrayList<>();
+
+            db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
+                        userList.add(queryDocumentSnapshots.getDocuments().get(i).toObject(User.class));
+                    }
+                }
+            });
+        }
+
+        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                currentUser = documentSnapshot.toObject(User.class);
+            }
+        });
+
+        //initialize events from firestore user
+        if (eventList == null) {
+            db.collection("chapters").document(currentUser.getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    eventList = documentSnapshot.toObject(Chapter.class).getEvents();
+                }
+            });
+        }
     }
 
     @Override
@@ -149,5 +185,17 @@ public class HomeActivity extends AppCompatActivity {
 
     public static List<Chapter> getChapterList() {
         return chapterList;
+    }
+
+    public static List<User> getUserList() {
+        return userList;
+    }
+
+    public static List<ChapterEvent> getEventList() {
+        return eventList;
+    }
+
+    public static User getCurrentUser() {
+        return currentUser;
     }
 }

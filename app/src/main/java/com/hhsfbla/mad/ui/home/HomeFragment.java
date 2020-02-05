@@ -7,19 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.recyclerview_stuff.EventAdapter;
-import com.hhsfbla.mad.recyclerview_stuff.EventItem;
+import com.hhsfbla.mad.activities.HomeActivity;
+import com.hhsfbla.mad.data.ChapterEvent;
+import com.hhsfbla.mad.adapters.EventAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -31,7 +28,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView eventRecyclerView;
     private RecyclerView.Adapter adapter;
 
-    private List<EventItem> eventItems;
+    private List<ChapterEvent> events;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -42,26 +39,11 @@ public class HomeFragment extends Fragment {
         eventRecyclerView.setHasFixedSize(true);
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        eventItems = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            EventItem eventItem = new EventItem("Event " + i, "13/32/20", "25:60pm", "21370 Homestead Road, Cupertino, CA", R.color.colorPrimaryDark);
-            eventItems.add(eventItem);
-        }
+        events = HomeActivity.getEventList();
 
-        adapter = new EventAdapter(eventItems, getContext());
+        adapter = new EventAdapter(events, getContext());
         eventRecyclerView.setAdapter(adapter);
 
         return root;
-//        homeViewModel =
-//                ViewModelProviders.of(this).get(HomeViewModel.class);
-//        View root = inflater.inflate(R.layout.fragment_home, container, false);
-//        final TextView textView = root.findViewById(R.id.text_home);
-//        homeViewModel.getText().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
-//        return root;
     }
 }

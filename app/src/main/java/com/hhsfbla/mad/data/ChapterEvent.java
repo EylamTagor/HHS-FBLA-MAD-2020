@@ -7,18 +7,22 @@ public class ChapterEvent {
     private String name;
     private ArrayList<String> attendees;
     private String date;
+    private String time;
     private String location;
     private String description;
+    private int pic;
 
     public ChapterEvent() {
-        this("", "", "", "");
+        this("", "", "", "", "", 0);
     }
 
-    public ChapterEvent(String name, String date, String location, String description) {
+    public ChapterEvent(String name, String date, String time, String location, String description, int pic) {
         this.name = name;
         this.date = date;
+        this.time = time;
         this.location = location;
         this.description = description;
+        this.pic = pic;
         attendees = new ArrayList<String>();
     }
 
@@ -70,5 +74,21 @@ public class ChapterEvent {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public int getPic() {
+        return pic;
+    }
+
+    public void setPic(int pic) {
+        this.pic = pic;
     }
 }

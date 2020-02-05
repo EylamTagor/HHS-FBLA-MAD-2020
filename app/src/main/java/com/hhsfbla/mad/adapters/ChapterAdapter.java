@@ -1,4 +1,4 @@
-package com.hhsfbla.mad.recyclerview_stuff;
+package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,10 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
 
@@ -32,9 +29,8 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     @NonNull
     @Override
     public ChapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.chapter_item, null);
-        return new ChapterViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chapter_item, parent, false);
+        return new ChapterAdapter.ChapterViewHolder(view);
     }
 
     @Override
