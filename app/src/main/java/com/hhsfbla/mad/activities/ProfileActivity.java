@@ -58,8 +58,14 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 name.setText(documentSnapshot.get("name").toString());
-                if(documentSnapshot.get("chapter") != null)
-                    chapter.setText(documentSnapshot.get("chapter").toString());
+                if(documentSnapshot.get("chapter") != null) {
+                    db.collection("chapters").document(documentSnapshot.get("chapter").toString()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot chapterSnap) {
+                            chapter.setText(chapterSnap.get("name").toString());
+                        }
+                    });
+                }
             }
         });
         email.setText(user.getEmail());
