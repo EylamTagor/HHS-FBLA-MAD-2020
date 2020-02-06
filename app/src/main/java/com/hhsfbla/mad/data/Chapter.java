@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Chapter {
 
-    private User creator;
     private String name;
     private ArrayList<String> users;
     private ArrayList<ChapterEvent> events;
@@ -123,14 +122,6 @@ public class Chapter {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
     }
 
     public ArrayList<String> getUsers() {
