@@ -1,6 +1,7 @@
 package com.hhsfbla.mad.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +34,13 @@ public class HomeFragment extends Fragment {
     private ImageView imageView;
 
     private RecyclerView eventRecyclerView;
-    private RecyclerView.Adapter adapter;
+    private EventAdapter adapter;
 
     private List<ChapterEvent> events;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private FirebaseUser user;
+    private static final String TAG = "fraghome";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class HomeFragment extends Fragment {
         eventRecyclerView = root.findViewById(R.id.eventFeed);
         eventRecyclerView.setHasFixedSize(true);
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new EventAdapter(events, getContext());
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -60,7 +63,10 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         events = documentSnapshot.toObject(Chapter.class).getEvents();
-                        adapter = new EventAdapter(events, getContext());
+                        Log.d(TAG, "here");
+                        Log.d(TAG, events.toString());
+                        events.add(new ChapterEvent("example", "999", "888", "hello", "details", 0));
+                        adapter.setEvents(events);
                         eventRecyclerView.setAdapter(adapter);
                     }
                 });

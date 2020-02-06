@@ -61,7 +61,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         return events.size();
     }
 
-
+    public void setEvents(List<ChapterEvent> events) {
+        this.events = events;
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView title, date, time, location;
