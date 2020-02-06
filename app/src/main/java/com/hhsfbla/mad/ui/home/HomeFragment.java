@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private TextView chapter_nameTxtView;
     private ImageView imageView;
-
+    private TextView noEventsYet;
     private RecyclerView eventRecyclerView;
     private EventAdapter adapter;
 
@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-
+        noEventsYet = root.findViewById(R.id.noEventsYet);
         eventRecyclerView = root.findViewById(R.id.eventFeed);
         eventRecyclerView.setHasFixedSize(true);
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -65,7 +65,10 @@ public class HomeFragment extends Fragment {
                         events = documentSnapshot.toObject(Chapter.class).getEvents();
                         Log.d(TAG, "here");
                         Log.d(TAG, events.toString());
-                        events.add(new ChapterEvent("example", "999", "888", "hello", "details", 0));
+                        if(events.isEmpty()) {
+                            noEventsYet.setVisibility(View.VISIBLE);
+                        }
+//                        events.add(new ChapterEvent("example", "999", "888", "hello", "details", R.color.colorPrimaryDark));
                         adapter.setEvents(events);
                         eventRecyclerView.setAdapter(adapter);
                     }
