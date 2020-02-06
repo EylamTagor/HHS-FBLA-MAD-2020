@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class User {
 
     private String name;
-    private Chapter chapter;
+    private String chapter;
     private UserType userType;
     private String email;
     private ArrayList<ChapterEvent> myEvents;
@@ -19,7 +19,7 @@ public class User {
         this("", null, "");
     }
 
-    public User(String name, Chapter chapter, String email) {
+    public User(String name, String chapter, String email) {
         this.name = name;
         this.userType = UserType.MEMBER;
         this.chapter = chapter;
@@ -37,10 +37,10 @@ public class User {
     }
 
     public String getChapter() {
-        return chapter.getName();
+        return chapter;
     }
 
-    public void setChapter(Chapter chapter) {
+    public void setChapter(String chapter) {
         this.chapter = chapter;
     }
 

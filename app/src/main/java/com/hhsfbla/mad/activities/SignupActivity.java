@@ -9,13 +9,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.adapters.ChapterAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SignupActivity extends AppCompatActivity {
@@ -44,10 +47,23 @@ public class SignupActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        chapterList = HomeActivity.getChapterList();
-
+        chapterList = new ArrayList<>();
         adapter = new ChapterAdapter(this, chapterList);
-        recyclerView.setAdapter(adapter);
+
+        db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
+                    chapterList.add(queryDocumentSnapshots.getDocuments().get(i).toObject(Chapter.class));
+                }
+                Log.d(TAG, "lol");
+                Log.d(TAG, chapterList.toString() + "here");
+                adapter.setChapterList(chapterList);
+                recyclerView.setAdapter(adapter);
+            }
+        });
+
+
     }
 
     public void updateUI() {

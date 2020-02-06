@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
+import com.hhsfbla.mad.data.ChapterEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder> {
@@ -47,6 +49,11 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     @Override
     public int getItemCount() {
         return chapterList.size();
+    }
+
+
+    public void setChapterList(List<Chapter> chapters) {
+        this.chapterList = chapters;
     }
 
     class ChapterViewHolder extends RecyclerView.ViewHolder {

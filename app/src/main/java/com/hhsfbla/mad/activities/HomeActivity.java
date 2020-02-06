@@ -120,52 +120,6 @@ public class HomeActivity extends AppCompatActivity {
 //        navigationView.setCheckedItem(R.id.teams);
 //        setTitle("My Teams");
 
-        //initialize chapters from firestore
-        db = FirebaseFirestore.getInstance();
-        if (chapterList == null) {
-            chapterList = new ArrayList<>();
-
-            db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
-                        chapterList.add(queryDocumentSnapshots.getDocuments().get(i).toObject(Chapter.class));
-                    }
-                }
-            });
-
-        }
-
-        //initialize users from firestore
-        if (userList == null) {
-            userList = new ArrayList<>();
-
-            db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
-                        userList.add(queryDocumentSnapshots.getDocuments().get(i).toObject(User.class));
-                    }
-                }
-            });
-        }
-
-        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                currentUser = documentSnapshot.toObject(User.class);
-            }
-        });
-
-        //initialize events from firestore user
-        if (eventList == null) {
-            db.collection("chapters").document(currentUser.getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    eventList = documentSnapshot.toObject(Chapter.class).getEvents();
-                }
-            });
-        }
     }
 
     @Override
@@ -182,20 +136,4 @@ public class HomeActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-
-    public static List<Chapter> getChapterList() {
-        return chapterList;
-    }
-
-    public static List<User> getUserList() {
-        return userList;
-    }
-
-    public static List<ChapterEvent> getEventList() {
-        return eventList;
-    }
-
-    public static User getCurrentUser() {
-        return currentUser;
-    }
 }
