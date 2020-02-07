@@ -114,11 +114,6 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
             }
         });
-
-//        Once you have the id for each fragment, put HomeFragment ID here instead of R.id.teams (also put in title)
-//        navigationView.setCheckedItem(R.id.teams);
-//        setTitle("My Teams");
-
     }
 
     @Override
@@ -134,5 +129,4 @@ public class HomeActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
 }

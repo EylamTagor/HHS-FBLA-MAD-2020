@@ -5,28 +5,32 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.HomeActivity;
 import com.hhsfbla.mad.data.Chapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder> {
+public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder> implements Filterable {
 
     private Context context;
     private List<Chapter> chapterList;
-    private FirebaseFirestore db;
+    private List<Chapter> fullList;
 
     public ChapterAdapter(Context context, final List<Chapter> chapterList) {
         this.context = context;
         this.chapterList = chapterList;
+        this.fullList = new ArrayList<>(chapterList);
     }
 
     @NonNull
@@ -65,6 +69,39 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     public void setChapterList(List<Chapter> chapters) {
         this.chapterList = chapters;
     }
+
+    @Override
+    public Filter getFilter() {
+        return chapterFilter;
+    }
+
+    private Filter chapterFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Chapter> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0)
+                filteredList.addAll(fullList);
+            else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Chapter c : fullList)
+                    if (c.getName().toLowerCase().contains(filterPattern) || c.getLocation().toLowerCase().contains(filterPattern))
+                        filteredList.add(c);
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            chapterList.clear();
+            chapterList.addAll((ArrayList) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     class ChapterViewHolder extends RecyclerView.ViewHolder {
         public TextView name, location;
