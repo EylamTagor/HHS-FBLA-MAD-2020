@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.HomeActivity;
 import com.hhsfbla.mad.data.Chapter;
@@ -53,30 +54,30 @@ public class HomeFragment extends Fragment {
         eventRecyclerView = root.findViewById(R.id.eventFeed);
         eventRecyclerView.setHasFixedSize(true);
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new EventAdapter(events, getContext());
+        adapter = new EventAdapter(events, root.getContext());
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currentUser = documentSnapshot.toObject(User.class);
-                db.collection("chapters").document(currentUser.getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                db.collection("chapters").document(currentUser.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        events = documentSnapshot.toObject(Chapter.class).getEvents();
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
                         Log.d(TAG, "here");
                         Log.d(TAG, events.toString());
-                        if(events.isEmpty()) {
+                        if (events.isEmpty()) {
                             noEventsYet.setVisibility(View.VISIBLE);
+                        } else {
+                            noEventsYet.setVisibility(View.INVISIBLE);
                         }
 //                        events.add(new ChapterEvent("example", "999", "888", "hello", "details", R.color.colorPrimaryDark));
                         adapter.setEvents(events);
                         eventRecyclerView.setAdapter(adapter);
                     }
                 });
-            }
-        });
 
-
+            }});
         return root;
     }
 }

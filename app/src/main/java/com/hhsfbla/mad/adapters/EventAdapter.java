@@ -2,6 +2,7 @@ package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.EventPageActivity;
+import com.hhsfbla.mad.activities.SignupActivity;
 import com.hhsfbla.mad.data.ChapterEvent;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     private List<ChapterEvent> events;
     private Context context;
-
+    private static final String TAG = "Event Adapter";
     public EventAdapter(List<ChapterEvent> events, Context context) {
         this.events = events;
         this.context = context;
@@ -49,6 +51,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "event clicked");
                 Intent intent = new Intent(context, EventPageActivity.class);
                 intent.putExtra("EVENT_POSITION", position);
                 context.startActivity(intent);

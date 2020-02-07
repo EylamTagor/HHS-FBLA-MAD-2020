@@ -26,6 +26,7 @@ public class EventPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_page);
+        setTitle("Event Details");
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = auth.getCurrentUser();
@@ -38,6 +39,8 @@ public class EventPageActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         List<ChapterEvent> eventList = documentSnapshot.toObject(Chapter.class).getEvents();
+                        if(eventList.isEmpty())
+                            return;
                         String eventPosition = getIntent().getStringExtra("EVENT_POSITION");
                         event = eventList.get(Integer.parseInt(eventPosition));
                     }

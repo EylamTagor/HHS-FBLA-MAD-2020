@@ -53,7 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
         profilePic = findViewById(R.id.profilePic);
         sign_outBtn = findViewById(R.id.sign_outBtn);
         doneBtn2 = findViewById(R.id.doneBtn2);
-
+        setTitle("Profile");
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {

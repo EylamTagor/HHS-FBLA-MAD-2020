@@ -55,6 +55,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,7 +88,6 @@ public class HomeActivity extends AppCompatActivity {
         name = header.findViewById(R.id.name_drawer);
 
         // user setup
-        user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // TODO set the ImageView to the user's pfp, TextViews below it to name/email
             email.setText(user.getEmail());

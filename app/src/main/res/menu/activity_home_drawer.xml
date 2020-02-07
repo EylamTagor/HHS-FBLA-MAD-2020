@@ -7,12 +7,13 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_menu_camera"
-        android:title="@string/menu_home" /><![CDATA[
+        android:title="@string/menu_home" />
+    <item
 
-    android:id="@+id/nav_comps"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_comps" />
-        ]]>
+        android:id="@+id/nav_comps"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="@string/menu_comps" />
+
     <item
             android:id="@+id/nav_calendar"
             android:icon="@drawable/ic_menu_manage"
@@ -50,34 +51,5 @@
                     android:title="@string/menu_contact" />
             </menu>
         </item>
-
-
-<!--    <group android:checkableBehavior="single">-->
-<!--        <item-->
-<!--            android:id="@+id/nav_message"-->
-<!--            android:icon="@drawable/ic_email_black_24dp"-->
-<!--            android:title="Message" />-->
-<!--        <item-->
-<!--            android:id="@+id/nav_chat"-->
-<!--            android:icon="@drawable/ic_email_black_24dp"-->
-<!--            android:title="Chat" />-->
-<!--        <item-->
-<!--            android:id="@+id/nav_profile"-->
-<!--            android:icon="@drawable/ic_email_black_24dp"-->
-<!--            android:title="Profile" />-->
-<!--    </group>-->
-
-<!--    <item android:title="Communicate">-->
-<!--        <menu>-->
-<!--            <item-->
-<!--                android:id="@+id/nav_share"-->
-<!--                android:icon="@drawable/ic_email_black_24dp"-->
-<!--                android:title="Share" />-->
-<!--            <item-->
-<!--                android:id="@+id/nav_send"-->
-<!--                android:icon="@drawable/ic_email_black_24dp"-->
-<!--                android:title="Send" />-->
-<!--        </menu>-->
-<!--    </item>-->
 
 </menu>
