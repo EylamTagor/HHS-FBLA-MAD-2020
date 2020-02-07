@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.AddEventActivity">
 
+
     <ImageButton
         android:id="@+id/backBtn2"
         android:layout_width="wrap_content"
@@ -16,151 +17,211 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/actionModeCloseDrawable" />
 
-    <TextView
-        android:id="@+id/nameTxtView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
-        android:text="Name:"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backBtn2" />
-
-    <TextView
-        android:id="@+id/dateTxtView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="39dp"
-        android:text="Date:"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <TextView
-        android:id="@+id/timeTxtView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:text="Time:"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateTxtView" />
-
-    <TextView
-        android:id="@+id/locaTxtView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:text="Location:"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeTxtView" />
-
-    <TextView
-        android:id="@+id/descrTxtView"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:text="Description:"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locaTxtView" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="32dp"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameTxtView"
-        tools:srcCompat="@color/colorGray"
-        tools:visibility="visible" />
-
-    <Button
-        android:id="@+id/editBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="132dp"
-        android:text="Edit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameEditTxt" />
-
-    <EditText
-        android:id="@+id/nameEditTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="55dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintStart_toEndOf="@+id/nameTxtView"
-        app:layout_constraintTop_toBottomOf="@+id/doneBtn" />
-
-    <EditText
-        android:id="@+id/dateEditTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="44dp"
-        android:ems="10"
-        android:inputType="date"
-        android:text="Date "
-        app:layout_constraintStart_toEndOf="@+id/dateTxtView"
-        app:layout_constraintTop_toBottomOf="@+id/editBtn" />
-
-    <EditText
-        android:id="@+id/timeEditTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:inputType="time"
-        android:text="Time"
-        app:layout_constraintStart_toEndOf="@+id/timeTxtView"
-        app:layout_constraintTop_toBottomOf="@+id/dateEditTxt" />
-
-    <EditText
-        android:id="@+id/locaEditTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:inputType="textPostalAddress"
-        android:text="Address"
-        app:layout_constraintStart_toEndOf="@+id/locaTxtView"
-        app:layout_constraintTop_toBottomOf="@+id/timeEditTxt" />
-
-    <EditText
-        android:id="@+id/descrEditTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:text="Description"
-        app:layout_constraintStart_toEndOf="@+id/descrTxtView"
-        app:layout_constraintTop_toBottomOf="@+id/locaEditTxt" />
-
     <Button
         android:id="@+id/doneBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
+        android:fontFamily="@font/andada"
         android:text="Done"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="410dp"
+        android:layout_height="590dp"
+        android:layout_marginTop="80dp"
+        android:fillViewport="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/nameTxtView"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="1dp"
+                    android:fontFamily="@font/andada"
+                    android:ems="10"
+                    android:textSize="20sp"
+                    android:text="Name:" />
+
+                <EditText
+                    android:id="@+id/nameEditTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:fontFamily="@font/andada"
+                    android:gravity="start|top"
+                    android:inputType="textPersonName"
+                    tools:layout_editor_absoluteX="199dp" />
+            </LinearLayout>
+
+
+
+            <ImageButton
+                android:id="@+id/imageBtn"
+                android:layout_width="194dp"
+                android:layout_height="102dp"
+                android:layout_marginStart="108dp"
+                android:layout_marginTop="32dp"
+                android:padding="0sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nameEditTxt"
+                tools:layout_editor_absoluteY="205dp"
+                tools:srcCompat="@color/colorGray" />
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/dateTxtView"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="1dp"
+                    android:fontFamily="@font/andada"
+                    android:ems="10"
+                    android:textSize="20sp"
+                    android:text="Date:" />
+
+                <EditText
+                    android:id="@+id/dateEditTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:fontFamily="@font/andada"
+                    android:gravity="start|top"
+                    android:inputType="date"
+                    tools:layout_editor_absoluteX="199dp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/timeTxtView"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="1dp"
+                    android:fontFamily="@font/andada"
+                    android:ems="10"
+                    android:textSize="20sp"
+                    android:text="Time:" />
+
+                <EditText
+                    android:id="@+id/timeEditTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:fontFamily="@font/andada"
+                    android:gravity="start|top"
+                    android:inputType="time"
+                    tools:layout_editor_absoluteX="199dp" />
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/locaTxtView"
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="1dp"
+                    android:fontFamily="@font/andada"
+                    android:ems="10"
+                    android:textSize="20sp"
+                    android:text="Location:" />
+
+                <EditText
+                    android:id="@+id/locaEditTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:fontFamily="@font/andada"
+                    android:gravity="start|top"
+                    android:inputType="textPostalAddress"
+                    tools:layout_editor_absoluteX="199dp" />
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/descrTxtView"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="1dp"
+                    android:fontFamily="@font/andada"
+                    android:ems="10"
+                    android:textSize="20sp"
+                    android:text="Description:" />
+
+                <EditText
+                    android:id="@+id/descrEditTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:fontFamily="@font/andada"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"
+                    tools:layout_editor_absoluteX="199dp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

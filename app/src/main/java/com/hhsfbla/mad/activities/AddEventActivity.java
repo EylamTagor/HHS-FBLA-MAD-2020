@@ -26,13 +26,12 @@ public class AddEventActivity extends AppCompatActivity {
 
     private ImageButton backBtn2;
     private Button doneBtn;
-    private Button editBtn;
     private EditText nameEditTxt;
     private EditText dateEditTxt;
     private EditText timeEditTxt;
     private EditText locaEditTxt;
     private EditText descrEditTxt;
-    private ImageView imageView;
+    private ImageButton imageBtn;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private static final String TAG = "ADDEVENTPAGE";
@@ -47,13 +46,12 @@ public class AddEventActivity extends AppCompatActivity {
 
         backBtn2 = findViewById(R.id.backBtn2);
         doneBtn = findViewById(R.id.doneBtn);
-        editBtn = findViewById(R.id.editBtn);
         nameEditTxt = findViewById(R.id.nameEditTxt);
         dateEditTxt = findViewById(R.id.dateEditTxt);
         timeEditTxt = findViewById(R.id.timeEditTxt);
         locaEditTxt = findViewById(R.id.locaEditTxt);
         descrEditTxt = findViewById(R.id.descrEditTxt);
-        imageView = findViewById(R.id.imageView);
+        imageBtn = findViewById(R.id.imageBtn);
 
 
         backBtn2.setOnClickListener(new View.OnClickListener() {
