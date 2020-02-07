@@ -15,10 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.EventPageActivity;
-import com.hhsfbla.mad.activities.SignupActivity;
 import com.hhsfbla.mad.data.ChapterEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {

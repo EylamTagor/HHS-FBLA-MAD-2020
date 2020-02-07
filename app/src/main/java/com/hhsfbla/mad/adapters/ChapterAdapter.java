@@ -1,20 +1,21 @@
 package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.activities.HomeActivity;
 import com.hhsfbla.mad.data.Chapter;
-import com.hhsfbla.mad.data.ChapterEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder> {
@@ -44,6 +45,15 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
             holder.location.setText("Somewhere in space (no location set)");
         } else
             holder.location.setText(chapter.getLocation());
+
+        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, HomeActivity.class);
+                intent.putExtra("CHAPTER_POSITION", position);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -57,13 +67,15 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     }
 
     class ChapterViewHolder extends RecyclerView.ViewHolder {
-        TextView name, location;
+        public TextView name, location;
+        public ConstraintLayout constraintLayout;
 
         public ChapterViewHolder(@NonNull View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.chapterName);
             location = itemView.findViewById(R.id.chapterLocation);
+            constraintLayout = itemView.findViewById(R.id.chapterConstraintLayout);
         }
     }
 }
