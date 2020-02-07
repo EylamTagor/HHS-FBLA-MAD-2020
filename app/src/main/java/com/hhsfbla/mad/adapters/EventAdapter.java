@@ -51,7 +51,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             public void onClick(View v) {
                 Log.d(TAG, "event clicked");
                 Intent intent = new Intent(context, EventPageActivity.class);
-                intent.putExtra("EVENT_POSITION", position);
+                intent.putExtra("EVENT_POSITION", events.get(position).getName());
                 context.startActivity(intent);
             }
         });
