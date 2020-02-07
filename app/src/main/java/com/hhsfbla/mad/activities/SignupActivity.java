@@ -3,7 +3,10 @@ package com.hhsfbla.mad.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,11 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.adapters.ChapterAdapter;
+import com.hhsfbla.mad.data.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +36,7 @@ public class SignupActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private FirebaseUser fuser;
-    private boolean failed = true;
-
+    private Button createNewChapter;
     private static final String TAG = "signupactivity";
 
     @Override
@@ -43,6 +48,7 @@ public class SignupActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         fuser = auth.getCurrentUser();
 
+        createNewChapter = findViewById(R.id.createNewChapter);
         searchView = findViewById(R.id.searchChapters);
         recyclerView = findViewById(R.id.chapterList);
         recyclerView.setHasFixedSize(true);
@@ -62,7 +68,14 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+        createNewChapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                        startActivity(new Intent(SignupActivity.this, SetupActivity.class));
+
+            }
+        });
     }
 
 
