@@ -54,9 +54,7 @@ public class SignupActivity extends AppCompatActivity {
         db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
-                    chapterList.add(queryDocumentSnapshots.getDocuments().get(i).toObject(Chapter.class));
-                }
+                chapterList = queryDocumentSnapshots.toObjects(Chapter.class);
                 Log.d(TAG, "lol");
                 Log.d(TAG, chapterList.toString() + "here");
                 adapter.setChapterList(chapterList);
@@ -78,17 +76,5 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    public void updateUI() {
 
-    }
-
-    private void sendToNextPage() {
-        if (!failed) {
-            Log.d(TAG, "Update UI");
-            fuser = auth.getCurrentUser();
-            Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
 }

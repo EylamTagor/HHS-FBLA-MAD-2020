@@ -156,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if(document.getId().equals(mAuth.getCurrentUser().getUid())) {
+                                if(document.getId().equals(mAuth.getCurrentUser().getUid()) && document.get("chapter") != null) {
                                     updateUI();
                                     Log.d(TAG, "return");
                                     return;

@@ -10,7 +10,7 @@ public class User {
     private String chapter;
     private UserType userType;
     private String email;
-    private ArrayList<ChapterEvent> myEvents;
+    private ArrayList<String> myEvents;
     private String blurb;  // Officers
     private String phoneNumber;
     private ArrayList<Competition> comps;
@@ -24,7 +24,7 @@ public class User {
         this.userType = UserType.MEMBER;
         this.chapter = chapter;
         this.email = email;
-        myEvents = new ArrayList<ChapterEvent>();
+        myEvents = new ArrayList<String>();
         comps = new ArrayList<Competition>();
     }
 
@@ -61,14 +61,11 @@ public class User {
     }
 
     public ArrayList<String> getMyEvents() {
-        ArrayList<String> names = new ArrayList<String>();
-        for(ChapterEvent event : myEvents) {
-            names.add(event.getName());
-        }
-        return names;
+
+        return myEvents;
     }
 
-    public void setMyEvents(ArrayList<ChapterEvent> myEvents) {
+    public void setMyEvents(ArrayList<String> myEvents) {
         this.myEvents = myEvents;
     }
 

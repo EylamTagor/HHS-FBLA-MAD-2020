@@ -9,14 +9,24 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.HomeActivity;
 import com.hhsfbla.mad.data.Chapter;
+import com.hhsfbla.mad.data.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +37,14 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     private List<Chapter> chapterList;
     private List<Chapter> fullList;
 
+
+    private FirebaseFirestore db;
+    private FirebaseUser fuser;
     public ChapterAdapter(Context context, final List<Chapter> chapterList) {
         this.context = context;
         this.chapterList = chapterList;
-        this.fullList = new ArrayList<>(chapterList);
+        db = FirebaseFirestore.getInstance();
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @NonNull
@@ -53,9 +67,22 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, HomeActivity.class);
-                intent.putExtra("CHAPTER_POSITION", position);
-                context.startActivity(intent);
+                db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
+                            if(snapshot.toObject(Chapter.class).getName().equalsIgnoreCase(chapterList.get(position).getName())) {
+                                db.collection("users").document(fuser.getUid()).set(new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail()));
+                                db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
+                                Intent intent = new Intent(context, HomeActivity.class);
+                                context.startActivity(intent);
+                                return;
+                            }
+                        }
+                        Toast.makeText(context, "Error lol", Toast.LENGTH_LONG).show();
+                    }
+                });
+
             }
         });
     }
