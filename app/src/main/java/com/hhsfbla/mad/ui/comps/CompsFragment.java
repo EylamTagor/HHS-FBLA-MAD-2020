@@ -2,6 +2,8 @@ package com.hhsfbla.mad.ui.comps;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hhsfbla.mad.R;
 
 public class CompsFragment extends Fragment {
