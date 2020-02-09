@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.SetupActivity">
 
-    <TextView
+    <EditText
         android:id="@+id/chapterName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.18" />
 
-    <TextView
+    <EditText
         android:id="@+id/chapterInstagram"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chapterName" />
 
-    <TextView
+    <EditText
         android:id="@+id/chapterFacebook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chapterDescription" />
 
-    <TextView
+    <EditText
         android:id="@+id/chapterDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chapterFacebook" />
 
-    <TextView
+    <EditText
         android:id="@+id/chapterLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
