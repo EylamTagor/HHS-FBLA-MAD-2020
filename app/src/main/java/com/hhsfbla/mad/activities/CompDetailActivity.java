@@ -58,8 +58,18 @@ public class CompDetailActivity extends AppCompatActivity {
         pic = findViewById(R.id.compPicDetail);
 
         db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d(TAG, competitors.toString());
+                User temp = documentSnapshot.toObject(User.class);
+                if(temp.getComps().contains(compName)) {
+                    joinButton.setVisibility(View.GONE);
+                    unJoinButton.setVisibility(View.VISIBLE);
+                } else {
+                    joinButton.setVisibility(View.VISIBLE);
+                    unJoinButton.setVisibility(View.GONE);
+                }
                 db.collection("chapters").document(documentSnapshot.get("chapter").toString()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(final DocumentSnapshot snap) {
@@ -79,14 +89,7 @@ public class CompDetailActivity extends AppCompatActivity {
                                 if(competitors == null || competitors.size() > 3) {
                                     return;
                                 }
-                                Log.d(TAG, competitors.toString());
-                                if(competitors.contains(fuser.getUid())) {
-                                    joinButton.setVisibility(View.GONE);
-                                    unJoinButton.setVisibility(View.VISIBLE);
-                                } else {
-                                    joinButton.setVisibility(View.VISIBLE);
-                                    unJoinButton.setVisibility(View.GONE);
-                                }
+
                             }
                         });
                     }
