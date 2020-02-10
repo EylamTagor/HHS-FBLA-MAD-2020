@@ -24,6 +24,7 @@ import com.hhsfbla.mad.data.User;
 import java.util.List;
 
 public class EventPageActivity extends AppCompatActivity {
+
     private ChapterEvent mainEvent;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -31,6 +32,7 @@ public class EventPageActivity extends AppCompatActivity {
     private Button joinButton;
     private Button unJoinButton;
     private static final String TAG = "Event Details Page";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
