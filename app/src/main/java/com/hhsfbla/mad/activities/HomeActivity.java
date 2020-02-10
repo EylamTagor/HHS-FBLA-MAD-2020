@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                startActivity(new Intent(HomeActivity.this, AddEventActivity.class));
-                startActivity(new Intent(HomeActivity.this, SignupActivity.class));
+                startActivity(new Intent(HomeActivity.this, AddEventActivity.class));
             }
         });
 
@@ -88,7 +88,6 @@ public class HomeActivity extends AppCompatActivity {
 
         // user setup
         if (user != null) {
-            // TODO set the ImageView to the user's pfp, TextViews below it to name/email
             email.setText(user.getEmail());
             if (!user.getDisplayName().isEmpty()) {
                 name.setText(user.getDisplayName());

@@ -71,7 +71,6 @@ public class HomeFragment extends Fragment {
                         } else {
                             noEventsYet.setVisibility(View.INVISIBLE);
                         }
-//                        events.add(new ChapterEvent("example", "999", "888", "hello", "details", R.color.colorPrimaryDark));
                         adapter.setEvents(events);
                         eventRecyclerView.setAdapter(adapter);
                     }

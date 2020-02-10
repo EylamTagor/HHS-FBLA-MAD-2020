@@ -6,4 +6,65 @@
     android:layout_height="match_parent"
     tools:context=".activities.SetupActivity">
 
+    <EditText
+        android:id="@+id/chapterName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chapter Name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.18" />
+
+    <EditText
+        android:id="@+id/chapterInstagram"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chapter Insta"
+        app:layout_constraintBottom_toTopOf="@+id/chapterDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chapterName" />
+
+    <EditText
+        android:id="@+id/chapterFacebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chapter FB"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chapterDescription" />
+
+    <EditText
+        android:id="@+id/chapterDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chapter Description"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chapterName" />
+
+    <Button
+        android:id="@+id/createChapterButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chapterFacebook" />
+
+    <EditText
+        android:id="@+id/chapterLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        app:layout_constraintBottom_toTopOf="@+id/chapterInstagram"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chapterName" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
