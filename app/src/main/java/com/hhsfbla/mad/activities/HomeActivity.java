@@ -88,7 +88,6 @@ public class HomeActivity extends AppCompatActivity {
 
         // user setup
         if (user != null) {
-            // TODO set the ImageView to the user's pfp, TextViews below it to name/email
             email.setText(user.getEmail());
             if (!user.getDisplayName().isEmpty()) {
                 name.setText(user.getDisplayName());
