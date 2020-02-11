@@ -42,7 +42,6 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
         final Competition comp = comps.get(position);
 
         holder.name.setText(comp.getName());
-        holder.description.setText(comp.getDescription());
         holder.pic.setImageResource(comp.getPic());
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +64,7 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView name, description;
+        public TextView name;
         public ImageView pic;
         public ConstraintLayout constraintLayout;
 
@@ -73,7 +72,6 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
             super(itemView);
 
             name = itemView.findViewById(R.id.competitionName);
-            description = itemView.findViewById(R.id.competitionDescription);
             pic = itemView.findViewById(R.id.competitionImage);
             constraintLayout = itemView.findViewById(R.id.competitionConstraintLayout);
         }

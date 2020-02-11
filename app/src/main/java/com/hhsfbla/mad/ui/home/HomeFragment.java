@@ -31,8 +31,6 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
-    private TextView chapter_nameTxtView;
-    private ImageView imageView;
     private TextView noEventsYet;
     private RecyclerView eventRecyclerView;
     private EventAdapter adapter;
