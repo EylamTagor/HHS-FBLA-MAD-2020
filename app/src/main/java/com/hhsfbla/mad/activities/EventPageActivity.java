@@ -36,6 +36,7 @@ public class EventPageActivity extends AppCompatActivity {
     private Button joinButton;
     private Button unJoinButton;
     private static final String TAG = "Event Details Page";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -23,9 +23,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.ChapterEvent;
+import com.hhsfbla.mad.data.CompType;
+import com.hhsfbla.mad.data.Competition;
 import com.hhsfbla.mad.data.User;
 import com.squareup.picasso.Picasso;
 
@@ -39,12 +42,6 @@ public class HomeActivity extends AppCompatActivity {
     private TextView name;
     private TextView email;
     private FirebaseFirestore db;
-
-    //initialize chapter list from firestore
-    private static List<Chapter> chapterList;
-    private static List<User> userList;
-    private static List<ChapterEvent> eventList;
-    private static User currentUser;
 
     private static final String TAG = "DASHBOARD";
 
@@ -113,6 +110,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
             }
         });
+
     }
 
 

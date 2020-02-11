@@ -40,6 +40,7 @@
 
     <string name="name">Name:</string>
     <string name="email">Email:</string>
+    <string name="title_activity_comp_detail">CompDetailActivity</string>
 
 
     <!--    <string name="default_web_client_id">968052628426-1jl22qaspvgnminmiba4qm25f3kbmnvn.apps.googleusercontent.com</string>-->
