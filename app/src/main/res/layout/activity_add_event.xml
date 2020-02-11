@@ -13,6 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
+        android:background="@drawable/button_border"
+        android:backgroundTint="#00FFFFFF"
+        android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/actionModeCloseDrawable" />
@@ -23,10 +26,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
+        android:background="@drawable/button_border"
+        android:backgroundTint="#000000"
+        android:foreground="?android:attr/selectableItemBackground"
         android:fontFamily="@font/andada"
         android:text="Done"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 
     <ScrollView
         android:layout_width="410dp"
@@ -41,186 +49,134 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="16dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="#000000"
+            app:boxStrokeWidth="10sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameEditTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:hint="Enter Name" />
 
-                <TextView
-                    android:id="@+id/nameTxtView"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="1dp"
-                    android:fontFamily="@font/andada"
-                    android:ems="10"
-                    android:textSize="20sp"
-                    android:text="Name:" />
-
-                <EditText
-                    android:id="@+id/nameEditTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:fontFamily="@font/andada"
-                    android:gravity="start|top"
-                    android:inputType="textPersonName"
-                    tools:layout_editor_absoluteX="199dp" />
-            </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-
-            <ImageButton
-                android:id="@+id/imageBtn"
-                android:layout_width="194dp"
-                android:layout_height="102dp"
-                android:layout_marginStart="108dp"
-                android:layout_marginTop="32dp"
-                android:padding="0sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nameEditTxt"
-                tools:layout_editor_absoluteY="205dp"
-                tools:srcCompat="@color/colorGray" />
-
+        <ImageButton
+            android:id="@+id/imageBtn"
+            android:layout_width="194dp"
+            android:layout_height="102dp"
+            android:layout_marginStart="108dp"
+            android:layout_marginTop="16dp"
+            android:padding="0sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nameEditTxt"
+            tools:layout_editor_absoluteY="205dp"
+            tools:srcCompat="@color/colorGray" />
 
 
-
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="#000000"
+                app:boxStrokeWidth="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/dateTxtView"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="1dp"
-                    android:fontFamily="@font/andada"
-                    android:ems="10"
-                    android:textSize="20sp"
-                    android:text="Date:" />
-
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/dateEditTxt"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:fontFamily="@font/andada"
-                    android:gravity="start|top"
-                    android:inputType="date"
-                    tools:layout_editor_absoluteX="199dp" />
-            </LinearLayout>
+                    android:hint="Enter Date" />
 
 
-            <LinearLayout
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="#000000"
+                app:boxStrokeWidth="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/timeTxtView"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="1dp"
-                    android:fontFamily="@font/andada"
-                    android:ems="10"
-                    android:textSize="20sp"
-                    android:text="Time:" />
-
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/timeEditTxt"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:fontFamily="@font/andada"
-                    android:gravity="start|top"
-                    android:inputType="time"
-                    tools:layout_editor_absoluteX="199dp" />
-            </LinearLayout>
+                    android:hint="Enter Time" />
 
 
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="#000000"
+                app:boxStrokeWidth="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/locaTxtView"
-                    android:layout_width="85dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="1dp"
-                    android:fontFamily="@font/andada"
-                    android:ems="10"
-                    android:textSize="20sp"
-                    android:text="Location:" />
-
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/locaEditTxt"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:fontFamily="@font/andada"
-                    android:gravity="start|top"
-                    android:inputType="textPostalAddress"
-                    tools:layout_editor_absoluteX="199dp" />
-            </LinearLayout>
+                    android:hint="Enter Location" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
 
 
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="#000000"
+                app:boxStrokeWidth="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/descrTxtView"
-                    android:layout_width="110dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="1dp"
-                    android:fontFamily="@font/andada"
-                    android:ems="10"
-                    android:textSize="20sp"
-                    android:text="Description:" />
-
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descrEditTxt"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:fontFamily="@font/andada"
-                    android:gravity="start|top"
                     android:inputType="textMultiLine"
-                    tools:layout_editor_absoluteX="199dp" />
-            </LinearLayout>
+                    android:hint="Enter Description" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
 
         </LinearLayout>
+
     </ScrollView>
 
 

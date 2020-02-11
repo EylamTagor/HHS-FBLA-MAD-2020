@@ -2,7 +2,6 @@ package com.hhsfbla.mad.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,14 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
 
@@ -26,11 +24,11 @@ public class AddEventActivity extends AppCompatActivity {
 
     private ImageButton backBtn2;
     private Button doneBtn;
-    private EditText nameEditTxt;
-    private EditText dateEditTxt;
-    private EditText timeEditTxt;
-    private EditText locaEditTxt;
-    private EditText descrEditTxt;
+    private TextInputEditText nameEditTxt;
+    private TextInputEditText dateEditTxt;
+    private TextInputEditText timeEditTxt;
+    private TextInputEditText locaEditTxt;
+    private TextInputEditText descrEditTxt;
     private ImageButton imageBtn;
     private FirebaseFirestore db;
     private FirebaseUser user;
