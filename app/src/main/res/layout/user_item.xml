@@ -18,34 +18,31 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/userConstraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:paddingBottom="16dp">
 
             <TextView
                 android:id="@+id/userNameDetail"
-                android:layout_width="289dp"
-                android:layout_height="35dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:text="User Name"
                 android:textColor="@android:color/black"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.6"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@+id/userImageDetail"
+                app:layout_constraintStart_toEndOf="@+id/userImageDetail"
+                app:layout_constraintTop_toTopOf="@+id/userImageDetail" />
 
             <ImageView
                 android:id="@+id/userImageDetail"
-                android:layout_width="53dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/userNameDetail"
-                app:layout_constraintHorizontal_bias="0.14"
+                android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/location_icon" />
+                app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
