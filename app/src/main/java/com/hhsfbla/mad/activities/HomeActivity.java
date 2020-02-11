@@ -23,16 +23,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.data.Chapter;
-import com.hhsfbla.mad.data.ChapterEvent;
-import com.hhsfbla.mad.data.CompType;
-import com.hhsfbla.mad.data.Competition;
-import com.hhsfbla.mad.data.User;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -112,8 +104,6 @@ public class HomeActivity extends AppCompatActivity {
         });
 
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
