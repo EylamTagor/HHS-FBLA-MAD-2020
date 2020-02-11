@@ -6,222 +6,133 @@
     android:layout_height="match_parent"
     tools:context=".activities.AddEventActivity">
 
+    <EditText
+        android:id="@+id/facebookLinkField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Link to Facebook event (optional)"
+        android:inputType="textPersonName"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationField" />
+
+    <EditText
+        android:id="@+id/nameField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Event Name"
+        android:inputType="textPersonName"
+        android:textColor="@android:color/black"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/uploadEventPic"
+        android:layout_width="match_parent"
+        android:layout_height="192dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/com_facebook_button_background_color_disabled"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameField"
+        app:srcCompat="@drawable/camera_icon" />
+
+    <EditText
+        android:id="@+id/dateField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Date"
+        android:inputType="textPersonName"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/uploadEventPic" />
+
+    <EditText
+        android:id="@+id/timeField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Time"
+        android:inputType="textPersonName"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateField" />
+
+    <EditText
+        android:id="@+id/locationField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Location"
+        android:inputType="textPersonName"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeField" />
+
+    <EditText
+        android:id="@+id/descriptionField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Description"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/facebookLinkField" />
 
     <ImageButton
         android:id="@+id/backBtn2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/button_border"
+        android:padding="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?attr/actionModeCloseDrawable" />
+        app:layout_constraintTop_toBottomOf="@+id/descriptionField"
+        app:srcCompat="@drawable/back_button" />
 
-    <Button
-        android:id="@+id/doneBtn"
+    <ImageButton
+        android:id="@+id/finishEventBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:fontFamily="@font/andada"
-        android:text="Done"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="64dp"
+        android:background="@drawable/button_border"
+        android:padding="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ScrollView
-        android:layout_width="410dp"
-        android:layout_height="590dp"
-        android:layout_marginTop="80dp"
-        android:fillViewport="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/nameTxtView"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="1dp"
-                    android:fontFamily="@font/andada"
-                    android:ems="10"
-                    android:textSize="20sp"
-                    android:text="Name:" />
-
-                <EditText
-                    android:id="@+id/nameEditTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:fontFamily="@font/andada"
-                    android:gravity="start|top"
-                    android:inputType="textPersonName"
-                    tools:layout_editor_absoluteX="199dp" />
-            </LinearLayout>
-
-
-
-            <ImageButton
-                android:id="@+id/imageBtn"
-                android:layout_width="194dp"
-                android:layout_height="102dp"
-                android:layout_marginStart="108dp"
-                android:layout_marginTop="32dp"
-                android:padding="0sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nameEditTxt"
-                tools:layout_editor_absoluteY="205dp"
-                tools:srcCompat="@color/colorGray" />
-
-
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/dateTxtView"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="1dp"
-                    android:fontFamily="@font/andada"
-                    android:ems="10"
-                    android:textSize="20sp"
-                    android:text="Date:" />
-
-                <EditText
-                    android:id="@+id/dateEditTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:fontFamily="@font/andada"
-                    android:gravity="start|top"
-                    android:inputType="date"
-                    tools:layout_editor_absoluteX="199dp" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/timeTxtView"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="1dp"
-                    android:fontFamily="@font/andada"
-                    android:ems="10"
-                    android:textSize="20sp"
-                    android:text="Time:" />
-
-                <EditText
-                    android:id="@+id/timeEditTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:fontFamily="@font/andada"
-                    android:gravity="start|top"
-                    android:inputType="time"
-                    tools:layout_editor_absoluteX="199dp" />
-            </LinearLayout>
-
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/locaTxtView"
-                    android:layout_width="85dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="1dp"
-                    android:fontFamily="@font/andada"
-                    android:ems="10"
-                    android:textSize="20sp"
-                    android:text="Location:" />
-
-                <EditText
-                    android:id="@+id/locaEditTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:fontFamily="@font/andada"
-                    android:gravity="start|top"
-                    android:inputType="textPostalAddress"
-                    tools:layout_editor_absoluteX="199dp" />
-            </LinearLayout>
-
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/descrTxtView"
-                    android:layout_width="110dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="1dp"
-                    android:fontFamily="@font/andada"
-                    android:ems="10"
-                    android:textSize="20sp"
-                    android:text="Description:" />
-
-                <EditText
-                    android:id="@+id/descrEditTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:fontFamily="@font/andada"
-                    android:gravity="start|top"
-                    android:inputType="textMultiLine"
-                    tools:layout_editor_absoluteX="199dp" />
-            </LinearLayout>
-
-
-        </LinearLayout>
-    </ScrollView>
-
+        app:layout_constraintTop_toBottomOf="@+id/descriptionField"
+        app:srcCompat="@drawable/check_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

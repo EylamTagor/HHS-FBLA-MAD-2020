@@ -1,40 +1,38 @@
 package com.hhsfbla.mad.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
 
 public class AddEventActivity extends AppCompatActivity {
+    private static final int RESULT_LOAD_IMAGE = 1;
 
-
-    private ImageButton backBtn2;
-    private Button doneBtn;
-    private EditText nameEditTxt;
-    private EditText dateEditTxt;
-    private EditText timeEditTxt;
-    private EditText locaEditTxt;
-    private EditText descrEditTxt;
+    private ImageButton backBtn2, doneBtn;
+    private EditText nameEditTxt, dateEditTxt, timeEditTxt, locaEditTxt, descrEditTxt, linkEditTxt;
     private ImageButton imageBtn;
+
     private FirebaseFirestore db;
     private FirebaseUser user;
     private static final String TAG = "ADDEVENTPAGE";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,14 +43,14 @@ public class AddEventActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         backBtn2 = findViewById(R.id.backBtn2);
-        doneBtn = findViewById(R.id.doneBtn);
-        nameEditTxt = findViewById(R.id.nameEditTxt);
-        dateEditTxt = findViewById(R.id.dateEditTxt);
-        timeEditTxt = findViewById(R.id.timeEditTxt);
-        locaEditTxt = findViewById(R.id.locaEditTxt);
-        descrEditTxt = findViewById(R.id.descrEditTxt);
-        imageBtn = findViewById(R.id.imageBtn);
-
+        doneBtn = findViewById(R.id.finishEventBtn);
+        nameEditTxt = findViewById(R.id.nameField);
+        dateEditTxt = findViewById(R.id.dateField);
+        timeEditTxt = findViewById(R.id.timeField);
+        locaEditTxt = findViewById(R.id.locationField);
+        descrEditTxt = findViewById(R.id.descriptionField);
+        linkEditTxt = findViewById(R.id.facebookLinkField);
+        imageBtn = findViewById(R.id.uploadEventPic);
 
         backBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +58,6 @@ public class AddEventActivity extends AppCompatActivity {
                 startActivity(new Intent(AddEventActivity.this, HomeActivity.class));
             }
         });
-
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -71,11 +68,26 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
 
+        imageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+            }
+        });
     }
 
     public void addEvent() {
-        //TODO figure out how to set image
-        final ChapterEvent event = new ChapterEvent(nameEditTxt.getText().toString(), dateEditTxt.getText().toString(), timeEditTxt.getText().toString(), locaEditTxt.getText().toString(), descrEditTxt.getText().toString(), 0);
+        Bitmap bitmap = ((BitmapDrawable) imageBtn.getDrawable()).getBitmap();
+
+        final ChapterEvent event = new ChapterEvent(
+                nameEditTxt.getText().toString(),
+                dateEditTxt.getText().toString(),
+                timeEditTxt.getText().toString(),
+                locaEditTxt.getText().toString(),
+                descrEditTxt.getText().toString(),
+                linkEditTxt.getText().toString(),
+                bitmap);
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot userSnap) {
@@ -90,4 +102,12 @@ public class AddEventActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
+            Uri image = data.getData();
+            imageBtn.setImageURI(image);
+        }
+    }
 }
