@@ -3,12 +3,18 @@ package com.hhsfbla.mad.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -20,19 +26,21 @@ import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
 
 public class AddEventActivity extends AppCompatActivity {
+    private static final int RESULT_LOAD_IMAGE = 1;
 
 
-    private ImageButton backBtn2;
-    private Button doneBtn;
+
+    private ImageButton backBtn2, doneBtn, imageBtn;
     private TextInputEditText nameEditTxt;
     private TextInputEditText dateEditTxt;
     private TextInputEditText timeEditTxt;
     private TextInputEditText locaEditTxt;
     private TextInputEditText descrEditTxt;
-    private ImageButton imageBtn;
+    private EditText linkEditTxt;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private static final String TAG = "ADDEVENTPAGE";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +57,8 @@ public class AddEventActivity extends AppCompatActivity {
         timeEditTxt = findViewById(R.id.timeEditTxt);
         locaEditTxt = findViewById(R.id.locaEditTxt);
         descrEditTxt = findViewById(R.id.descrEditTxt);
+        linkEditTxt = findViewById(R.id.linkEditTxt);
         imageBtn = findViewById(R.id.imageBtn);
-
 
         backBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +66,6 @@ public class AddEventActivity extends AppCompatActivity {
                 startActivity(new Intent(AddEventActivity.this, HomeActivity.class));
             }
         });
-
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -69,11 +76,26 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
 
+        imageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+            }
+        });
     }
 
     public void addEvent() {
-        //TODO figure out how to set image
-        final ChapterEvent event = new ChapterEvent(nameEditTxt.getText().toString(), dateEditTxt.getText().toString(), timeEditTxt.getText().toString(), locaEditTxt.getText().toString(), descrEditTxt.getText().toString(), 0);
+        Bitmap bitmap = ((BitmapDrawable) imageBtn.getDrawable()).getBitmap();
+
+        final ChapterEvent event = new ChapterEvent(
+                nameEditTxt.getText().toString(),
+                dateEditTxt.getText().toString(),
+                timeEditTxt.getText().toString(),
+                locaEditTxt.getText().toString(),
+                descrEditTxt.getText().toString(),
+                linkEditTxt.getText().toString(),
+                bitmap);
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot userSnap) {
@@ -88,4 +110,12 @@ public class AddEventActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
+            Uri image = data.getData();
+            imageBtn.setImageURI(image);
+        }
+    }
 }

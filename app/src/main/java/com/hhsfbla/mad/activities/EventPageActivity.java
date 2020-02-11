@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +26,9 @@ import com.hhsfbla.mad.data.User;
 import java.util.List;
 
 public class EventPageActivity extends AppCompatActivity {
+    private TextView title, date, time, location, desc;
+    private ImageView dateIcon, timeIcon, locationIcon;
+
     private ChapterEvent mainEvent;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -31,6 +36,7 @@ public class EventPageActivity extends AppCompatActivity {
     private Button joinButton;
     private Button unJoinButton;
     private static final String TAG = "Event Details Page";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +68,23 @@ public class EventPageActivity extends AppCompatActivity {
                                     unJoinButton.setVisibility(View.GONE);
                                 }
                                 mainEvent = event;
+
+                                //set event details
+                                title = findViewById(R.id.eventTitleDetail);
+                                title.setText(mainEvent.getName());
+
+                                date = findViewById(R.id.eventDateDetail);
+                                date.setText(mainEvent.getDate());
+
+                                time = findViewById(R.id.eventTimeDetail);
+                                time.setText(mainEvent.getTime());
+
+                                location = findViewById(R.id.eventLocationDetail);
+                                location.setText(mainEvent.getLocation());
+
+                                desc = findViewById(R.id.eventDescriptionDetail);
+                                desc.setText(mainEvent.getDescription());
+
                                 return;
                             }
                         }
@@ -69,6 +92,7 @@ public class EventPageActivity extends AppCompatActivity {
                 });
             }
         });
+
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

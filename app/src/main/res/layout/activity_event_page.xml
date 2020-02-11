@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Event Title"
         android:textColor="@android:color/black"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -28,8 +27,7 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventTitleDetail"
-        app:srcCompat="@color/colorPrimaryDark" />
+        app:layout_constraintTop_toBottomOf="@+id/eventTitleDetail" />
 
     <ImageView
         android:id="@+id/calendarIconDetail"
@@ -46,14 +44,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="13/32/20"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/locationIconDetail"
-        app:layout_constraintTop_toBottomOf="@+id/eventTimeDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/eventPicDetail" />
 
     <ImageView
         android:id="@+id/clockIconDetail"
@@ -72,12 +69,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
-        android:text="0:60pm-25:00pm"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/clockIconDetail"
-        app:layout_constraintTop_toBottomOf="@+id/eventLocationDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/eventDateDetail" />
 
     <ImageView
         android:id="@+id/locationIconDetail"
@@ -94,43 +90,26 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
-        android:text="1600 Pennsylvania Ave, Washington, D.C."
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/calendarIconDetail"
-        app:layout_constraintTop_toBottomOf="@+id/eventPicDetail" />
-
-    <TextView
-        android:id="@+id/eventDescriptionTitleDetail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:text="Description"
-        android:textColor="@android:color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventDateDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/eventTimeDetail" />
 
     <TextView
         android:id="@+id/eventDescriptionDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:text="This event exists, has existed, or will exist, and will occur from some time in one day to another time in either the same day or another day. The location can be one or multiple locations, as it depends solely on the event's organizer to decide."
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventDescriptionTitleDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/eventLocationDetail" />
 
     <Button
         android:id="@+id/joinButton"

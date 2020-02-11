@@ -45,7 +45,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.date.setText(event.getDate());
         holder.time.setText(event.getTime());
         holder.location.setText(event.getLocation());
-        holder.pic.setImageResource(event.getPic());
+        holder.pic.setImageBitmap(event.getPic());
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

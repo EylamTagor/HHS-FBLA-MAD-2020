@@ -7,6 +7,7 @@
     tools:context=".activities.AddEventActivity">
 
 
+
     <ImageButton
         android:id="@+id/backBtn2"
         android:layout_width="wrap_content"
@@ -14,35 +15,33 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/button_border"
-        android:backgroundTint="#00FFFFFF"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?attr/actionModeCloseDrawable" />
+        app:srcCompat="@drawable/back_button" />
 
-    <Button
-        android:id="@+id/doneBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:background="@drawable/button_border"
-        android:backgroundTint="#000000"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:fontFamily="@font/andada"
-        android:text="Done"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageButton
+            android:id="@+id/doneBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/button_border"
+            android:padding="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/check_icon" />
 
 
+    
 
     <ScrollView
         android:layout_width="410dp"
-        android:layout_height="590dp"
-        android:layout_marginTop="80dp"
+        android:layout_height="490dp"
+        android:layout_marginTop="10dp"
         android:fillViewport="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,23 +64,24 @@
                 android:id="@+id/nameEditTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Name" />
-
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:hint="Event Name"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <ImageButton
             android:id="@+id/imageBtn"
-            android:layout_width="194dp"
-            android:layout_height="102dp"
-            android:layout_marginStart="108dp"
+            android:layout_width="match_parent"
+            android:layout_height="192dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:padding="0sp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/com_facebook_button_background_color_disabled"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/nameEditTxt"
-            tools:layout_editor_absoluteY="205dp"
-            tools:srcCompat="@color/colorGray" />
-
+            app:layout_constraintTop_toBottomOf="@+id/nameEditTxt"
+            app:srcCompat="@drawable/camera_icon" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -123,7 +123,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Enter Time" />
+    
 
+    
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -137,6 +139,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:boxStrokeColor="#000000"
                 app:boxStrokeWidth="10sp"
+                android:textColor="@android:color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -149,7 +152,20 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
+            <EditText
+                android:id="@+id/linkEditTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:hint="Link to Facebook event (optional)"
+                android:inputType="textPersonName"
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/locaEditTxt" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -157,9 +173,11 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:boxStrokeColor="#000000"
                 app:boxStrokeWidth="10sp"
+                android:textColor="@android:color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -174,10 +192,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-
         </LinearLayout>
 
     </ScrollView>
 
 
+    
 </androidx.constraintlayout.widget.ConstraintLayout>

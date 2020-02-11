@@ -32,7 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton backBtn;
     private EditText name;
     private EditText email;
-    private EditText chapter;
+    private Button chapter;
     private FirebaseFirestore db;
     private Button sign_outBtn;
     private Button doneBtn2;
@@ -49,25 +49,11 @@ public class ProfileActivity extends AppCompatActivity {
         backBtn = findViewById(R.id.backBtn);
         name = findViewById(R.id.nameTextField);
         email = findViewById(R.id.emailTextField);
-        chapter = findViewById(R.id.chapterTextField);
+        chapter = findViewById(R.id.chapterButton);
         profilePic = findViewById(R.id.profilePic);
         sign_outBtn = findViewById(R.id.sign_outBtn);
         doneBtn2 = findViewById(R.id.doneBtn2);
         setTitle("Profile");
-        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                name.setText(documentSnapshot.get("name").toString());
-                if(documentSnapshot.get("chapter") != null) {
-                    db.collection("chapters").document(documentSnapshot.get("chapter").toString()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot chapterSnap) {
-                            chapter.setText(chapterSnap.get("name").toString());
-                        }
-                    });
-                }
-            }
-        });
         email.setText(user.getEmail());
         String photo = String.valueOf(user.getPhotoUrl());
         Picasso.get().load(photo).into(profilePic);
@@ -91,6 +77,14 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+
+        chapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                startActivity(new Intent(ProfileActivity.this, SignupActivity.class));
+            }
+        });
 
         sign_outBtn.setOnClickListener(new View.OnClickListener() {
             @Override
