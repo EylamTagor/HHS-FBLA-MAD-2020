@@ -92,8 +92,8 @@ public class ChapterEvent {
         return pic;
     }
 
-    public void setPic(Bitmap picId) {
-        this.pic = picId;
+    public void setPic(Bitmap pic) {
+        this.pic = pic;
     }
 
     public String getFacebookLink() {
