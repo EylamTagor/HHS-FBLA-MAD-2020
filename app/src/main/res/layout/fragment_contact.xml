@@ -6,29 +6,18 @@
     android:layout_height="match_parent">
 
 
-    <ImageButton
-        android:id="@+id/backBtn3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/button_border"
-        android:padding="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/back_button" />
 
     <TextView
         android:id="@+id/contactTxtView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:text="Contact Us"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/backBtn3" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/fblaWebLinkTxtView"
