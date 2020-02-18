@@ -231,60 +231,60 @@ public class EventPageActivity extends AppCompatActivity {
 
             }
         });
-        final AppCompatActivity lol = this;
-        shareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<String> permissionNeeds = Arrays.asList("publish_actions");
-
-                manager.logInWithPublishPermissions(lol, permissionNeeds);
-
-                manager.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
-                {
-                    @Override
-                    public void onSuccess(LoginResult loginResult)
-                    {
-                        Bitmap image = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.ic_launcher);
-                        SharePhoto photo = new SharePhoto.Builder()
-                            .setBitmap(image).setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg"))
-                            .build();
-                        SharePhotoContent content = new SharePhotoContent.Builder()
-                            .addPhoto(photo)
-
-                            .build();
-                        ShareApi.share(content, new FacebookCallback<Sharer.Result>() {
-                        @Override
-                        public void onSuccess(Sharer.Result result)
-                        {
-                            Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onCancel()
-                        {
-                            Log.d("FACEBOOK_TEST", "share api cancel");
-                        }
-
-                        @Override
-                        public void onError(FacebookException e)
-                        {
-                            Log.d("FACEBOOK_TEST", "share api error " + e);
-                        }
-                    });
-                    }
-
-                    @Override
-                    public void onCancel()
-                    {
-                        System.out.println("onCancel");
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception)
-                    {
-                        System.out.println("onError");
-                    }
-                });
+//        final AppCompatActivity lol = this;
+//        shareButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                List<String> permissionNeeds = Arrays.asList("publish_actions");
+//
+//                manager.logInWithPublishPermissions(lol, permissionNeeds);
+//
+//                manager.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+//                {
+//                    @Override
+//                    public void onSuccess(LoginResult loginResult)
+//                    {
+//                        Bitmap image = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.ic_launcher);
+//                        SharePhoto photo = new SharePhoto.Builder()
+//                            .setBitmap(image).setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg"))
+//                            .build();
+//                        SharePhotoContent content = new SharePhotoContent.Builder()
+//                            .addPhoto(photo)
+//
+//                            .build();
+//                        ShareApi.share(content, new FacebookCallback<Sharer.Result>() {
+//                        @Override
+//                        public void onSuccess(Sharer.Result result)
+//                        {
+//                            Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                        @Override
+//                        public void onCancel()
+//                        {
+//                            Log.d("FACEBOOK_TEST", "share api cancel");
+//                        }
+//
+//                        @Override
+//                        public void onError(FacebookException e)
+//                        {
+//                            Log.d("FACEBOOK_TEST", "share api error " + e);
+//                        }
+//                    });
+//                    }
+//
+//                    @Override
+//                    public void onCancel()
+//                    {
+//                        System.out.println("onCancel");
+//                    }
+//
+//                    @Override
+//                    public void onError(FacebookException exception)
+//                    {
+//                        System.out.println("onError");
+//                    }
+//                });
 //                if (ShareDialog.canShow(ShareLinkContent.class)) {
 //                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
 //                            .setContentUrl(Uri.parse("http://developers.facebook.com/android"))
@@ -336,8 +336,8 @@ public class EventPageActivity extends AppCompatActivity {
 //                    shareDialog.show(content);
 //                }
             }
-        });
-    }
+//        });
+
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
