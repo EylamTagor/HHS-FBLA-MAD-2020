@@ -8,43 +8,31 @@
 
     <TextView
         android:id="@+id/compNameDetail"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Comp Title"
+        android:layout_marginEnd="128dp"
         android:textColor="@android:color/black"
         android:textSize="28sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/compPicDetail"
-        android:layout_width="match_parent"
-        android:layout_height="128dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/compNameDetail"
-        app:srcCompat="@color/colorPrimaryDark" />
-
     <TextView
-        android:id="@+id/compDescriptionTitleDetail"
+        android:id="@+id/compTypeDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:text="Description"
         android:textColor="@android:color/black"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/compPicDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/compNameDetail" />
 
     <TextView
         android:id="@+id/compDescriptionDetail"
@@ -53,12 +41,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="This event exists, has existed, or will exist, and will occur from some time in one day to another time in either the same day or another day. The location can be one or multiple locations, as it depends solely on the event's organizer to decide."
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/compDescriptionTitleDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/compTypeDetail" />
 
     <Button
         android:id="@+id/compJoinButton"

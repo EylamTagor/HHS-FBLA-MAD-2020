@@ -25,7 +25,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
+import com.hhsfbla.mad.data.Competition;
 import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.ui.comps.CompsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +36,7 @@ public class CompDetailActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private FirebaseUser fuser;
-    private TextView name, description;
-    private ImageView pic;
+    private TextView name, description, type;
     private Button joinButton;
     private Button unJoinButton;
     private ArrayList<String> competitors;
@@ -50,12 +51,19 @@ public class CompDetailActivity extends AppCompatActivity {
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
         final String compName = getIntent().getStringExtra("COMP_POSITION");
+        Competition comp = null;
+        for (Competition c : CompsFragment.competitions)
+            if (c.getName().equals(compName))
+                comp = c;
+
         competitors = new ArrayList<String>();
         joinButton = findViewById(R.id.compJoinButton);
         unJoinButton = findViewById(R.id.compUnJoinButton);
         name = findViewById(R.id.compNameDetail);
         description = findViewById(R.id.compDescriptionDetail);
-        pic = findViewById(R.id.compPicDetail);
+        type = findViewById(R.id.compTypeDetail);
+        type.setText(comp.getCompType().toString() + " Competition");
+
 
         db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 
@@ -63,7 +71,7 @@ public class CompDetailActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Log.d(TAG, competitors.toString());
                 User temp = documentSnapshot.toObject(User.class);
-                if(temp.getComps().contains(compName)) {
+                if (temp.getComps().contains(compName)) {
                     joinButton.setVisibility(View.GONE);
                     unJoinButton.setVisibility(View.VISIBLE);
                 } else {
@@ -76,17 +84,17 @@ public class CompDetailActivity extends AppCompatActivity {
                         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(final QuerySnapshot users) {
-                                for(DocumentSnapshot user : users) {
-                                    for(String member : (List<String>)snap.get("users")) {
-                                        if(member.equalsIgnoreCase(user.getId())) {
-                                            if(user.toObject(User.class).getComps().contains(compName)) {
+                                for (DocumentSnapshot user : users) {
+                                    for (String member : (List<String>) snap.get("users")) {
+                                        if (member.equalsIgnoreCase(user.getId())) {
+                                            if (user.toObject(User.class).getComps().contains(compName)) {
                                                 competitors.add(member);
                                             }
                                         }
                                     }
                                 }
                                 //TODO set competitor names
-                                if(competitors == null || competitors.size() > 3) {
+                                if (competitors == null || competitors.size() > 3) {
                                     return;
                                 }
 

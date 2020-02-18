@@ -28,7 +28,7 @@
     <fragment
         android:id="@+id/nav_comps"
         android:name="com.hhsfbla.mad.ui.comps.CompsFragment"
-        android:label="Competetive Events"
+        android:label="Competitive Events"
         tools:layout="@layout/fragment_comps" />
     <fragment
         android:id="@+id/nav_my_events"
