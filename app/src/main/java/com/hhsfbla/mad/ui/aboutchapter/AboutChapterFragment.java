@@ -23,9 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.adapters.EventAdapter;
 import com.hhsfbla.mad.adapters.UserAdapter;
-import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 
