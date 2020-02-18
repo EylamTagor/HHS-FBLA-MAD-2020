@@ -43,6 +43,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     public ChapterAdapter(Context context, final List<Chapter> chapterList) {
         this.context = context;
         this.chapterList = chapterList;
+        fullList = new ArrayList<>(chapterList);
         db = FirebaseFirestore.getInstance();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
     }
@@ -107,14 +108,17 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         protected FilterResults performFiltering(CharSequence constraint) {
             List<Chapter> filteredList = new ArrayList<>();
 
-            if (constraint == null || constraint.length() == 0)
+            if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(fullList);
+            }
             else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                for (Chapter c : fullList)
-                    if (c.getName().toLowerCase().contains(filterPattern) || c.getLocation().toLowerCase().contains(filterPattern))
+                for (Chapter c : fullList) {
+                    if (c.getName().toLowerCase().startsWith(filterPattern)) {
                         filteredList.add(c);
+                    }
+                }
             }
 
             FilterResults filterResults = new FilterResults();

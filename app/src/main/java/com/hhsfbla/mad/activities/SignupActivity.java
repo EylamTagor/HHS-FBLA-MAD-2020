@@ -55,7 +55,6 @@ public class SignupActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         chapterList = new ArrayList<>();
-        adapter = new ChapterAdapter(this, chapterList);
 
         db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -63,17 +62,8 @@ public class SignupActivity extends AppCompatActivity {
                 chapterList = queryDocumentSnapshots.toObjects(Chapter.class);
                 Log.d(TAG, "lol");
                 Log.d(TAG, chapterList.toString() + "here");
-                adapter.setChapterList(chapterList);
+                adapter = new ChapterAdapter(getApplicationContext(), chapterList);
                 recyclerView.setAdapter(adapter);
-            }
-        });
-
-        createNewChapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                startActivity(new Intent(SignupActivity.this, SetupActivity.class));
-
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
@@ -86,7 +76,13 @@ public class SignupActivity extends AppCompatActivity {
                         return false;
                     }
                 });
+            }
+        });
 
+        createNewChapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SignupActivity.this, SetupActivity.class));
             }
         });
 
