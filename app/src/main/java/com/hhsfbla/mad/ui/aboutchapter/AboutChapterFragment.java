@@ -78,7 +78,25 @@ public class AboutChapterFragment extends Fragment {
 
 //TODO: set aboutChap to description of chapter, set locaChap to location of chapter
 
+        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User currentUSer = documentSnapshot.toObject(User.class);
+                db.collection("chapters").document(currentUSer.getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Chapter chapter = documentSnapshot.toObject(Chapter.class);
+                        if(!(chapter.getDescription() == null || chapter.getDescription().isEmpty())) {
+                            aboutChap.setText(chapter.getDescription());
+                        }
+                        if(!(chapter.getLocation() == null || chapter.getLocation().isEmpty())) {
+                            locaChap.setText(chapter.getLocation());
+                        }
 
+                    }
+                });
+            }
+        });
 
 
         chapLink = root.findViewById(R.id.chapWebLink);

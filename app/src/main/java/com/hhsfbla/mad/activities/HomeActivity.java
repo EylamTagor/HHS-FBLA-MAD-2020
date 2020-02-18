@@ -73,20 +73,16 @@ public class HomeActivity extends AppCompatActivity {
         // user setup
         if (user != null) {
             email.setText(user.getEmail());
-            if (!user.getDisplayName().isEmpty()) {
-                name.setText(user.getDisplayName());
-            } else {
-                Log.d(TAG, "name not working");
-            }
             db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     name.setText(documentSnapshot.get("name").toString());
-
                 }
             });
+
             String photo = String.valueOf(user.getPhotoUrl());
-            Picasso.get().load(photo).into(profileButton);
+            Picasso.get().load(user.getPhotoUrl()).into(profileButton);
+//            Picasso.get().load(photo).into(profileButton);
         } else {
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }

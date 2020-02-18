@@ -2,6 +2,7 @@ package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,17 +74,46 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
                 db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for(DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
+                        for(final DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
                             if(snapshot.toObject(Chapter.class).getName().equalsIgnoreCase(chapterList.get(position).getName())) {
-                                db.collection("users").document(fuser.getUid()).set(new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail()));
-                                db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
-                                Intent intent = new Intent(context, HomeActivity.class);
-                                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                                context.startActivity(intent);
-                                return;
+//                                db.collection("users").document(fuser.getUid()).set(new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail()));
+                                db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        User user = documentSnapshot.toObject(User.class);
+                                        if(user == null) {
+                                            user = new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail());
+                                            db.collection("users").document(fuser.getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
+                                                    Log.d("hello", fuser.getUid());
+                                                    Log.d("hello", snapshot.getId());
+                                                    Intent intent = new Intent(context, HomeActivity.class);
+                                                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                                    context.startActivity(intent);
+                                                    return;
+                                                }
+                                            });
+                                        } else {
+                                            db.collection("users").document(fuser.getUid()).update("chapter", snapshot.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
+                                                    Log.d("hello", fuser.getUid());
+                                                    Log.d("hello", snapshot.getId());
+                                                    Intent intent = new Intent(context, HomeActivity.class);
+                                                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                                    context.startActivity(intent);
+                                                    return;
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+
                             }
                         }
-                        Toast.makeText(context, "Error lol", Toast.LENGTH_LONG).show();
                     }
                 });
 
