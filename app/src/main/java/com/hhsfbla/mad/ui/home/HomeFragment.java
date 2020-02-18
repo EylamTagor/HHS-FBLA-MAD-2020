@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,10 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.AddEventActivity;
-import com.hhsfbla.mad.activities.HomeActivity;
-import com.hhsfbla.mad.data.Chapter;
-import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.adapters.EventAdapter;
+import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 
@@ -47,8 +44,7 @@ public class HomeFragment extends Fragment {
     private FirebaseUser user;
     private static final String TAG = "fraghome";
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
         db = FirebaseFirestore.getInstance();
@@ -66,7 +62,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currentUser = documentSnapshot.toObject(User.class);
-                if(currentUser.getUserType() != UserType.MEMBER) {
+                if (currentUser.getUserType() != UserType.MEMBER) {
                     fab.setVisibility(View.VISIBLE);
                 }
                 db.collection("chapters").document(currentUser.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -85,7 +81,8 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-            }});
+            }
+        });
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

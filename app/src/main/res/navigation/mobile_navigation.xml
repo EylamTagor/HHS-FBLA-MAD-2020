@@ -45,4 +45,9 @@
         android:name="com.hhsfbla.mad.ui.contact.ContactFragment"
         android:label="Contact Us"
         tools:layout="@layout/fragment_contact" />
+    <fragment
+        android:id="@+id/nav_mycomps"
+        android:name="com.hhsfbla.mad.ui.mycomps.MyCompsFragment"
+        android:label="My Competitions"
+        tools:layout="@layout/fragment_my_comps" />
 </navigation>
