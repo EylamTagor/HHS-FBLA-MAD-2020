@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,9 +25,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.adapters.EventAdapter;
 import com.hhsfbla.mad.adapters.UserAdapter;
-import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 
@@ -43,7 +43,7 @@ public class AboutChapterFragment extends Fragment {
     private TextView noUsersYet;
     private RecyclerView userRecyclerView;
     private UserAdapter adapter;
-
+    private SearchView searchView;
     private List<User> users;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
@@ -54,6 +54,7 @@ public class AboutChapterFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_about_chapter, container, false);
+        searchView = root.findViewById(R.id.userSearch);
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -61,13 +62,14 @@ public class AboutChapterFragment extends Fragment {
         userRecyclerView = root.findViewById(R.id.userFeed);
         userRecyclerView.setHasFixedSize(true);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new UserAdapter(users, root.getContext());
-        initRecyclerView(UserType.MEMBER);
+        users = new ArrayList<>();
+        initRecyclerView(UserType.MEMBER, root);
+
 
         return root;
     }
 
-    public void initRecyclerView(final UserType type) {
+    public void initRecyclerView(final UserType type, final View root) {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -84,20 +86,31 @@ public class AboutChapterFragment extends Fragment {
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 List<String> chapUsers = (List<String>)documentSnapshot.get("users");
                                 Log.d(TAG, chapUsers.toString());
-                                ArrayList<User> lol = new ArrayList<User>();
                                 for(DocumentSnapshot snap : queryDocumentSnapshots) {
                                     if(chapUsers.contains(snap.getId())) {
-                                        lol.add(snap.toObject(User.class));
+                                        users.add(snap.toObject(User.class));
                                     }
                                 }
-                                users = lol;
-                                adapter.setUsers(lol);
+                                adapter = new UserAdapter(users, root.getContext());
                                 userRecyclerView.setAdapter(adapter);
                                 if(users.isEmpty()) {
                                     noUsersYet.setVisibility(View.VISIBLE);
                                 } else {
                                     noUsersYet.setVisibility(View.GONE);
                                 }
+                                Toast.makeText(getContext(), "Ready", Toast.LENGTH_LONG).show();
+                                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                    @Override
+                                    public boolean onQueryTextSubmit(String s) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onQueryTextChange(String s) {
+                                        adapter.getFilter().filter(s);
+                                        return false;
+                                    }
+                                });
                             }
                         });
                     }

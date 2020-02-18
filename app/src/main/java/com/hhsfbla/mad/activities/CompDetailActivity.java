@@ -8,6 +8,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.View;
@@ -24,9 +26,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.adapters.UserAdapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.Competition;
 import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.data.UserType;
 import com.hhsfbla.mad.ui.comps.CompsFragment;
 
 import java.util.ArrayList;
@@ -36,10 +40,12 @@ public class CompDetailActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private FirebaseUser fuser;
-    private TextView name, description, type;
+    private TextView name, description, type, noCompetitorsYet;
     private Button joinButton;
     private Button unJoinButton;
-    private ArrayList<String> competitors;
+    private RecyclerView userRecyclerView;
+    private ArrayList<User> competitors;
+    private UserAdapter adapter;
     private static final String TAG = "COMPDETAIL";
 
     @Override
@@ -51,25 +57,23 @@ public class CompDetailActivity extends AppCompatActivity {
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
         final String compName = getIntent().getStringExtra("COMP_POSITION");
-        Competition comp = null;
-        for (Competition c : CompsFragment.competitions)
-            if (c.getName().equals(compName))
-                comp = c;
 
-        competitors = new ArrayList<String>();
+        noCompetitorsYet = findViewById(R.id.noCompetitorsYet);
         joinButton = findViewById(R.id.compJoinButton);
         unJoinButton = findViewById(R.id.compUnJoinButton);
         name = findViewById(R.id.compNameDetail);
         description = findViewById(R.id.compDescriptionDetail);
         type = findViewById(R.id.compTypeDetail);
-        type.setText(comp.getCompType().toString() + " Competition");
-
+        competitors = new ArrayList<>();
+        userRecyclerView = findViewById(R.id.competitors);
+        userRecyclerView.setHasFixedSize(true);
+        userRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        adapter = new UserAdapter(competitors, getApplicationContext());
 
         db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Log.d(TAG, competitors.toString());
                 User temp = documentSnapshot.toObject(User.class);
                 if (temp.getComps().contains(compName)) {
                     joinButton.setVisibility(View.GONE);
@@ -88,16 +92,22 @@ public class CompDetailActivity extends AppCompatActivity {
                                     for (String member : (List<String>) snap.get("users")) {
                                         if (member.equalsIgnoreCase(user.getId())) {
                                             if (user.toObject(User.class).getComps().contains(compName)) {
-                                                competitors.add(member);
+                                                //TODO add user
+                                                competitors.add(user.toObject(User.class));
                                             }
                                         }
                                     }
                                 }
                                 //TODO set competitor names
-                                if (competitors == null || competitors.size() > 3) {
+                                if (competitors.size() > 3 || competitors.isEmpty()) {
+                                    Log.d(TAG, competitors.toString());
                                     return;
+                                } else {
+                                    noCompetitorsYet.setVisibility(View.GONE);
                                 }
 
+                                adapter.setUsers(competitors);
+                                userRecyclerView.setAdapter(adapter);
                             }
                         });
                     }
@@ -110,6 +120,7 @@ public class CompDetailActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 name.setText(compName);
                 description.setText(documentSnapshot.get("description").toString());
+                type.setText(documentSnapshot.get("compType").toString());
             }
         });
         joinButton.setOnClickListener(new View.OnClickListener() {

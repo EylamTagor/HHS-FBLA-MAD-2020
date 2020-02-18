@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,16 +20,20 @@ import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.CompDetailActivity;
 import com.hhsfbla.mad.data.CompType;
 import com.hhsfbla.mad.data.Competition;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> {
+public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> implements Filterable {
 
     private List<Competition> comps;
+    private List<Competition> allItems;
     private Context context;
     private static final String TAG = "Event Adapter";
 
     public CompsAdapter(List<Competition> comps, Context context) {
         this.comps = comps;
+        allItems = new ArrayList<Competition>(comps);
         this.context = context;
     }
 
@@ -65,6 +71,42 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
     public void setEvents(List<Competition> events) {
         this.comps = events;
     }
+
+    @Override
+    public Filter getFilter() {
+        return compFilter;
+    }
+
+    private Filter compFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Competition> filteredComps = new ArrayList<>();
+
+            if(charSequence == null || charSequence.length() == 0) {
+                filteredComps.addAll(allItems);
+            } else {
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+
+                for(Competition comp : allItems) {
+                    if(comp.getName().toLowerCase().startsWith(filterPattern)) {
+                        filteredComps.add(comp);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredComps;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            comps.clear();
+            comps.addAll((List)filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name;

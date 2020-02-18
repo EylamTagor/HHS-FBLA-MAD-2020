@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -28,18 +30,21 @@ import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
+public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> implements Filterable {
 
     private FirebaseFirestore db;
     private FirebaseUser fuser;
     private List<User> users;
+    private List<User> allItems;
     private Context context;
-    private static final String TAG = "Event Adapter";
+    private static final String TAG = "User Adapter";
 
     public UserAdapter(List<User> users, Context context) {
         this.users = users;
+        allItems = new ArrayList<User>(users);
         this.context = context;
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -131,6 +136,44 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public void setUsers(List<User> users) {
         this.users = users;
     }
+
+    @Override
+    public Filter getFilter() {
+        Log.d(TAG, "hello");
+        return userFilter;
+    }
+
+    private Filter userFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<User> filteredUsers = new ArrayList<>();
+            Log.d(TAG, charSequence.toString());
+            Log.d(TAG, allItems.toString());
+            if(charSequence == null || charSequence.length() == 0) {
+                filteredUsers.addAll(allItems);
+            } else {
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+
+                for(User user : allItems) {
+                    if(user.getName().toLowerCase().startsWith(filterPattern)) {
+                        filteredUsers.add(user);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredUsers;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            users.clear();
+            users.addAll((List)filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name;
