@@ -10,6 +10,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -80,7 +82,7 @@ public class EventPageActivity extends AppCompatActivity {
 
         }
     };
-    private TextView title, date, time, location, desc;
+    private TextView title, date, time, location, desc, link;
     private ImageView dateIcon, timeIcon, locationIcon, eventImage;
     private ChapterEvent mainEvent;
     private FirebaseAuth auth;
@@ -97,6 +99,13 @@ public class EventPageActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_event_page);
         setTitle("Event Details");
+
+        title = findViewById(R.id.eventTitleDetail);
+        date = findViewById(R.id.eventDateDetail);
+        time = findViewById(R.id.eventTimeDetail);
+        location = findViewById(R.id.eventLocationDetail);
+        desc = findViewById(R.id.eventDescriptionDetail);
+        link = findViewById(R.id.eventLinkDetail);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = auth.getCurrentUser();
@@ -153,21 +162,14 @@ public class EventPageActivity extends AppCompatActivity {
                                 mainEvent = event;
 
                                 //set event details
-                                title = findViewById(R.id.eventTitleDetail);
                                 title.setText(mainEvent.getName());
-
-                                date = findViewById(R.id.eventDateDetail);
                                 date.setText(mainEvent.getDate());
-
-                                time = findViewById(R.id.eventTimeDetail);
                                 time.setText(mainEvent.getTime());
-
-                                location = findViewById(R.id.eventLocationDetail);
                                 location.setText(mainEvent.getLocation());
-
-                                desc = findViewById(R.id.eventDescriptionDetail);
                                 desc.setText(mainEvent.getDescription());
-
+                                link.setText(mainEvent.getFacebookLink());
+                                link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click Here For More Information</a>"));
+                                link.setMovementMethod(LinkMovementMethod.getInstance());
                                 return;
                             }
                         }
