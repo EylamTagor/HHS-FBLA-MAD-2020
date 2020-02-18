@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.CompDetailActivity;
+import com.hhsfbla.mad.data.CompType;
 import com.hhsfbla.mad.data.Competition;
 import java.util.List;
 
@@ -42,6 +43,19 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
         final Competition comp = comps.get(position);
 
         holder.name.setText(comp.getName());
+        if (comp.getCompType() == CompType.TECH){
+            holder.type.setText("Tech");
+        }else if (comp.getCompType() == CompType.WRITTEN){
+            holder.type.setText("Written");
+        }else if (comp.getCompType() == CompType.SPEAKING){
+            holder.type.setText("Speaking");
+        }else if (comp.getCompType() == CompType.PRODUCTION){
+            holder.type.setText("Production");
+        }else if (comp.getCompType() == CompType.CASESTUDY){
+            holder.type.setText("Case Study");
+        }else if (comp.getCompType() == CompType.PROJECT){
+            holder.type.setText("Project");
+        }
         holder.pic.setImageResource(comp.getPic());
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,12 +80,14 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
 
         public TextView name;
         public ImageView pic;
+        public TextView type;
         public ConstraintLayout constraintLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.competitionName);
+            type = itemView.findViewById(R.id.competitionType);
             pic = itemView.findViewById(R.id.competitionImage);
             constraintLayout = itemView.findViewById(R.id.competitionConstraintLayout);
         }
