@@ -25,7 +25,7 @@ import com.hhsfbla.mad.R;
 public class ContactFragment extends Fragment {
 
     private ContactViewModel mViewModel;
-    TextView fblaLink;
+    TextView fblaLink, formLink;
     ImageButton facebook, insta, twitter, linkedin;
 
 
@@ -41,7 +41,7 @@ public class ContactFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_contact, container, false);
 
         fblaLink = root.findViewById(R.id.fblaWebLinkTxtView);
-        fblaLink.setText(Html.fromHtml("<a href='https://www.fbla-pbl.org'>FBLA Website Link</androidx.constraintlayout.widget.ConstraintLayout<a>"));
+        fblaLink.setText(Html.fromHtml("<a href='https://www.fbla-pbl.org'>FBLA Website Link</androidx.constraintlayout.widget.ConstraintLayout</a>"));
         fblaLink.setMovementMethod(LinkMovementMethod.getInstance());
         fblaLink.setTextColor(Color.BLACK);
 
@@ -78,6 +78,11 @@ public class ContactFragment extends Fragment {
             }
         });
 
+
+        formLink = root.findViewById(R.id.qaForm);
+        formLink.setText(Html.fromHtml("<a href='https://forms.gle/LMNjUUEDPGALoLpaA'>Q&A Form Link</androidx.constraintlayout.widget.ConstraintLayout</a>"));
+        formLink.setMovementMethod(LinkMovementMethod.getInstance());
+        formLink.setTextColor(Color.BLACK);
         return root;
 
     }
