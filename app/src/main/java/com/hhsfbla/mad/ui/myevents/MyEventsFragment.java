@@ -1,20 +1,17 @@
 package com.hhsfbla.mad.ui.myevents;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +21,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.adapters.EventAdapter;
-import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 
@@ -33,7 +29,6 @@ import java.util.List;
 
 public class MyEventsFragment extends Fragment {
 
-    private MyEventsViewModel mViewModel;
     private TextView noEventsYet;
     private RecyclerView eventRecyclerView;
     private EventAdapter adapter;
@@ -43,6 +38,7 @@ public class MyEventsFragment extends Fragment {
     private FirebaseAuth auth;
     private FirebaseUser user;
     private static final String TAG = "MYEVENTS";
+
     public static MyEventsFragment newInstance() {
         return new MyEventsFragment();
     }
@@ -68,10 +64,10 @@ public class MyEventsFragment extends Fragment {
                 db.collection("chapters").document(currentUser.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        ArrayList<ChapterEvent> temp = new ArrayList<ChapterEvent>();
-                        for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                            for(String event : currentUser.getMyEvents()) {
-                                if(event.equalsIgnoreCase(snap.getId())) {
+                        ArrayList<ChapterEvent> temp = new ArrayList<>();
+                        for (DocumentSnapshot snap : queryDocumentSnapshots) {
+                            for (String event : currentUser.getMyEvents()) {
+                                if (event.equalsIgnoreCase(snap.getId())) {
                                     Log.d(TAG, snap.toObject(ChapterEvent.class).toString());
                                     temp.add(snap.toObject(ChapterEvent.class));
                                 }

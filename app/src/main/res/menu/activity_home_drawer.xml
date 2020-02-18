@@ -9,23 +9,31 @@
         android:icon="@drawable/home_icon"
         android:title="@string/menu_home" />
     <item
-
-        android:id="@+id/nav_comps"
-        android:icon="@drawable/comps_icon"
-        android:title="@string/menu_comps" />
+        android:id="@+id/nav_my_events"
+        android:icon="@drawable/my_icon"
+        android:title="@string/menu_my_events" />
 
     <item
             android:id="@+id/nav_calendar"
             android:icon="@drawable/calendar_icon1"
             android:title="@string/menu_calendar" />
 
-        <item
-            android:id="@+id/nav_my_events"
-            android:icon="@drawable/my_icon"
-            android:title="@string/menu_my_events" />
 
+    <item android:title="Competitive Events" >
+        <menu >
+            <item
 
-        <item android:title="About Chapter" >
+                android:id="@+id/nav_comps"
+                android:icon="@drawable/comps_icon"
+                android:title="Compeititon List" />
+            <item
+                android:id="@+id/nav_mycomps"
+                android:icon="@drawable/comps_icon"
+                android:title="My Competitions" />
+        </menu>
+    </item>
+
+    <item android:title="About Chapter" >
             <menu>
                 <item
                     android:id="@+id/nav_about_chapter"
