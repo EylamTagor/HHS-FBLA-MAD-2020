@@ -45,6 +45,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.data.UserType;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.PicassoProvider;
 import com.squareup.picasso.Target;
@@ -90,7 +91,7 @@ public class EventPageActivity extends AppCompatActivity {
     private FirebaseUser user;
     private Button joinButton;
     private Button unJoinButton;
-    private Button shareButton;
+    private Button shareButton, editButton;
     private static final String TAG = "Event Details Page";
 
     @Override
@@ -113,6 +114,7 @@ public class EventPageActivity extends AppCompatActivity {
         joinButton = findViewById(R.id.joinButton);
         unJoinButton = findViewById(R.id.unJoinButton);
         shareButton = findViewById(R.id.shareButton);
+        editButton = findViewById(R.id.editButton);
         eventImage = findViewById(R.id.eventPicDetail);
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(this);
@@ -140,11 +142,13 @@ public class EventPageActivity extends AppCompatActivity {
         //this loginManager helps you eliminate adding a LoginButton to your UI
         manager = LoginManager.getInstance();
 
-
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currentUser = documentSnapshot.toObject(User.class);
+                if(currentUser.getUserType() == UserType.MEMBER) {
+                    editButton.setVisibility(View.GONE);
+                }
                 db.collection("chapters").document(currentUser.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -236,6 +240,17 @@ public class EventPageActivity extends AppCompatActivity {
 
             }
         });
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EventPageActivity.this, EditEventActivity.class);
+                String name = getIntent().getStringExtra("EVENT_POSITION");
+                intent.putExtra("EVENT_NAME", name);
+                startActivity(intent);
+            }
+        });
+
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
