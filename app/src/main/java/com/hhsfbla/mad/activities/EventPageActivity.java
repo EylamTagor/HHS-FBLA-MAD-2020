@@ -10,6 +10,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,6 +45,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.data.UserType;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.PicassoProvider;
 import com.squareup.picasso.Target;
@@ -80,7 +83,7 @@ public class EventPageActivity extends AppCompatActivity {
 
         }
     };
-    private TextView title, date, time, location, desc;
+    private TextView title, date, time, location, desc, link;
     private ImageView dateIcon, timeIcon, locationIcon, eventImage;
     private ChapterEvent mainEvent;
     private FirebaseAuth auth;
@@ -88,7 +91,7 @@ public class EventPageActivity extends AppCompatActivity {
     private FirebaseUser user;
     private Button joinButton;
     private Button unJoinButton;
-    private Button shareButton;
+    private Button shareButton, editButton;
     private static final String TAG = "Event Details Page";
 
     @Override
@@ -97,6 +100,13 @@ public class EventPageActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_event_page);
         setTitle("Event Details");
+
+        title = findViewById(R.id.eventTitleDetail);
+        date = findViewById(R.id.eventDateDetail);
+        time = findViewById(R.id.eventTimeDetail);
+        location = findViewById(R.id.eventLocationDetail);
+        desc = findViewById(R.id.eventDescriptionDetail);
+        link = findViewById(R.id.eventLinkDetail);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = auth.getCurrentUser();
@@ -104,6 +114,7 @@ public class EventPageActivity extends AppCompatActivity {
         joinButton = findViewById(R.id.joinButton);
         unJoinButton = findViewById(R.id.unJoinButton);
         shareButton = findViewById(R.id.shareButton);
+        editButton = findViewById(R.id.editButton);
         eventImage = findViewById(R.id.eventPicDetail);
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(this);
@@ -131,11 +142,13 @@ public class EventPageActivity extends AppCompatActivity {
         //this loginManager helps you eliminate adding a LoginButton to your UI
         manager = LoginManager.getInstance();
 
-
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currentUser = documentSnapshot.toObject(User.class);
+                if(currentUser.getUserType() == UserType.MEMBER) {
+                    editButton.setVisibility(View.GONE);
+                }
                 db.collection("chapters").document(currentUser.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -153,21 +166,14 @@ public class EventPageActivity extends AppCompatActivity {
                                 mainEvent = event;
 
                                 //set event details
-                                title = findViewById(R.id.eventTitleDetail);
                                 title.setText(mainEvent.getName());
-
-                                date = findViewById(R.id.eventDateDetail);
                                 date.setText(mainEvent.getDate());
-
-                                time = findViewById(R.id.eventTimeDetail);
                                 time.setText(mainEvent.getTime());
-
-                                location = findViewById(R.id.eventLocationDetail);
                                 location.setText(mainEvent.getLocation());
-
-                                desc = findViewById(R.id.eventDescriptionDetail);
                                 desc.setText(mainEvent.getDescription());
-
+                                link.setText(mainEvent.getFacebookLink());
+                                link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click Here For More Information</a>"));
+                                link.setMovementMethod(LinkMovementMethod.getInstance());
                                 return;
                             }
                         }
@@ -234,6 +240,17 @@ public class EventPageActivity extends AppCompatActivity {
 
             }
         });
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EventPageActivity.this, EditEventActivity.class);
+                String name = getIntent().getStringExtra("EVENT_POSITION");
+                intent.putExtra("EVENT_NAME", name);
+                startActivity(intent);
+            }
+        });
+
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
