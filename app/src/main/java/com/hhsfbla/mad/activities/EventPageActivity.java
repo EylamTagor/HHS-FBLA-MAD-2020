@@ -25,7 +25,9 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.share.ShareApi;
 import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.ShareMediaContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
@@ -46,6 +48,7 @@ import com.squareup.picasso.PicassoProvider;
 import com.squareup.picasso.Target;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class EventPageActivity extends AppCompatActivity {
@@ -119,7 +122,7 @@ public class EventPageActivity extends AppCompatActivity {
             @Override
             public void onError(FacebookException error) {
                 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
-                Log.d(TAG, error.getMessage());
+                Log.d(TAG, error.toString());
 
 
             }
@@ -231,113 +234,73 @@ public class EventPageActivity extends AppCompatActivity {
 
             }
         });
-//        final AppCompatActivity lol = this;
-//        shareButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                List<String> permissionNeeds = Arrays.asList("publish_actions");
-//
-//                manager.logInWithPublishPermissions(lol, permissionNeeds);
-//
-//                manager.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
-//                {
-//                    @Override
-//                    public void onSuccess(LoginResult loginResult)
-//                    {
-//                        Bitmap image = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.ic_launcher);
-//                        SharePhoto photo = new SharePhoto.Builder()
-//                            .setBitmap(image).setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg"))
-//                            .build();
-//                        SharePhotoContent content = new SharePhotoContent.Builder()
-//                            .addPhoto(photo)
-//
-//                            .build();
-//                        ShareApi.share(content, new FacebookCallback<Sharer.Result>() {
-//                        @Override
-//                        public void onSuccess(Sharer.Result result)
-//                        {
-//                            Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        @Override
-//                        public void onCancel()
-//                        {
-//                            Log.d("FACEBOOK_TEST", "share api cancel");
-//                        }
-//
-//                        @Override
-//                        public void onError(FacebookException e)
-//                        {
-//                            Log.d("FACEBOOK_TEST", "share api error " + e);
-//                        }
-//                    });
-//                    }
-//
-//                    @Override
-//                    public void onCancel()
-//                    {
-//                        System.out.println("onCancel");
-//                    }
-//
-//                    @Override
-//                    public void onError(FacebookException exception)
-//                    {
-//                        System.out.println("onError");
-//                    }
-//                });
-//                if (ShareDialog.canShow(ShareLinkContent.class)) {
-//                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
-//                            .setContentUrl(Uri.parse("http://developers.facebook.com/android"))
-//                            .build();
-//                    Bitmap image = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.ic_launcher);
-//                    SharePhoto photo = new SharePhoto.Builder()
-//                            .setBitmap(image).setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg"))
-//                            .build();
-//                    SharePhotoContent content = new SharePhotoContent.Builder()
-//                            .addPhoto(photo)
-//                            .build();
-//                    ShareApi.share(content, new FacebookCallback<Sharer.Result>() {
-//                        @Override
-//                        public void onSuccess(Sharer.Result result)
-//                        {
-//                            Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        @Override
-//                        public void onCancel()
-//                        {
-//                            Log.d("FACEBOOK_TEST", "share api cancel");
-//                        }
-//
-//                        @Override
-//                        public void onError(FacebookException e)
-//                        {
-//                            Log.d("FACEBOOK_TEST", "share api error " + e);
-//                        }
-//                    });
-//                    shareDialog.show(content);
-//                }
-//                if(eventImage.getDrawable() != null) {
-//                    Bitmap image = ((BitmapDrawable) eventImage.getDrawable()).getBitmap();
-//                    SharePhoto photo = new SharePhoto.Builder()
-//                            .setBitmap(image)
-//                            .build();
-//                    SharePhotoContent content = new SharePhotoContent.Builder()
-//                            .addPhoto(photo)
-//                            .build();
-//                    shareDialog.show(content);
-//                } else {
-//                    SharePhoto photo = new SharePhoto.Builder()
-//                            .setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg"))
-//                            .build();
-//                    SharePhotoContent content = new SharePhotoContent.Builder()
-//                            .addPhoto(photo)
-//                            .build();
-//                    shareDialog.show(content);
-//                }
-            }
-//        });
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                if (ShareDialog.canShow(ShareLinkContent.class)) {
+                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                            .setContentUrl(Uri.parse("http://developers.facebook.com/android")).setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg"))
+                            .build();
+                    SharePhoto p = new SharePhoto.Builder().setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg")).build();
+                    SharePhotoContent heh = new SharePhotoContent.Builder().addPhoto(p).setContentUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg")).build();
+                    shareDialog.show(linkContent);
+                }
+            }
+        });
+    }
+
+    private void facebookPost() {
+        final List<String> permissionNeeds = Arrays.asList("publish_pages");
+        final Activity lol = this;
+        manager.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+        {
+            @Override
+            public void onSuccess(LoginResult loginResult)
+            {
+                manager.logInWithPublishPermissions(lol, permissionNeeds);
+                Bitmap image = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.ic_launcher);
+                SharePhoto photo = new SharePhoto.Builder()
+                        .setBitmap(image).setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg"))
+                        .build();
+                SharePhotoContent content = new SharePhotoContent.Builder()
+                        .addPhoto(photo)
+
+                        .build();
+                ShareApi.share(content, new FacebookCallback<Sharer.Result>() {
+                    @Override
+                    public void onSuccess(Sharer.Result result)
+                    {
+                        Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancel()
+                    {
+                        Log.d("FACEBOOK_TEST", "share api cancel");
+                    }
+
+                    @Override
+                    public void onError(FacebookException e)
+                    {
+                        Log.d("FACEBOOK_TEST", "share api error " + e);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel()
+            {
+                System.out.println("onCancel");
+            }
+
+            @Override
+            public void onError(FacebookException exception)
+            {
+                System.out.println("onError");
+            }
+        });
+    }
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
