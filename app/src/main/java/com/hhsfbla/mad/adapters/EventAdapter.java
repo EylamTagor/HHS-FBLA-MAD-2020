@@ -19,6 +19,8 @@ import com.hhsfbla.mad.data.ChapterEvent;
 
 import java.util.List;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
 
     private List<ChapterEvent> events;
@@ -52,6 +54,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 Log.d(TAG, "event clicked");
                 Intent intent = new Intent(context, EventPageActivity.class);
                 intent.putExtra("EVENT_POSITION", events.get(position).getName());
+                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });

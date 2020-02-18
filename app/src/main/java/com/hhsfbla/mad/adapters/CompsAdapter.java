@@ -24,6 +24,8 @@ import com.hhsfbla.mad.data.Competition;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> implements Filterable {
 
     private List<Competition> comps;
@@ -58,6 +60,7 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
                 Log.d(TAG, "event clicked");
                 Intent intent = new Intent(context, CompDetailActivity.class);
                 intent.putExtra("COMP_POSITION", comps.get(position).getName());
+                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });

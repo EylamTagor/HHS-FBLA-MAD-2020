@@ -31,6 +31,8 @@ import com.hhsfbla.mad.data.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder> implements Filterable {
 
     private Context context;
@@ -76,6 +78,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
                                 db.collection("users").document(fuser.getUid()).set(new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail()));
                                 db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
                                 Intent intent = new Intent(context, HomeActivity.class);
+                                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                                 context.startActivity(intent);
                                 return;
                             }

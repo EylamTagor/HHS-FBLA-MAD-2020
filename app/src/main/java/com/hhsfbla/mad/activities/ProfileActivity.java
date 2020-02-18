@@ -21,9 +21,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -36,6 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private Button sign_outBtn;
     private Button doneBtn2;
+    private Button deleteAccount;
 
     private static final String TAG = "DASHBOARD";
 
@@ -53,6 +58,7 @@ public class ProfileActivity extends AppCompatActivity {
         profilePic = findViewById(R.id.profilePic);
         sign_outBtn = findViewById(R.id.sign_outBtn);
         doneBtn2 = findViewById(R.id.doneBtn2);
+        deleteAccount = findViewById(R.id.deleteAccountButton);
         setTitle("Profile");
         email.setText(user.getEmail());
         String photo = String.valueOf(user.getPhotoUrl());
@@ -70,7 +76,6 @@ public class ProfileActivity extends AppCompatActivity {
         doneBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: save the new info into database
                 db.collection("users").document(user.getUid()).update("name",name.getText().toString());
 //                setName(name.getText());
                 startActivity(new Intent(ProfileActivity.this, HomeActivity.class));
@@ -81,11 +86,61 @@ public class ProfileActivity extends AppCompatActivity {
         chapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(final DocumentSnapshot documentSnapshot) {
+                        db.collection("chapters").document(documentSnapshot.get("chapter").toString()).update("users", FieldValue.arrayRemove(user.getUid()));
+                        db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for(DocumentSnapshot snap : queryDocumentSnapshots) {
+                                    if(((List<String>)snap.get("attendees")).contains(user.getUid())) {
+                                        db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
                 finish();
-                startActivity(new Intent(ProfileActivity.this, SignupActivity.class));
+                Intent intent = new Intent(ProfileActivity.this, SignupActivity.class);
+                startActivity(intent);
+
+                //TODO add dialog to confirm chapter change
             }
         });
 
+        deleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //TODO add are you sure dialog
+                db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(final DocumentSnapshot documentSnapshot) {
+                        db.collection("chapters").document(documentSnapshot.get("chapter").toString()).update("users", FieldValue.arrayRemove(user.getUid()));
+                        db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for(DocumentSnapshot snap : queryDocumentSnapshots) {
+                                    if(((List<String>)snap.get("attendees")).contains(user.getUid())) {
+                                        db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
+                                    }
+                                }
+                            }
+                        });
+                        db.collection("users").document(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                FirebaseAuth.getInstance().signOut();
+                                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                            }
+                        });
+                    }
+                });
+
+            }
+        });
         sign_outBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
