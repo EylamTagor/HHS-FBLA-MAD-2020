@@ -46,15 +46,8 @@ public class HomeActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
         //TODO: lead fab to add event activity, unless we don't want the add event button to be on the member homepage...
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                startActivity(new Intent(HomeActivity.this, AddEventActivity.class));
-                startActivity(new Intent(HomeActivity.this, AddEventActivity.class));
-            }
-        });
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);

@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -86,8 +87,8 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     public void addEvent() {
-        Bitmap bitmap = ((BitmapDrawable) imageBtn.getDrawable()).getBitmap();
-
+//        Bitmap bitmap = ((BitmapDrawable) imageBtn.getDrawable()).getBitmap();
+        Bitmap bitmap = null;
         final ChapterEvent event = new ChapterEvent(
                 nameEditTxt.getText().toString(),
                 dateEditTxt.getText().toString(),
