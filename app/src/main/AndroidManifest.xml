@@ -15,7 +15,7 @@
         <activity
             android:name=".activities.CompDetailActivity"
             android:label="@string/title_activity_comp_detail"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home"
@@ -55,6 +55,9 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"
             tools:replace="android:value" />
+        <provider android:authorities="com.facebook.app.FacebookContentProvider824878607959677"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>

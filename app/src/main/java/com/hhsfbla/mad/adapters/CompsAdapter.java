@@ -2,6 +2,7 @@ package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,8 +88,7 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
             super(itemView);
 
             name = itemView.findViewById(R.id.competitionName);
-            type = itemView.findViewById(R.id.competitionType);
-            pic = itemView.findViewById(R.id.competitionImage);
+            pic = itemView.findViewById(R.id.compIcon);
             constraintLayout = itemView.findViewById(R.id.competitionConstraintLayout);
         }
     }

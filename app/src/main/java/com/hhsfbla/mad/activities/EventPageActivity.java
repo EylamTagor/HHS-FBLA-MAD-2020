@@ -2,13 +2,35 @@ package com.hhsfbla.mad.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.share.ShareApi;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.ShareMediaContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,27 +41,60 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.PicassoProvider;
+import com.squareup.picasso.Target;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class EventPageActivity extends AppCompatActivity {
-    private TextView title, date, time, location, desc;
-    private ImageView dateIcon, timeIcon, locationIcon;
 
+    private ShareDialog shareDialog;
+    private CallbackManager callbackManager;
+    private LoginManager manager;
+    private Target target = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            SharePhoto photo = new SharePhoto.Builder()
+                    .setBitmap(bitmap)
+                    .build();
+            if(ShareDialog.canShow(SharePhotoContent.class)) {
+                SharePhotoContent content = new SharePhotoContent.Builder()
+                        .addPhoto(photo)
+                        .build();
+                shareDialog.show(content);
+            }
+        }
+
+        @Override
+        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+            Log.d(TAG, e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+    };
+    private TextView title, date, time, location, desc;
+    private ImageView dateIcon, timeIcon, locationIcon, eventImage;
     private ChapterEvent mainEvent;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private Button joinButton;
     private Button unJoinButton;
+    private Button shareButton;
     private static final String TAG = "Event Details Page";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_event_page);
         setTitle("Event Details");
         auth = FirebaseAuth.getInstance();
@@ -48,6 +103,34 @@ public class EventPageActivity extends AppCompatActivity {
         mainEvent = new ChapterEvent();
         joinButton = findViewById(R.id.joinButton);
         unJoinButton = findViewById(R.id.unJoinButton);
+        shareButton = findViewById(R.id.shareButton);
+        eventImage = findViewById(R.id.eventPicDetail);
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(getApplicationContext(), "Cancel", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                Log.d(TAG, error.toString());
+
+
+            }
+        });
+
+        //this loginManager helps you eliminate adding a LoginButton to your UI
+        manager = LoginManager.getInstance();
+
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -151,5 +234,78 @@ public class EventPageActivity extends AppCompatActivity {
 
             }
         });
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (ShareDialog.canShow(ShareLinkContent.class)) {
+                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                            .setContentUrl(Uri.parse("http://developers.facebook.com/android")).setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg"))
+                            .build();
+                    SharePhoto p = new SharePhoto.Builder().setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg")).build();
+                    SharePhotoContent heh = new SharePhotoContent.Builder().addPhoto(p).setContentUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg")).build();
+                    shareDialog.show(linkContent);
+                }
+            }
+        });
     }
+
+    private void facebookPost() {
+        final List<String> permissionNeeds = Arrays.asList("publish_pages");
+        final Activity lol = this;
+        manager.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+        {
+            @Override
+            public void onSuccess(LoginResult loginResult)
+            {
+                manager.logInWithPublishPermissions(lol, permissionNeeds);
+                Bitmap image = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.ic_launcher);
+                SharePhoto photo = new SharePhoto.Builder()
+                        .setBitmap(image).setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg"))
+                        .build();
+                SharePhotoContent content = new SharePhotoContent.Builder()
+                        .addPhoto(photo)
+
+                        .build();
+                ShareApi.share(content, new FacebookCallback<Sharer.Result>() {
+                    @Override
+                    public void onSuccess(Sharer.Result result)
+                    {
+                        Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancel()
+                    {
+                        Log.d("FACEBOOK_TEST", "share api cancel");
+                    }
+
+                    @Override
+                    public void onError(FacebookException e)
+                    {
+                        Log.d("FACEBOOK_TEST", "share api error " + e);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel()
+            {
+                System.out.println("onCancel");
+            }
+
+            @Override
+            public void onError(FacebookException exception)
+            {
+                System.out.println("onError");
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
 }

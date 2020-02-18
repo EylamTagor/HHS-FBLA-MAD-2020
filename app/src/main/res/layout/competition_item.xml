@@ -9,7 +9,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@android:drawable/screen_background_light_transparent"
         android:clickable="true"
         android:focusable="auto"
@@ -23,44 +25,23 @@
 
             <TextView
                 android:id="@+id/competitionName"
-                android:layout_width="289dp"
-                android:layout_height="35dp"
-                android:text="Competition Name"
-                android:textColor="@android:color/black"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:layout_marginTop="7sp"
-                app:layout_constraintBottom_toTopOf="@id/competitionType"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <TextView
-                android:id="@+id/competitionType"
-                android:layout_width="289dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Competition Type"
+                android:layout_marginStart="16dp"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:layout_marginTop="7sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/competitionName" />
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/compIcon"
+                app:layout_constraintStart_toEndOf="@+id/compIcon"
+                app:layout_constraintTop_toTopOf="@+id/compIcon" />
 
             <ImageView
-                android:id="@+id/competitionImage"
-                android:layout_width="53dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="7sp"
-                android:layout_marginTop="0sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/competitionName"
-                app:layout_constraintHorizontal_bias="0.14"
+                android:id="@+id/compIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/location_icon" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -82,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
         loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
 
         loginFacebookBtn.setReadPermissions(Arrays.asList("email", "public_profile"));
+        loginFacebookBtn.setPublishPermissions(Arrays.asList("publish_actions"));
         loginFacebookBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {

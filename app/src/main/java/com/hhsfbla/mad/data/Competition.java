@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Competition {
 
-//    private ArrayList<String> competitors;
+    //    private ArrayList<String> competitors;
     private CompType compType;
     private String name;
     private String description;
@@ -24,7 +24,6 @@ public class Competition {
         this.pic = pic;
     }
 
-
     public CompType getCompType() {
         return compType;
     }
@@ -40,7 +39,6 @@ public class Competition {
     public void setPic(int pic) {
         this.pic = pic;
     }
-
 
 
 //    public void addCompetitor(String user) {
