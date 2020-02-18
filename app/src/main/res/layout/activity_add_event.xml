@@ -33,63 +33,61 @@
             app:srcCompat="@drawable/check_icon" />
 
 
-    
-
     <ScrollView
         android:layout_width="410dp"
         android:layout_height="490dp"
-        android:layout_marginTop="10dp"
         android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@+id/backBtn2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_marginTop="15sp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="16dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxStrokeColor="#000000"
-            app:boxStrokeWidth="10sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nameEditTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:hint="Event Name"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <ImageButton
-            android:id="@+id/imageBtn"
-            android:layout_width="match_parent"
-            android:layout_height="192dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@color/com_facebook_button_background_color_disabled"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameEditTxt"
-            app:srcCompat="@drawable/camera_icon" />
-
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                app:boxStrokeColor="#000000"
+                app:boxStrokeWidth="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nameEditTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Event Name"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <ImageButton
+                android:id="@+id/imageBtn"
+                android:layout_width="match_parent"
+                android:layout_height="192dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/com_facebook_button_background_color_disabled"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nameEditTxt"
+                app:srcCompat="@drawable/camera_icon" />
+
+            <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
                 app:boxStrokeColor="#000000"
                 app:boxStrokeWidth="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -105,14 +103,13 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginEnd="20dp"
                 app:boxStrokeColor="#000000"
                 app:boxStrokeWidth="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -123,23 +120,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Enter Time" />
-    
 
-    
 
             </com.google.android.material.textfield.TextInputLayout>
 
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginEnd="20dp"
+                android:textColor="@android:color/black"
                 app:boxStrokeColor="#000000"
                 app:boxStrokeWidth="10sp"
-                android:textColor="@android:color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -168,16 +163,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/locaEditTxt" />
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="32dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:textColor="@android:color/black"
                 app:boxStrokeColor="#000000"
                 app:boxStrokeWidth="10sp"
-                android:textColor="@android:color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -185,8 +180,8 @@
                     android:id="@+id/descrEditTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:hint="Enter Description" />
+                    android:hint="Enter Description"
+                    android:inputType="textMultiLine" />
 
 
             </com.google.android.material.textfield.TextInputLayout>
