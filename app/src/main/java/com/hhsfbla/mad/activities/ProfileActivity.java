@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,13 +34,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     private FirebaseUser user;
     private ImageView profilePic;
-    private ImageButton backBtn;
-    private EditText name;
-    private EditText email;
+    private ImageButton backBtn, doneBtn2;
+    private TextInputEditText name, email;
     private Button chapter;
     private FirebaseFirestore db;
     private Button sign_outBtn;
-    private Button doneBtn2;
     private Button deleteAccount;
 
     private static final String TAG = "DASHBOARD";
@@ -64,7 +63,9 @@ public class ProfileActivity extends AppCompatActivity {
         String photo = String.valueOf(user.getPhotoUrl());
         Picasso.get().load(photo).into(profilePic);
 
-        backBtn.setBackgroundColor(255);
+
+
+
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override

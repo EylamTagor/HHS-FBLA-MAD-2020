@@ -2,6 +2,9 @@ package com.hhsfbla.mad.ui.aboutchapter;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,10 +13,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.adapters.UserAdapter;
+import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 
@@ -40,7 +47,7 @@ public class AboutChapterFragment extends Fragment {
         return new AboutChapterFragment();
     }
 
-    private TextView noUsersYet;
+    private TextView noUsersYet, aboutChap, locaChap;
     private RecyclerView userRecyclerView;
     private UserAdapter adapter;
     private SearchView searchView;
@@ -49,6 +56,8 @@ public class AboutChapterFragment extends Fragment {
     private FirebaseAuth auth;
     private FirebaseUser user;
     private static final String TAG = "fragaboutchap";
+    private TextView chapLink;
+    private ImageButton facebook, insta, twitter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,11 +68,47 @@ public class AboutChapterFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         noUsersYet = root.findViewById(R.id.noUsersYet);
+        aboutChap = root.findViewById(R.id.aboutChapTxtView);
+        locaChap = root.findViewById(R.id.locaChapTxtView);
         userRecyclerView = root.findViewById(R.id.userFeed);
         userRecyclerView.setHasFixedSize(true);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         users = new ArrayList<>();
         initRecyclerView(UserType.MEMBER, root);
+
+//TODO: set aboutChap to description of chapter, set locaChap to location of chapter
+
+
+
+
+        chapLink = root.findViewById(R.id.chapWebLink);
+        chapLink.setText(Html.fromHtml("<a href='http://hhsfbla.com'>Homestead FBLA Website</androidx.constraintlayout.widget.ConstraintLayout</a>"));
+        chapLink.setMovementMethod(LinkMovementMethod.getInstance());
+        chapLink.setTextColor(Color.BLACK);
+
+        facebook = root.findViewById(R.id.facebookBtn);
+        facebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/homestead8990")));
+            }
+        });
+
+        insta = root.findViewById(R.id.instaBtn);
+        insta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/homesteadfbla/")));
+            }
+        });
+
+        twitter = root.findViewById(R.id.twitterBtn);
+        twitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/graemecrackerz")));
+            }
+        });
 
 
         return root;
