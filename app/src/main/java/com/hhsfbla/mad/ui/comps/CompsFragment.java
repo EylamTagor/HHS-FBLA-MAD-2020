@@ -1,6 +1,7 @@
 package com.hhsfbla.mad.ui.comps;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +39,7 @@ public class CompsFragment extends Fragment {
     private FirebaseAuth auth;
     private FirebaseUser user;
     private static final String TAG = "COMPS";
-
+    
     public static final Competition[] competitions = {
             new Competition("3-D Animation", "", CompType.TECH, R.drawable.tech_icon),
             new Competition("Accounting 1", "", CompType.WRITTEN, R.drawable.written_icon),

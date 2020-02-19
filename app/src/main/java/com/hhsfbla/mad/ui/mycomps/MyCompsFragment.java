@@ -65,7 +65,7 @@ public class MyCompsFragment extends Fragment {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             comps.add(documentSnapshot.toObject(Competition.class));
 
-                            if (comps == null) {
+                            if (comps.size() == 0) {
                                 noCompsYet.setVisibility(View.VISIBLE);
                                 return;
                             } else {
