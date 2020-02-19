@@ -161,7 +161,6 @@ public class AboutChapterFragment extends Fragment {
                                 } else {
                                     noUsersYet.setVisibility(View.GONE);
                                 }
-                                Toast.makeText(getContext(), "Ready", Toast.LENGTH_LONG).show();
                                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                                     @Override
                                     public boolean onQueryTextSubmit(String s) {
