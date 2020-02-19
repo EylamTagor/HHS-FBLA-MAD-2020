@@ -251,9 +251,6 @@ public class CompsFragment extends Fragment {
         }
         adapter = new CompsAdapter(comps, root.getContext());
         eventRecyclerView.setAdapter(adapter);
-        for(Competition comp : comps) {
-            db.collection("comps").document(comp.getName()).set(comp, SetOptions.merge());
-        }
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
