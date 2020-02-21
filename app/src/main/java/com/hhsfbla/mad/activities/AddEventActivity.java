@@ -23,6 +23,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
 
@@ -40,6 +42,7 @@ public class AddEventActivity extends AppCompatActivity {
     private EditText linkEditTxt;
     private FirebaseFirestore db;
     private FirebaseUser user;
+    private FirebaseStorage storage;
     private static final String TAG = "ADDEVENTPAGE";
 
     @Override
