@@ -52,6 +52,7 @@ import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
+import com.hhsfbla.mad.dialogs.DeleteEventDialog;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.PicassoProvider;
 import com.squareup.picasso.Target;
@@ -60,7 +61,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class EventPageActivity extends AppCompatActivity {
+public class EventPageActivity extends AppCompatActivity implements DeleteEventDialog.DeleteEventDialogListener{
 
     private StorageReference storageReference;
     private ShareDialog shareDialog;
@@ -213,42 +214,7 @@ public class EventPageActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "hello");
-                db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        final User user = documentSnapshot.toObject(User.class);
-                        db.collection("chapters").document(user.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                List<ChapterEvent> events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
-                                String name = getIntent().getStringExtra("EVENT_POSITION");
-                                for(final DocumentSnapshot snap : queryDocumentSnapshots) {
-                                    ChapterEvent event = snap.toObject(ChapterEvent.class);
-
-                                    if(event.getName().equals(name)) {
-                                        if(event.getPic() == null || event.getPic() == "") {
-                                            Log.d(TAG, "event has no pic");
-                                            db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
-                                            deleteInDB(snap.getId());
-                                            return;
-                                        }
-                                        StorageReference storageRef = storageReference.child(name);
-                                        storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d(TAG, "deleted in storage");
-                                                db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
-                                                deleteInDB(snap.getId());
-
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
+                openDialog();
             }
         });
 
@@ -278,20 +244,67 @@ public class EventPageActivity extends AppCompatActivity {
         });
     }
 
-    private void deleteInDB(final String eventID) {
-        Log.d(TAG, "deleting in db");
-        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+    private void deleteInDB() {
+        Log.d(TAG, "hello");
+        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                    if(snap.toObject(User.class).getMyEvents().contains(eventID)) {
-                        Log.d(TAG, "hithere");
-                        db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(eventID));
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                final User user = documentSnapshot.toObject(User.class);
+                db.collection("chapters").document(user.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<ChapterEvent> events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
+                        String name = getIntent().getStringExtra("EVENT_POSITION");
+                        for(final DocumentSnapshot snap : queryDocumentSnapshots) {
+                            ChapterEvent event = snap.toObject(ChapterEvent.class);
+
+                            if(event.getName().equals(name)) {
+                                if(event.getPic() == null || event.getPic() == "") {
+                                    Log.d(TAG, "event has no pic");
+                                    db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
+                                    Log.d(TAG, "deleting in db");
+                                    db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            for(DocumentSnapshot snap : queryDocumentSnapshots) {
+                                                if(snap.toObject(User.class).getMyEvents().contains(snap.getId())) {
+                                                    Log.d(TAG, "hithere");
+                                                    db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
+                                                }
+                                            }
+                                            startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
+                                        }
+                                    });                                    return;
+                                }
+                                StorageReference storageRef = storageReference.child(name);
+                                storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "deleted in storage");
+                                        db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
+                                        Log.d(TAG, "deleting in db");
+                                        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                for(DocumentSnapshot snap : queryDocumentSnapshots) {
+                                                    if(snap.toObject(User.class).getMyEvents().contains(snap.getId())) {
+                                                        Log.d(TAG, "hithere");
+                                                        db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
+                                                    }
+                                                }
+                                                Toast.makeText(getApplicationContext(), "Event Deleted", Toast.LENGTH_LONG).show();
+                                                startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
                     }
-                }
-                startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
+                });
             }
         });
+
     }
 
     private String getFileExtension(Uri uri) {
@@ -352,10 +365,21 @@ public class EventPageActivity extends AppCompatActivity {
         });
     }
 
+    private void openDialog() {
+        DeleteEventDialog dialog = new DeleteEventDialog();
+        dialog.show(getSupportFragmentManager(), "");
+    }
+
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void sendConfirmation(boolean confirm) {
+        if(confirm) {
+            deleteInDB();
+        }
+    }
 }
