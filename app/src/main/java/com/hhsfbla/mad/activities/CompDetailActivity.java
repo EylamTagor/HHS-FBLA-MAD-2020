@@ -1,5 +1,6 @@
 package com.hhsfbla.mad.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,6 +43,7 @@ public class CompDetailActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseUser fuser;
     private TextView name, description, type, noCompetitorsYet;
+    private ImageButton back;
     private Button joinButton;
     private Button unJoinButton;
     private RecyclerView userRecyclerView;
@@ -61,6 +64,7 @@ public class CompDetailActivity extends AppCompatActivity {
         noCompetitorsYet = findViewById(R.id.noCompetitorsYet);
         joinButton = findViewById(R.id.compJoinButton);
         unJoinButton = findViewById(R.id.compUnJoinButton);
+        back = findViewById(R.id.doneBtn3);
         name = findViewById(R.id.compNameDetail);
         description = findViewById(R.id.compDescriptionDetail);
         type = findViewById(R.id.compTypeDetail);
@@ -123,6 +127,14 @@ public class CompDetailActivity extends AppCompatActivity {
                 type.setText(documentSnapshot.get("compType").toString());
             }
         });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CompDetailActivity.this, HomeActivity.class));
+            }
+        });
+
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

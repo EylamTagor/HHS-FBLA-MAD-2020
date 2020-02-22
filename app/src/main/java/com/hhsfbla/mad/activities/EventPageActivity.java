@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -70,13 +71,14 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     private CallbackManager callbackManager;
     private LoginManager manager;
     private TextView title, date, time, location, desc, link;
-    private ImageView dateIcon, timeIcon, locationIcon, eventImage;
+    private ImageView eventImage;
     private ChapterEvent mainEvent;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private Button joinButton;
     private Button unJoinButton;
+    private ImageButton back;
     private Button shareButton, editButton, deleteButton;
     private static final String TAG = "Event Details Page";
 
@@ -101,6 +103,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         unJoinButton = findViewById(R.id.unJoinButton);
         shareButton = findViewById(R.id.shareButton);
         editButton = findViewById(R.id.editButton);
+        back = findViewById(R.id.doneBtn4);
         deleteButton = findViewById(R.id.deleteEvent);
         eventImage = findViewById(R.id.eventPicDetail);
         callbackManager = CallbackManager.Factory.create();
@@ -150,6 +153,14 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                         }
                     }
                 });
+            }
+        });
+
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
             }
         });
 
