@@ -29,15 +29,6 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/*<ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/circle_button"
-        android:contentDescription="@string/nav_header_desc"
-        android:scaleType="centerCrop"
-        app:srcCompat="@null" />
-
- */
 public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
