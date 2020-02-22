@@ -51,7 +51,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.location.setText(event.getLocation());
         if(event.getPic() != "" && event.getPic() != null) {
             Picasso.get().load(Uri.parse(event.getPic())).fit().centerCrop().into(holder.pic);
-        }
+        } else
+            holder.pic.setVisibility(View.GONE);
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
