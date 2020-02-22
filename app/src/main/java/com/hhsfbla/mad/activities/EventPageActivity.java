@@ -1,15 +1,10 @@
 package com.hhsfbla.mad.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
@@ -20,9 +15,10 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -32,9 +28,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.share.ShareApi;
 import com.facebook.share.Sharer;
-import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.ShareMediaContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
@@ -48,20 +42,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 import com.hhsfbla.mad.dialogs.DeleteEventDialog;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.PicassoProvider;
-import com.squareup.picasso.Target;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 public class EventPageActivity extends AppCompatActivity implements DeleteEventDialog.DeleteEventDialogListener{
@@ -147,7 +136,8 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                                 if(mainEvent.getPic() != null && mainEvent.getPic() != "") {
                                     Log.d(TAG, mainEvent.getPic());
                                     Picasso.get().load(Uri.parse(mainEvent.getPic())).fit().centerCrop().into(eventImage);
-                                }
+                                } else
+                                    eventImage.setVisibility(View.GONE);
                                 return;
                             }
                         }

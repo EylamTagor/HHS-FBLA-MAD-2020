@@ -6,17 +6,17 @@
 
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/home_icon"
+        android:icon="@drawable/home"
         android:title="@string/menu_home" />
     <item
         android:id="@+id/nav_my_events"
-        android:icon="@drawable/my_icon"
+        android:icon="@drawable/myevents"
         android:title="@string/menu_my_events" />
 
     <item
-            android:id="@+id/nav_calendar"
-            android:icon="@drawable/calendar_icon1"
-            android:title="@string/menu_calendar" />
+        android:id="@+id/nav_calendar"
+        android:icon="@drawable/calendar_icon"
+        android:title="@string/menu_calendar" />
 
 
     <item android:title="Competitive Events" >
@@ -24,11 +24,11 @@
             <item
 
                 android:id="@+id/nav_comps"
-                android:icon="@drawable/comps_icon"
+                android:icon="@drawable/comps"
                 android:title="Compeititon List" />
             <item
                 android:id="@+id/nav_mycomps"
-                android:icon="@drawable/comps_icon"
+                android:icon="@drawable/mycomps_icon"
                 android:title="My Competitions" />
         </menu>
     </item>
@@ -37,7 +37,7 @@
             <menu>
                 <item
                     android:id="@+id/nav_about_chapter"
-                    android:icon="@drawable/about_icon"
+                    android:icon="@drawable/info_icon"
                     android:title="@string/menu_about_chapter" />
                 <item
                     android:id="@+id/nav_officer"
@@ -51,7 +51,7 @@
             <menu>
                 <item
                     android:id="@+id/nav_about"
-                    android:icon="@drawable/about_icon"
+                    android:icon="@drawable/info_icon"
                     android:title="@string/menu_about" />
                 <item
                     android:id="@+id/nav_contact"

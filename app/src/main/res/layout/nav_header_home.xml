@@ -20,7 +20,7 @@
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="0dp"
         android:scaleType="centerCrop"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        android:src="@drawable/com_facebook_profile_picture_blank_square" />
 
     <TextView
         android:id="@+id/name_drawer"
