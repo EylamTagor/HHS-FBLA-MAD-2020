@@ -15,6 +15,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,7 +85,7 @@ public class EventPageActivity extends AppCompatActivity {
         }
     };
     private TextView title, date, time, location, desc, link;
-    private ImageView dateIcon, timeIcon, locationIcon, eventImage;
+    private ImageView eventImage;
     private ChapterEvent mainEvent;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -92,6 +93,7 @@ public class EventPageActivity extends AppCompatActivity {
     private Button joinButton;
     private Button unJoinButton;
     private Button shareButton, editButton;
+    private ImageButton back;
     private static final String TAG = "Event Details Page";
 
     @Override
@@ -115,6 +117,7 @@ public class EventPageActivity extends AppCompatActivity {
         unJoinButton = findViewById(R.id.unJoinButton);
         shareButton = findViewById(R.id.shareButton);
         editButton = findViewById(R.id.editButton);
+        back = findViewById(R.id.doneBtn4);
         eventImage = findViewById(R.id.eventPicDetail);
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(this);
@@ -183,6 +186,14 @@ public class EventPageActivity extends AppCompatActivity {
                         }
                     }
                 });
+            }
+        });
+
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
             }
         });
 
