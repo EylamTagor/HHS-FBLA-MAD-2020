@@ -50,7 +50,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         fullList = new ArrayList<>(chapterList);
         db = FirebaseFirestore.getInstance();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        progressDialog = new ProgressDialog(context);
+        progressDialog = new ProgressDialog(context.getApplicationContext());
     }
 
     @NonNull
@@ -73,8 +73,8 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.setMessage("Joining...");
-                progressDialog.show();
+//                progressDialog.setMessage("Joining...");
+//                progressDialog.show();
                 db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -91,7 +91,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
-                                                    progressDialog.dismiss();
+//                                                    progressDialog.dismiss();
                                                     Intent intent = new Intent(context, HomeActivity.class);
                                                     intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                                                     context.startActivity(intent);
@@ -103,7 +103,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
-                                                    progressDialog.dismiss();
+//                                                    progressDialog.dismiss();
                                                     Intent intent = new Intent(context, HomeActivity.class);
                                                     intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                                                     context.startActivity(intent);
