@@ -41,10 +41,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ProfileActivity extends AppCompatActivity implements DeleteAccountDialog.DeleteAccountDialogListener, ChangeChapterDialog.ChangeChapterDialogListener {
 
     private FirebaseUser user;
-    private ImageView profilePic;
+    private CircleImageView profilePic;
     private ImageButton backBtn, doneBtn2;
     private TextInputEditText name, email;
     private Button chapter;

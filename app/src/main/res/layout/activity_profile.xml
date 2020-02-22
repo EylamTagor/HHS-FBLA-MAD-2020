@@ -33,113 +33,113 @@
 
 
 
-        <ImageView
-            android:id="@+id/profilePic"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:layout_marginTop="128dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/colorAccent" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profilePic"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="128dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@color/colorAccent" />
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layout1"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="20dp"
+        app:boxBackgroundColor="#FFFFFF"
+        app:boxStrokeColor="#000000"
+        app:boxStrokeWidth="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilePic">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nameTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="20dp"
-            app:boxBackgroundColor="#FFFFFF"
-            app:boxStrokeColor="#000000"
-            app:boxStrokeWidth="10sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profilePic">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nameTextField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Name"
-                android:textSize="22sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:hint="Name"
+            android:textSize="22sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layout2"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout2"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        app:boxStrokeColor="#000000"
+        app:boxStrokeWidth="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
-            app:boxStrokeColor="#000000"
-            app:boxStrokeWidth="10sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout1">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/emailTextField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:textSize="22sp"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:textSize="22sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-        <Button
-            android:id="@+id/chapterButton"
-            android:text="Change Chapter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginStart="32dp"
-            android:background="@drawable/button_border"
-            android:ems="10"
-            android:textSize="22sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout2" />
+    <Button
+        android:id="@+id/chapterButton"
+        android:text="Change Chapter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:background="@drawable/button_border"
+        android:ems="10"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout2" />
 
 
 
 
-        <Button
-            android:id="@+id/sign_outBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="Sign Out"
-            android:background="@drawable/button_border"
-            android:textSize="20sp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="240dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/chapterButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+    <Button
+        android:id="@+id/sign_outBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="Sign Out"
+        android:background="@drawable/button_border"
+        android:textSize="20sp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="240dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/chapterButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 
-        <Button
-            android:id="@+id/deleteAccountButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Delete Account"
-            android:background="@drawable/button_border"
-            android:textSize="20sp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginStart="240dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chapterButton"/>
+    <Button
+        android:id="@+id/deleteAccountButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Account"
+        android:background="@drawable/button_border"
+        android:textSize="20sp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chapterButton"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
