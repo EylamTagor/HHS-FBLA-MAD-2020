@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -24,11 +25,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
 import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseUser user;
-    private ImageButton profileButton;
+    private CircleImageView profileImage;
+    private Button profileButton;
     private TextView name;
     private TextView email;
     private FirebaseFirestore db;
@@ -62,6 +66,7 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         View header = navigationView.getHeaderView(0);
+        profileImage = header.findViewById(R.id.profileImage);
         profileButton = header.findViewById(R.id.profileButton);
         email = header.findViewById(R.id.email_drawer);
         name = header.findViewById(R.id.name_drawer);
@@ -76,7 +81,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
-            Picasso.get().load(user.getPhotoUrl()).into(profileButton);
+            Picasso.get().load(user.getPhotoUrl()).into(profileImage);
         } else {
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }
