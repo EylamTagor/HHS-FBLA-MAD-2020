@@ -131,7 +131,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                                 location.setText(mainEvent.getLocation());
                                 desc.setText(mainEvent.getDescription());
                                 link.setText(mainEvent.getFacebookLink());
-                                link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click Here For More Information</a>"));
+                                link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click here for more information</a>"));
                                 link.setMovementMethod(LinkMovementMethod.getInstance());
                                 if(mainEvent.getPic() != null && mainEvent.getPic() != "") {
                                     Log.d(TAG, mainEvent.getPic());
