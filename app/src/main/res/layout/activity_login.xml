@@ -12,14 +12,13 @@
         android:layout_width="wrap_content"
         android:layout_height="108dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="96dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="250dp"
         android:text="Welcome!"
         android:textSize="80sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -38,10 +37,9 @@
         android:layout_width="264dp"
         android:layout_height="64dp"
         android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
+        android:layout_marginTop="60dp"
         android:contextClickable="false"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeTxtView"

@@ -131,7 +131,7 @@ public class CompDetailActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(CompDetailActivity.this, HomeActivity.class));
+                startActivity(new Intent(CompDetailActivity.this, CompsFragment.class));
             }
         });
 

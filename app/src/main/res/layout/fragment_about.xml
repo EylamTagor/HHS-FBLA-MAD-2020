@@ -7,6 +7,17 @@
     android:layout_height="match_parent">
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+
+
     <TextView
         android:id="@+id/aboutTxtView"
         android:layout_width="wrap_content"
@@ -17,6 +28,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:text="Mission Statement"
         android:textSize="32sp"
+        android:textColor="@color/black"
         android:textStyle="bold"/>
 
     <TextView
@@ -30,7 +42,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="FBLA-PBL inspires and prepares students to become community-minded business leaders in a global society through relevant career preparation and leadership experiences."
-        android:textSize="24sp" />
+        android:textSize="22sp"
+        android:textColor="@color/black" />
 
 
     <TextView
@@ -44,7 +57,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/about2TxtView"
         android:text="FBLA-PBL’s programs focus on:"
-        android:textSize="28sp"/>
+        android:textSize="28sp"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/about4TxtView"
@@ -62,9 +76,12 @@ Educational Programs—members create career portfolios, enhance their knowledge
 Membership Benefits—members receive exclusive discounts and enhanced benefits for travel, education, and more. Learn about the benefits available to FBLA, PBL, and FBLA-Middle Level members.
 Community Service—members work with the March of Dimes to help end premature births by participating in awareness campaigns and the March for Babies fundraiser. Discover how FBLA, PBL, and FBLA-Middle Level members support the March of Dimes.
 Awards &amp; Recognition—members build a portfolio of accomplishments with a wide range of awards programs. Learn more about FBLA, PBL, and FBLA-Middle Level awards programs."
-        android:textSize="24sp" />
+        android:textSize="22sp"
+        android:textColor="@color/black" />
 
 
+        </LinearLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
