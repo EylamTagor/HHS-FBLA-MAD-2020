@@ -69,6 +69,7 @@ public class CompDetailActivity extends AppCompatActivity {
         userRecyclerView.setHasFixedSize(true);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         adapter = new UserAdapter(competitors, getApplicationContext());
+        userRecyclerView.setAdapter(adapter);
 
         db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 
@@ -106,8 +107,7 @@ public class CompDetailActivity extends AppCompatActivity {
                                     noCompetitorsYet.setVisibility(View.GONE);
                                 }
 
-                                adapter.setUsers(competitors);
-                                userRecyclerView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
                             }
                         });
                     }

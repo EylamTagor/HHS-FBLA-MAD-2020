@@ -58,12 +58,15 @@ public class CompsFragment extends Fragment {
         eventRecyclerView = root.findViewById(R.id.comps);
         eventRecyclerView.setHasFixedSize(true);
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        comps = new ArrayList<>();
+        adapter = new CompsAdapter(comps, root.getContext());
+        eventRecyclerView.setAdapter(adapter);
         db.collection("comps").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 comps = queryDocumentSnapshots.toObjects(Competition.class);
-                adapter = new CompsAdapter(comps, root.getContext());
-                eventRecyclerView.setAdapter(adapter);
+                adapter.setEvents(comps);
+                adapter.notifyDataSetChanged();
             }
         });
 

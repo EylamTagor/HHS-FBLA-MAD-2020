@@ -74,6 +74,8 @@ public class AboutChapterFragment extends Fragment {
         userRecyclerView.setHasFixedSize(true);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         users = new ArrayList<>();
+        adapter = new UserAdapter(users, root.getContext());
+        userRecyclerView.setAdapter(adapter);
         initRecyclerView(UserType.MEMBER, root);
 
 //TODO: set aboutChap to description of chapter, set locaChap to location of chapter
@@ -154,8 +156,7 @@ public class AboutChapterFragment extends Fragment {
                                         users.add(snap.toObject(User.class));
                                     }
                                 }
-                                adapter = new UserAdapter(users, root.getContext());
-                                userRecyclerView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
                                 if(users.isEmpty()) {
                                     noUsersYet.setVisibility(View.VISIBLE);
                                 } else {
