@@ -84,7 +84,7 @@ public class AddEventActivity extends AppCompatActivity {
             //TODO: save information typed on this page
             @Override
             public void onClick(View view) {
-                addEvent();
+                uploadFile();
             }
         });
 
@@ -100,7 +100,7 @@ public class AddEventActivity extends AppCompatActivity {
         });
     }
 
-    public void addEvent() {
+    public void addEvent(Uri uri) {
 //        Bitmap bitmap = ((BitmapDrawable) imageBtn.getDrawable()).getBitmap();
         final ChapterEvent event = new ChapterEvent(
                 nameEditTxt.getText().toString(),
@@ -109,12 +109,12 @@ public class AddEventActivity extends AppCompatActivity {
                 locaEditTxt.getText().toString(),
                 descrEditTxt.getText().toString(),
                 linkEditTxt.getText().toString(),
-                imageUri == null ? "" : imageUri.toString());
-        if(uploadTask != null && uploadTask.isInProgress()) {
-            Toast.makeText(this, "Upload in Progress", Toast.LENGTH_LONG).show();
-        } else {
-            uploadFile();
-        }
+                uri == null ? "" : uri.toString());
+//        if(uploadTask != null && uploadTask.isInProgress()) {
+//            Toast.makeText(this, "Upload in Progress", Toast.LENGTH_LONG).show();
+//        } else {
+//            uploadFile();
+//        }
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot userSnap) {
@@ -147,23 +147,31 @@ public class AddEventActivity extends AppCompatActivity {
 
     private void uploadFile() {
         if(imageUri != null) {
-            StorageReference fileRef = storageReference.child(nameEditTxt.getText().toString() + "." + getFileExtension(imageUri));
-            uploadTask = fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            final StorageReference fileRef = storageReference.child(nameEditTxt.getText().toString() + "." + getFileExtension(imageUri));
+            uploadTask = fileRef.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    addEvent(uri);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
 
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
 
-                }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-
-                }
-            });
+                        }
+                    });
         } else {
             //TODO add dialog
             Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();

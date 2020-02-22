@@ -176,7 +176,7 @@ public class EventPageActivity extends AppCompatActivity {
                                 link.setMovementMethod(LinkMovementMethod.getInstance());
                                 if(mainEvent.getPic() != null && mainEvent.getPic() != "") {
                                     Log.d(TAG, mainEvent.getPic());
-                                    Picasso.get().load(Uri.parse(mainEvent.getPic())).into(eventImage);
+                                    Picasso.get().load(Uri.parse(mainEvent.getPic())).fit().centerCrop().into(eventImage);
                                 }
                                 return;
                             }

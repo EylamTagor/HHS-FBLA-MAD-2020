@@ -118,7 +118,7 @@ public class EditEventActivity extends AppCompatActivity {
                                 linkEditTxt.setText(event.getFacebookLink());
                                 if(event.getPic() != null) {
                                     imageUri = Uri.parse(event.getPic());
-                                    Picasso.get().load(imageUri).into(imageBtn);
+                                    Picasso.get().load(imageUri).fit().centerCrop().into(imageBtn);
                                 }
                             }
                         }
