@@ -46,8 +46,6 @@ public class HomeActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //TODO: lead fab to add event activity, unless we don't want the add event button to be on the member homepage...
-
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -80,9 +78,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
-            String photo = String.valueOf(user.getPhotoUrl());
             Picasso.get().load(user.getPhotoUrl()).into(profileButton);
-//            Picasso.get().load(photo).into(profileButton);
         } else {
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }

@@ -1,6 +1,7 @@
 package com.hhsfbla.mad.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,7 +52,10 @@ public class LoginActivity extends AppCompatActivity {
     private String TAG = "FACELOG";
     private FirebaseFirestore db;
     private GoogleSignInClient mGoogleSignInClient;
-    static final int GOOGLE_SIGN_IN = 123;
+    private ProgressDialog progressDialog;
+
+    private static final int GOOGLE_SIGN_IN = 123;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,11 +86,12 @@ public class LoginActivity extends AppCompatActivity {
         loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
 
         loginFacebookBtn.setReadPermissions(Arrays.asList("email", "public_profile"));
-        loginFacebookBtn.setPublishPermissions(Arrays.asList("publish_actions"));
         loginFacebookBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
 //                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                progressDialog.setMessage("Loading...");
+                progressDialog.show();
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
@@ -102,7 +107,8 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Facebook Login Failed", Toast.LENGTH_SHORT).show();
             }
         });
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCanceledOnTouchOutside(false);
         mAuth = FirebaseAuth.getInstance();
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -123,6 +129,8 @@ public class LoginActivity extends AppCompatActivity {
     public void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
     }
 
     @Override
@@ -158,11 +166,13 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if(document.getId().equals(mAuth.getCurrentUser().getUid()) && document.get("chapter") != null) {
+                                    progressDialog.dismiss();
                                     updateUI();
                                     Log.d(TAG, "return");
                                     return;
                                 }
                             }
+                            progressDialog.dismiss();
                             sendtoSignup();
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
@@ -187,6 +197,7 @@ public class LoginActivity extends AppCompatActivity {
 //                            Log.d(TAG, "adding fuser facebook");
                             addUser();
                         } else {
+                            progressDialog.dismiss();
                             // If sign in fails, display a message to the fuser.
 //                            Log.d(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "A user with this email exists already", Toast.LENGTH_SHORT).show();

@@ -2,6 +2,7 @@ package com.hhsfbla.mad.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,7 @@ public class SetupActivity extends AppCompatActivity {
     private Button create;
     private FirebaseFirestore db;
     private FirebaseUser user;
+    private ProgressDialog progressDialog;
     private static final String TAG = "Setup Activity";
 
     @Override
@@ -35,7 +37,8 @@ public class SetupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
         setTitle("Chapter Setup");
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Creating...");
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -48,12 +51,14 @@ public class SetupActivity extends AppCompatActivity {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.show();
                 db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         Chapter example = new Chapter(chapName.getText().toString(), location.getText().toString());
                         for(Chapter chapter : queryDocumentSnapshots.toObjects(Chapter.class)) {
                             if(chapter.equals(example)) {
+                                progressDialog.dismiss();
                                 Toast.makeText(getApplicationContext(), "Chapter already Exists", Toast.LENGTH_LONG).show();
                                 return;
                             }
@@ -76,6 +81,7 @@ public class SetupActivity extends AppCompatActivity {
                                 db.collection("users").document(user.getUid()).update("chapter", newChap.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        progressDialog.dismiss();
                                         startActivity(new Intent(SetupActivity.this, HomeActivity.class));
                                     }
                                 });
