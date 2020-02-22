@@ -191,6 +191,24 @@
 
     </ScrollView>
 
+    <Button
+        android:id="@+id/editSetDateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="Date"
+        app:layout_constraintStart_toEndOf="@+id/editEventBackButton"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/editSetTimeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:text="Time"
+        app:layout_constraintEnd_toStartOf="@+id/editEventFinishButton"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

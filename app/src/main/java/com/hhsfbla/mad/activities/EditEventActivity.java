@@ -3,6 +3,8 @@ package com.hhsfbla.mad.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,12 +16,14 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,11 +43,13 @@ import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.dialogs.DatePicker;
+import com.hhsfbla.mad.dialogs.TimePicker;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class EditEventActivity extends AppCompatActivity {
+public class EditEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private static final int RESULT_LOAD_IMAGE = 1;
     private StorageTask uploadTask;
     private StorageReference storageReference;
@@ -57,6 +63,7 @@ public class EditEventActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseUser user;
     private Uri imageUri;
+    private Button setDateButton, setTimeButton;
     private static final String TAG = "EDIT EVENT PAGE";
 
     @Override
@@ -77,6 +84,8 @@ public class EditEventActivity extends AppCompatActivity {
         descrEditTxt = findViewById(R.id.eventDescriptionEdit);
         linkEditTxt = findViewById(R.id.eventLinkEdit);
         imageBtn = findViewById(R.id.eventImageEdit);
+        setDateButton = findViewById(R.id.editSetDateButton);
+        setTimeButton = findViewById(R.id.editSetTimeButton);
         storageReference = FirebaseStorage.getInstance().getReference("images");
 
         backBtn2.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +115,22 @@ public class EditEventActivity extends AppCompatActivity {
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(intent, RESULT_LOAD_IMAGE);
+            }
+        });
+
+        setDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment datePicker = new DatePicker();
+                datePicker.show(getSupportFragmentManager(), "date picker");
+            }
+        });
+
+        setTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment timePicker = new TimePicker();
+                timePicker.show(getSupportFragmentManager(), "time picker");
             }
         });
 
@@ -215,5 +240,20 @@ public class EditEventActivity extends AppCompatActivity {
             Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
             editEvent(null);
         }
+    }
+
+    @Override
+    public void onDateSet(android.widget.DatePicker datePicker, int i, int i1, int i2) {
+        String month = i1 < 10 ? "0" + i1 : i1 + "";
+        String day = i2 < 10 ? "0" + i2 : i2 + "";
+
+        dateEditTxt.setText(month + "/" + day + "/" + i);
+    }
+
+    @Override
+    public void onTimeSet(android.widget.TimePicker timePicker, int i, int i1) {
+        String hour = i < 10 ? "0" + i : i + "";
+        String minute = i1 < 10 ? "0" + i1 : i1 + "";
+        timeEditTxt.setText(hour + ":" + minute);
     }
 }
