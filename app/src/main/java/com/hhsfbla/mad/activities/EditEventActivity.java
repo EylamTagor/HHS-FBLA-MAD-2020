@@ -1,7 +1,9 @@
 package com.hhsfbla.mad.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,12 +13,15 @@ import android.provider.MediaStore;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +30,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.ChapterEvent;
@@ -35,9 +45,8 @@ import java.util.List;
 
 public class EditEventActivity extends AppCompatActivity {
     private static final int RESULT_LOAD_IMAGE = 1;
-
-
-
+    private StorageTask uploadTask;
+    private StorageReference storageReference;
     private ImageButton backBtn2, doneBtn, imageBtn;
     private TextInputEditText nameEditTxt;
     private TextInputEditText dateEditTxt;
@@ -68,6 +77,7 @@ public class EditEventActivity extends AppCompatActivity {
         descrEditTxt = findViewById(R.id.eventDescriptionEdit);
         linkEditTxt = findViewById(R.id.eventLinkEdit);
         imageBtn = findViewById(R.id.eventImageEdit);
+        storageReference = FirebaseStorage.getInstance().getReference("images");
 
         backBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,18 +91,20 @@ public class EditEventActivity extends AppCompatActivity {
             //TODO: save information typed on this page
             @Override
             public void onClick(View view) {
-                editEvent();
+                if(uploadTask != null && uploadTask.isInProgress()) {
+                    Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_LONG).show();
+                } else {
+                    uploadFile();
+                }
             }
         });
 
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, RESULT_LOAD_IMAGE);
                 startActivityForResult(intent, RESULT_LOAD_IMAGE);
             }
         });
@@ -128,8 +140,7 @@ public class EditEventActivity extends AppCompatActivity {
         });
     }
 
-    public void editEvent() {
-//        Bitmap bitmap = ((BitmapDrawable) imageBtn.getDrawable()).getBitmap();
+    public void editEvent(Uri uri) {
         final ChapterEvent event = new ChapterEvent(
                 nameEditTxt.getText().toString(),
                 dateEditTxt.getText().toString(),
@@ -137,7 +148,7 @@ public class EditEventActivity extends AppCompatActivity {
                 locaEditTxt.getText().toString(),
                 descrEditTxt.getText().toString(),
                 linkEditTxt.getText().toString(),
-                imageUri == null ? "" : imageUri.toString());
+                uri == null ? "" : uri.toString());
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(final DocumentSnapshot userSnap) {
@@ -159,12 +170,6 @@ public class EditEventActivity extends AppCompatActivity {
                         }
                     }
                 });
-//                db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document().set(event, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        startActivity(new Intent(EditEventActivity.this, HomeActivity.class));
-//                    }
-//                });
             }
         });
     }
@@ -175,6 +180,46 @@ public class EditEventActivity extends AppCompatActivity {
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
             imageBtn.setImageURI(imageUri);
+        }
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    private void uploadFile() {
+        if(imageUri != null) {
+            final StorageReference fileRef = storageReference.child(nameEditTxt.getText().toString() + "." + getFileExtension(imageUri));
+            uploadTask = fileRef.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    editEvent(uri);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+
+                        }
+                    });
+        } else {
+            //TODO add dialog
+            Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
+            editEvent(null);
         }
     }
 }

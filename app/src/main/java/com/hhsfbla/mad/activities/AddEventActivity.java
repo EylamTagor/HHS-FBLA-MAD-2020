@@ -41,7 +41,6 @@ public class AddEventActivity extends AppCompatActivity {
     private static final int RESULT_LOAD_IMAGE = 1;
     private Uri imageUri;
     private StorageTask uploadTask;
-
     private ImageButton backBtn2, doneBtn, imageBtn;
     private TextInputEditText nameEditTxt;
     private TextInputEditText dateEditTxt;
@@ -84,7 +83,11 @@ public class AddEventActivity extends AppCompatActivity {
             //TODO: save information typed on this page
             @Override
             public void onClick(View view) {
-                uploadFile();
+                if(uploadTask != null && uploadTask.isInProgress()) {
+                    Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_LONG).show();
+                } else {
+                    uploadFile();
+                }
             }
         });
 
@@ -175,6 +178,7 @@ public class AddEventActivity extends AppCompatActivity {
         } else {
             //TODO add dialog
             Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
+            addEvent(null);
         }
     }
 }
