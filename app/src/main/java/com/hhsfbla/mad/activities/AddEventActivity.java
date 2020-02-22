@@ -3,6 +3,7 @@ package com.hhsfbla.mad.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -52,6 +53,8 @@ public class AddEventActivity extends AppCompatActivity {
     private FirebaseUser user;
     private static final String TAG = "ADDEVENTPAGE";
     private StorageReference storageReference;
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +63,9 @@ public class AddEventActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.setContentView(R.layout.dialog_progress);
         backBtn2 = findViewById(R.id.backBtn2);
         doneBtn = findViewById(R.id.doneBtn);
         nameEditTxt = findViewById(R.id.nameEditTxt);
@@ -118,6 +123,7 @@ public class AddEventActivity extends AppCompatActivity {
 //        } else {
 //            uploadFile();
 //        }
+        progressDialog.setMessage("Saving...");
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot userSnap) {
@@ -125,6 +131,7 @@ public class AddEventActivity extends AppCompatActivity {
                 db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document().set(event).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        progressDialog.dismiss();
                         startActivity(new Intent(AddEventActivity.this, HomeActivity.class));
                     }
                 });
@@ -144,6 +151,8 @@ public class AddEventActivity extends AppCompatActivity {
 
     private void uploadFile() {
         if(imageUri != null) {
+            progressDialog.setMessage("Uploading...");
+            progressDialog.show();
             final StorageReference fileRef = storageReference.child(nameEditTxt.getText().toString());
             uploadTask = fileRef.putFile(imageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

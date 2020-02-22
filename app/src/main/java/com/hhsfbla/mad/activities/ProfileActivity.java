@@ -3,8 +3,14 @@ package com.hhsfbla.mad.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +37,8 @@ import com.hhsfbla.mad.dialogs.DeleteAccountDialog;
 import com.hhsfbla.mad.dialogs.DeleteEventDialog;
 import com.squareup.picasso.Picasso;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity implements DeleteAccountDialog.DeleteAccountDialogListener, ChangeChapterDialog.ChangeChapterDialogListener {
@@ -43,7 +51,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     private FirebaseFirestore db;
     private Button sign_outBtn;
     private Button deleteAccount;
-
+    private ProgressDialog progressDialog;
     private static final String TAG = "DASHBOARD";
 
 
@@ -51,6 +59,8 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCanceledOnTouchOutside(false);
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         backBtn = findViewById(R.id.backBtn);
@@ -65,10 +75,6 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
         email.setText(user.getEmail());
         String photo = String.valueOf(user.getPhotoUrl());
         Picasso.get().load(photo).into(profilePic);
-
-
-
-
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,27 +139,40 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     @Override
     public void sendConfirmation(boolean confirm) {
         if(confirm) {
+            progressDialog.setMessage("Deleting...");
+            progressDialog.show();
             db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(final DocumentSnapshot documentSnapshot) {
-                    db.collection("chapters").document(documentSnapshot.get("chapter").toString()).update("users", FieldValue.arrayRemove(user.getUid()));
-                    db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    db.collection("chapters").document(documentSnapshot.get("chapter").toString()).update("users", FieldValue.arrayRemove(user.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                                if(((List<String>)snap.get("attendees")).contains(user.getUid())) {
-                                    db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
-                                }
-                            }
-                            db.collection("users").document(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        public void onSuccess(Void aVoid) {
+                            db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
-                                public void onSuccess(Void aVoid) {
-                                    FirebaseAuth.getInstance().signOut();
-                                    startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    for(DocumentSnapshot snap : queryDocumentSnapshots) {
+                                        if(((List<String>)snap.get("attendees")).contains(user.getUid())) {
+                                            db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
+                                        }
+                                    }
+                                    db.collection("users").document(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    progressDialog.dismiss();
+                                                    FirebaseAuth.getInstance().signOut();
+                                                    startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                                                }
+                                            });
+                                        }
+                                    });
                                 }
                             });
                         }
                     });
+
                 }
             });
         }
@@ -162,7 +181,8 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     @Override
     public void sendChangeConfirmation(boolean confirm) {
         if(confirm) {
-
+            progressDialog.setMessage("Saving changes...");
+            progressDialog.show();
             db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(final DocumentSnapshot documentSnapshot) {
@@ -175,12 +195,13 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                                     db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
                                 }
                             }
+                            progressDialog.dismiss();
                             finish();
                             Intent intent = new Intent(ProfileActivity.this, SignupActivity.class);
                             startActivity(intent);
                         }
                     });
-                    
+
                 }
             });
         }

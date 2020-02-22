@@ -3,6 +3,7 @@ package com.hhsfbla.mad.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -103,7 +105,6 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         eventImage = findViewById(R.id.eventPicDetail);
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(this);
-
         //this loginManager helps you eliminate adding a LoginButton to your UI
         manager = LoginManager.getInstance();
 
