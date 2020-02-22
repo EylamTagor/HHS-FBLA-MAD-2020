@@ -1,7 +1,9 @@
 package com.hhsfbla.mad.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,12 +13,15 @@ import android.provider.MediaStore;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,14 +29,18 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
+import com.squareup.picasso.Picasso;
 
 public class AddEventActivity extends AppCompatActivity {
     private static final int RESULT_LOAD_IMAGE = 1;
-
-
+    private Uri imageUri;
+    private StorageTask uploadTask;
 
     private ImageButton backBtn2, doneBtn, imageBtn;
     private TextInputEditText nameEditTxt;
@@ -42,9 +51,8 @@ public class AddEventActivity extends AppCompatActivity {
     private EditText linkEditTxt;
     private FirebaseFirestore db;
     private FirebaseUser user;
-    private FirebaseStorage storage;
     private static final String TAG = "ADDEVENTPAGE";
-
+    private StorageReference storageReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +71,7 @@ public class AddEventActivity extends AppCompatActivity {
         descrEditTxt = findViewById(R.id.descrEditTxt);
         linkEditTxt = findViewById(R.id.linkEditTxt);
         imageBtn = findViewById(R.id.imageBtn);
-
+        storageReference = FirebaseStorage.getInstance().getReference("images");
         backBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,15 +91,17 @@ public class AddEventActivity extends AppCompatActivity {
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+//                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, RESULT_LOAD_IMAGE);
             }
         });
     }
 
     public void addEvent() {
 //        Bitmap bitmap = ((BitmapDrawable) imageBtn.getDrawable()).getBitmap();
-        Bitmap bitmap = null;
         final ChapterEvent event = new ChapterEvent(
                 nameEditTxt.getText().toString(),
                 dateEditTxt.getText().toString(),
@@ -99,7 +109,12 @@ public class AddEventActivity extends AppCompatActivity {
                 locaEditTxt.getText().toString(),
                 descrEditTxt.getText().toString(),
                 linkEditTxt.getText().toString(),
-                bitmap);
+                imageUri == null ? "" : imageUri.toString());
+        if(uploadTask != null && uploadTask.isInProgress()) {
+            Toast.makeText(this, "Upload in Progress", Toast.LENGTH_LONG).show();
+        } else {
+            uploadFile();
+        }
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot userSnap) {
@@ -112,14 +127,46 @@ public class AddEventActivity extends AppCompatActivity {
                 });
             }
         });
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
-            Uri image = data.getData();
-            imageBtn.setImageURI(image);
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            Picasso.get().load(imageUri).into(imageBtn);
+        }
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    private void uploadFile() {
+        if(imageUri != null) {
+            StorageReference fileRef = storageReference.child(nameEditTxt.getText().toString() + "." + getFileExtension(imageUri));
+            uploadTask = fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+
+                }
+            });
+        } else {
+            //TODO add dialog
+            Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
         }
     }
 }

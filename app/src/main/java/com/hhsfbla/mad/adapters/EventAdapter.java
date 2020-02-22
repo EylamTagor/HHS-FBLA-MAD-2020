@@ -2,6 +2,7 @@ package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.EventPageActivity;
 import com.hhsfbla.mad.data.ChapterEvent;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -47,7 +49,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.date.setText(event.getDate());
         holder.time.setText(event.getTime());
         holder.location.setText(event.getLocation());
-        holder.pic.setImageBitmap(event.getPic());
+        if(event.getPic() != "" && event.getPic() != null) {
+            Picasso.get().load(Uri.parse(event.getPic())).fit().centerCrop().into(holder.pic);
+        }
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

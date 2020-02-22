@@ -29,6 +29,7 @@ import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class EditEventActivity extends AppCompatActivity {
     private EditText linkEditTxt;
     private FirebaseFirestore db;
     private FirebaseUser user;
+    private Uri imageUri;
     private static final String TAG = "EDIT EVENT PAGE";
 
     @Override
@@ -87,7 +89,11 @@ public class EditEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, RESULT_LOAD_IMAGE);
+                startActivityForResult(intent, RESULT_LOAD_IMAGE);
             }
         });
 
@@ -111,7 +117,8 @@ public class EditEventActivity extends AppCompatActivity {
                                 descrEditTxt.setText(event.getDescription());
                                 linkEditTxt.setText(event.getFacebookLink());
                                 if(event.getPic() != null) {
-                                    imageBtn.setImageBitmap(event.getPic());
+                                    imageUri = Uri.parse(event.getPic());
+                                    Picasso.get().load(imageUri).into(imageBtn);
                                 }
                             }
                         }
@@ -123,7 +130,6 @@ public class EditEventActivity extends AppCompatActivity {
 
     public void editEvent() {
 //        Bitmap bitmap = ((BitmapDrawable) imageBtn.getDrawable()).getBitmap();
-        Bitmap bitmap = null;
         final ChapterEvent event = new ChapterEvent(
                 nameEditTxt.getText().toString(),
                 dateEditTxt.getText().toString(),
@@ -131,17 +137,34 @@ public class EditEventActivity extends AppCompatActivity {
                 locaEditTxt.getText().toString(),
                 descrEditTxt.getText().toString(),
                 linkEditTxt.getText().toString(),
-                bitmap);
+                imageUri == null ? "" : imageUri.toString());
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot userSnap) {
+            public void onSuccess(final DocumentSnapshot userSnap) {
                 Log.d(TAG, "Adding event");
-                db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document().set(event, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        startActivity(new Intent(EditEventActivity.this, HomeActivity.class));
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        String name = getIntent().getStringExtra("EVENT_NAME");
+                        List<ChapterEvent> events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
+                        for(DocumentSnapshot snap : queryDocumentSnapshots) {
+                            if(snap.toObject(ChapterEvent.class).getName().equalsIgnoreCase(name)) {
+                                db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document(snap.getId()).set(event, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        startActivity(new Intent(EditEventActivity.this, HomeActivity.class));
+                                    }
+                                });
+                            }
+                        }
                     }
                 });
+//                db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document().set(event, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        startActivity(new Intent(EditEventActivity.this, HomeActivity.class));
+//                    }
+//                });
             }
         });
     }
@@ -150,8 +173,8 @@ public class EditEventActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
-            Uri image = data.getData();
-            imageBtn.setImageURI(image);
+            imageUri = data.getData();
+            imageBtn.setImageURI(imageUri);
         }
     }
 }

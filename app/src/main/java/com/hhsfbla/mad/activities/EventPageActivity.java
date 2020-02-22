@@ -174,6 +174,10 @@ public class EventPageActivity extends AppCompatActivity {
                                 link.setText(mainEvent.getFacebookLink());
                                 link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click Here For More Information</a>"));
                                 link.setMovementMethod(LinkMovementMethod.getInstance());
+                                if(mainEvent.getPic() != null && mainEvent.getPic() != "") {
+                                    Log.d(TAG, mainEvent.getPic());
+                                    Picasso.get().load(Uri.parse(mainEvent.getPic())).into(eventImage);
+                                }
                                 return;
                             }
                         }
