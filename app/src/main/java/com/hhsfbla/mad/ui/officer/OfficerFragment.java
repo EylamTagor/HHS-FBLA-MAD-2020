@@ -62,10 +62,12 @@ public class OfficerFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         officerRecyclerView = root.findViewById(R.id.officers);
+        noOfficersYet = root.findViewById(R.id.noOfficersYet);
         officerRecyclerView.setHasFixedSize(true);
         officerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         officers = new ArrayList<>();
-        noOfficersYet = root.findViewById(R.id.noOfficersYet);
+        adapter = new UserAdapter(officers, root.getContext());
+        officerRecyclerView.setAdapter(adapter);
         initRecyclerView(UserType.OFFICER, root);
 
         return root;
@@ -93,8 +95,7 @@ public class OfficerFragment extends Fragment {
                                         officers.add(snap.toObject(User.class));
                                     }
                                 }
-                                adapter = new UserAdapter(officers, root.getContext());
-                                officerRecyclerView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
                                 if (officers.isEmpty()) {
                                     noOfficersYet.setVisibility(View.VISIBLE);
                                 } else {

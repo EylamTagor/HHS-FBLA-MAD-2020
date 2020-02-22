@@ -53,7 +53,7 @@ public class MyCompsFragment extends Fragment {
         compsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         comps = new ArrayList<>();
         adapter = new CompsAdapter(comps, root.getContext());
-
+        compsRecyclerView.setAdapter(adapter);
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -71,8 +71,7 @@ public class MyCompsFragment extends Fragment {
                             } else {
                                 noCompsYet.setVisibility(View.INVISIBLE);
                             }
-                            adapter.setEvents(comps);
-                            compsRecyclerView.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
                         }
                     });
 

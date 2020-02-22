@@ -55,7 +55,9 @@ public class MyEventsFragment extends Fragment {
         eventRecyclerView = root.findViewById(R.id.myEvents);
         eventRecyclerView.setHasFixedSize(true);
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        events = new ArrayList<>();
         adapter = new EventAdapter(events, root.getContext());
+        eventRecyclerView.setAdapter(adapter);
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -64,24 +66,21 @@ public class MyEventsFragment extends Fragment {
                 db.collection("chapters").document(currentUser.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        ArrayList<ChapterEvent> temp = new ArrayList<>();
                         for (DocumentSnapshot snap : queryDocumentSnapshots) {
                             for (String event : currentUser.getMyEvents()) {
                                 if (event.equalsIgnoreCase(snap.getId())) {
                                     Log.d(TAG, snap.toObject(ChapterEvent.class).toString());
-                                    temp.add(snap.toObject(ChapterEvent.class));
+                                    events.add(snap.toObject(ChapterEvent.class));
                                 }
                             }
                         }
-                        events = temp;
                         if (events == null) {
                             noEventsYet.setVisibility(View.VISIBLE);
                             return;
                         } else {
                             noEventsYet.setVisibility(View.INVISIBLE);
                         }
-                        adapter.setEvents(events);
-                        eventRecyclerView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     }
                 });
             }

@@ -28,6 +28,7 @@ import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -55,7 +56,9 @@ public class HomeFragment extends Fragment {
         eventRecyclerView = root.findViewById(R.id.eventFeed);
         eventRecyclerView.setHasFixedSize(true);
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        events = new ArrayList<>();
         adapter = new EventAdapter(events, root.getContext());
+        eventRecyclerView.setAdapter(adapter);
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @SuppressLint("RestrictedApi")
@@ -69,15 +72,13 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
-                        Log.d(TAG, events.toString());
-                        Log.d(TAG, events.toString());
                         if (events.isEmpty()) {
                             noEventsYet.setVisibility(View.VISIBLE);
                         } else {
                             noEventsYet.setVisibility(View.INVISIBLE);
                         }
                         adapter.setEvents(events);
-                        eventRecyclerView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     }
                 });
 
