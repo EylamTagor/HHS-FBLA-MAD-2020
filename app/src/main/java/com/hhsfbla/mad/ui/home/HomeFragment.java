@@ -72,8 +72,6 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
-                        Log.d(TAG, events.toString());
-                        Log.d(TAG, events.toString());
                         if (events.isEmpty()) {
                             noEventsYet.setVisibility(View.VISIBLE);
                         } else {

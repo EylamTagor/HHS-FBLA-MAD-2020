@@ -142,15 +142,9 @@ public class AddEventActivity extends AppCompatActivity {
         }
     }
 
-    private String getFileExtension(Uri uri) {
-        ContentResolver cR = getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(cR.getType(uri));
-    }
-
     private void uploadFile() {
         if(imageUri != null) {
-            final StorageReference fileRef = storageReference.child(nameEditTxt.getText().toString() + "." + getFileExtension(imageUri));
+            final StorageReference fileRef = storageReference.child(nameEditTxt.getText().toString());
             uploadTask = fileRef.putFile(imageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override

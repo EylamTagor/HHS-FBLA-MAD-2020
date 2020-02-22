@@ -61,9 +61,9 @@ public class User {
     }
 
     public ArrayList<String> getMyEvents() {
-
         return myEvents;
     }
+
 
     public void setMyEvents(ArrayList<String> myEvents) {
         this.myEvents = myEvents;
