@@ -57,6 +57,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
         return new UserAdapter.ViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull UserAdapter.ViewHolder holder, final int position) {
         final User user = users.get(position);
@@ -134,7 +136,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
     }
 
     public void setUsers(List<User> users) {
+        Log.d(TAG, allItems.toString());
         this.users = users;
+        allItems.clear();
+        this.allItems.addAll(users);
+        Log.d(TAG, allItems.toString());
+
     }
 
     @Override
@@ -150,6 +157,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
             Log.d(TAG, charSequence.toString());
             Log.d(TAG, allItems.toString());
             if(charSequence == null || charSequence.length() == 0) {
+
                 filteredUsers.addAll(allItems);
             } else {
                 String filterPattern = charSequence.toString().toLowerCase().trim();

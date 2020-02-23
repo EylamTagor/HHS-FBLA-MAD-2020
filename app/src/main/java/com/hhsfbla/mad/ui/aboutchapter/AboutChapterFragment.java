@@ -78,8 +78,6 @@ public class AboutChapterFragment extends Fragment {
         userRecyclerView.setAdapter(adapter);
         initRecyclerView(UserType.MEMBER, root);
 
-//TODO: set aboutChap to description of chapter, set locaChap to location of chapter
-
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -157,6 +155,7 @@ public class AboutChapterFragment extends Fragment {
                                     }
                                 }
                                 adapter.notifyDataSetChanged();
+                                adapter.setUsers(users);
                                 if(users.isEmpty()) {
                                     noUsersYet.setVisibility(View.VISIBLE);
                                 } else {

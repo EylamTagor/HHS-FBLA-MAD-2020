@@ -96,6 +96,7 @@ public class OfficerFragment extends Fragment {
                                     }
                                 }
                                 adapter.notifyDataSetChanged();
+                                adapter.setUsers(officers);
                                 if (officers.isEmpty()) {
                                     noOfficersYet.setVisibility(View.VISIBLE);
                                 } else {
