@@ -33,10 +33,12 @@
                 app:layout_constraintStart_toEndOf="@+id/userImageDetail"
                 app:layout_constraintTop_toTopOf="@+id/userImageDetail" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/userImageDetail"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                app:civ_border_width="1dp"
+                app:civ_border_color="#FF000000"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"

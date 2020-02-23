@@ -171,7 +171,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for(final DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
                             if(snapshot.toObject(Chapter.class).getName().equalsIgnoreCase(chapterList.get(position).getName())) {
-                                updateUser(snapshot, null);
+                                updateUser(snapshot, fuser.getPhotoUrl());
                             }
                         }
                     }

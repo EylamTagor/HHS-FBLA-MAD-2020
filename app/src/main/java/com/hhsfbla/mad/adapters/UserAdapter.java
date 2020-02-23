@@ -34,6 +34,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> implements Filterable {
 
     private FirebaseFirestore db;
@@ -65,16 +67,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
         final User user = users.get(position);
         holder.name.setText(user.getName());
         holder.rank.setText(user.getUserType().toString());
-        String photo = String.valueOf(fuser.getPhotoUrl());
-        db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot snapshot) {
-                if(snapshot.toObject(User.class).getPic() == null || snapshot.toObject(User.class).getPic() == "") {
-                    return;
-                }
-                Picasso.get().load(Uri.parse(snapshot.toObject(User.class).getPic())).into(holder.pic);
-            }
-        });
+        if(users.get(position).getPic() != "" && users.get(position).getPic() != null) {
+            Picasso.get().load(Uri.parse(users.get(position).getPic())).into(holder.pic);
+        } else {
+            Picasso.get().load(R.drawable.com_facebook_profile_picture_blank_square).into(holder.pic);
+        }
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -195,7 +192,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name, rank;
-        public ImageView pic;
+        public CircleImageView pic;
         public ConstraintLayout constraintLayout;
 
         public ViewHolder(@NonNull View itemView) {
