@@ -169,14 +169,18 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                                     db.collection("users").document(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "hihihi");
+//                                            user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                @Override
+//                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "hihihi2");
                                                     progressDialog.dismiss();
                                                     FirebaseAuth.getInstance().signOut();
                                                     startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-                                                }
-                                            });
+//                                                }
+//                                            });
+                                            Log.d(TAG, "hihihi3");
+
                                         }
                                     });
                                 }

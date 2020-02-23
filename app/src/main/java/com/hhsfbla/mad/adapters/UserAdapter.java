@@ -2,6 +2,7 @@ package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -60,11 +61,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
 
 
     @Override
-    public void onBindViewHolder(@NonNull UserAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final @NonNull UserAdapter.ViewHolder holder, final int position) {
         final User user = users.get(position);
         holder.name.setText(user.getName());
         String photo = String.valueOf(fuser.getPhotoUrl());
-        Picasso.get().load(photo).into(holder.pic);
+        db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot snapshot) {
+                if(snapshot.toObject(User.class).getPic() == null || snapshot.toObject(User.class).getPic() == "") {
+                    return;
+                }
+                Picasso.get().load(Uri.parse(snapshot.toObject(User.class).getPic())).into(holder.pic);
+            }
+        });
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

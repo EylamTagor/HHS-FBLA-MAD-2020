@@ -67,16 +67,16 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     private Button setDateButton, setTimeButton;
     private static final String TAG = "EDIT EVENT PAGE";
     private ProgressDialog progressDialog;
-
+    private boolean hasImageChanged;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_event);
         setTitle("Edit Event");
         progressDialog = new ProgressDialog(this);
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
-
+        hasImageChanged = false;
         backBtn2 = findViewById(R.id.editEventBackButton);
         doneBtn = findViewById(R.id.editEventFinishButton);
         nameEditTxt = findViewById(R.id.eventNameEdit);
@@ -88,7 +88,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         imageBtn = findViewById(R.id.eventImageEdit);
         setDateButton = findViewById(R.id.editSetDateButton);
         setTimeButton = findViewById(R.id.editSetTimeButton);
-        storageReference = FirebaseStorage.getInstance().getReference("images");
+        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
 
         backBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +105,25 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                 if(uploadTask != null && uploadTask.isInProgress()) {
                     Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_LONG).show();
                 } else {
-                    uploadFile();
+                    db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot snapshot) {
+                            db.collection("chapters").document(snapshot.toObject(User.class).getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    for(DocumentSnapshot snap : queryDocumentSnapshots) {
+                                        String name = getIntent().getStringExtra("EVENT_NAME");
+                                        if(snap.toObject(ChapterEvent.class).getName().equalsIgnoreCase(name)) {
+                                            Log.d(TAG, snap.getId());
+                                            uploadFile(snap.getId());
+
+                                        }
+                                    }
+                                }
+                            });
+
+                        }
+                    });
                 }
             }
         });
@@ -167,15 +185,8 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         });
     }
 
-    public void editEvent(Uri uri) {
-        final ChapterEvent event = new ChapterEvent(
-                nameEditTxt.getText().toString(),
-                dateEditTxt.getText().toString(),
-                timeEditTxt.getText().toString(),
-                locaEditTxt.getText().toString(),
-                descrEditTxt.getText().toString(),
-                linkEditTxt.getText().toString(),
-                uri == null ? "" : uri.toString());
+    public void editEvent(final Uri uri) {
+
         progressDialog.setMessage("Saving...");
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -188,6 +199,14 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                         List<ChapterEvent> events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
                         for(DocumentSnapshot snap : queryDocumentSnapshots) {
                             if(snap.toObject(ChapterEvent.class).getName().equalsIgnoreCase(name)) {
+                                final ChapterEvent event = new ChapterEvent(
+                                        nameEditTxt.getText().toString(),
+                                        dateEditTxt.getText().toString(),
+                                        timeEditTxt.getText().toString(),
+                                        locaEditTxt.getText().toString(),
+                                        descrEditTxt.getText().toString(),
+                                        linkEditTxt.getText().toString(),
+                                        uri == null ? snap.toObject(ChapterEvent.class).getPic() : uri.toString());
                                 db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document(snap.getId()).set(event, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -209,14 +228,15 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
             imageBtn.setImageURI(imageUri);
+            hasImageChanged = true;
         }
     }
 
-    private void uploadFile() {
-        if(imageUri != null) {
+    private void uploadFile(String id) {
+        if(imageUri != null && hasImageChanged) {
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
-            final StorageReference fileRef = storageReference.child(nameEditTxt.getText().toString());
+            final StorageReference fileRef = storageReference.child(id);
             uploadTask = fileRef.putFile(imageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override

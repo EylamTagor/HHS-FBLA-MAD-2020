@@ -3,6 +3,7 @@ package com.hhsfbla.mad.adapters;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,8 +27,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.HomeActivity;
+import com.hhsfbla.mad.activities.SignupActivity;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
 
@@ -40,7 +48,8 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     private Context context;
     private List<Chapter> chapterList;
     private List<Chapter> fullList;
-
+    private StorageReference storageReference;
+    private StorageTask uploadTask;
     private ProgressDialog progressDialog;
     private FirebaseFirestore db;
     private FirebaseUser fuser;
@@ -51,6 +60,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         db = FirebaseFirestore.getInstance();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         progressDialog = new ProgressDialog(context.getApplicationContext());
+        storageReference = FirebaseStorage.getInstance().getReference("images").child("pfps");
     }
 
     @NonNull
@@ -58,6 +68,87 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     public ChapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chapter_item, parent, false);
         return new ChapterAdapter.ChapterViewHolder(view);
+    }
+
+    private void updateUser(final DocumentSnapshot snapshot, final Uri uri) {
+        db.collection("chapters").document(snapshot.getId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot queryDocumentSnapshots) {
+//                                db.collection("users").document(fuser.getUid()).set(new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail()));
+                db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User user = documentSnapshot.toObject(User.class);
+                        if(user == null) {
+                            user = new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail());
+                            if(uri != null){
+                                user.setPic(uri.toString());
+                            }
+                            db.collection("users").document(fuser.getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
+//                                                    progressDialog.dismiss();
+                                    Intent intent = new Intent(context, HomeActivity.class);
+                                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                    context.startActivity(intent);
+                                    return;
+                                }
+                            });
+                        } else {
+                            db.collection("users").document(fuser.getUid()).update("chapter", snapshot.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
+//                                                    progressDialog.dismiss();
+                                    Intent intent = new Intent(context, HomeActivity.class);
+                                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                    context.startActivity(intent);
+                                    return;
+                                }
+                            });
+                        }
+                    }
+                });
+
+            }
+        });
+    }
+
+    private void uploadFile(final DocumentSnapshot snapshot) {
+        if(fuser.getPhotoUrl() != null) {
+//            progressDialog.setMessage("Uploading...");
+//            progressDialog.show();
+            final StorageReference fileRef = storageReference.child(fuser.getUid());
+            uploadTask = fileRef.putFile(fuser.getPhotoUrl())
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    updateUser(snapshot, uri);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+
+                        }
+                    });
+        } else {
+            //TODO add dialog
+            Toast.makeText(context, "No Image Selected", Toast.LENGTH_LONG).show();
+            updateUser(snapshot, null);
+        }
     }
 
     @Override
@@ -80,40 +171,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for(final DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
                             if(snapshot.toObject(Chapter.class).getName().equalsIgnoreCase(chapterList.get(position).getName())) {
-//                                db.collection("users").document(fuser.getUid()).set(new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail()));
-                                db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        User user = documentSnapshot.toObject(User.class);
-                                        if(user == null) {
-                                            user = new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail());
-                                            db.collection("users").document(fuser.getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
-//                                                    progressDialog.dismiss();
-                                                    Intent intent = new Intent(context, HomeActivity.class);
-                                                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                                                    context.startActivity(intent);
-                                                    return;
-                                                }
-                                            });
-                                        } else {
-                                            db.collection("users").document(fuser.getUid()).update("chapter", snapshot.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
-//                                                    progressDialog.dismiss();
-                                                    Intent intent = new Intent(context, HomeActivity.class);
-                                                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                                                    context.startActivity(intent);
-                                                    return;
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-
+                                updateUser(snapshot, null);
                             }
                         }
                     }
