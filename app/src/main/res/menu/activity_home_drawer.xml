@@ -25,7 +25,7 @@
 
                 android:id="@+id/nav_comps"
                 android:icon="@drawable/comps"
-                android:title="Compeititon List" />
+                android:title="Competition List" />
             <item
                 android:id="@+id/nav_mycomps"
                 android:icon="@drawable/mycomps_icon"

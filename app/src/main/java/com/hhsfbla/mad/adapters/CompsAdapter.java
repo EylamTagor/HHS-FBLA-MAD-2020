@@ -53,7 +53,21 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
 
         holder.name.setText(comp.getName());
 
-        holder.pic.setImageResource(comp.getPic());
+        int pic = 0;
+        if (comp.getCompType().equals(CompType.WRITTEN))
+            pic = R.drawable.written_icon;
+        else if (comp.getCompType().equals(CompType.TECH))
+            pic = R.drawable.tech_icon;
+        else if (comp.getCompType().equals(CompType.SPEAKING))
+            pic = R.drawable.speaking_icon;
+        else if (comp.getCompType().equals(CompType.CASESTUDY))
+            pic = R.drawable.casestudy_icon;
+        else if (comp.getCompType().equals(CompType.PRODUCTION))
+            pic = R.drawable.production_icon;
+        else if (comp.getCompType().equals(CompType.PROJECT))
+            pic = R.drawable.project_icon;
+
+        holder.pic.setImageResource(pic);
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

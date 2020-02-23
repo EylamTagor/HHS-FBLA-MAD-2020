@@ -44,7 +44,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
 
     public UserAdapter(List<User> users, Context context) {
         this.users = users;
-        allItems = new ArrayList<User>(users);
+        allItems = new ArrayList<>(users);
         this.context = context;
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -61,6 +61,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
     public void onBindViewHolder(@NonNull UserAdapter.ViewHolder holder, final int position) {
         final User user = users.get(position);
         holder.name.setText(user.getName());
+        holder.rank.setText(user.getUserType().toString());
         String photo = String.valueOf(fuser.getPhotoUrl());
         Picasso.get().load(photo).into(holder.pic);
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +177,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView name;
+        public TextView name, rank;
         public ImageView pic;
         public ConstraintLayout constraintLayout;
 
@@ -184,6 +185,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
             super(itemView);
 
             name = itemView.findViewById(R.id.userNameDetail);
+            rank = itemView.findViewById(R.id.rank);
             pic = itemView.findViewById(R.id.userImageDetail);
             constraintLayout = itemView.findViewById(R.id.userConstraintLayout);
         }

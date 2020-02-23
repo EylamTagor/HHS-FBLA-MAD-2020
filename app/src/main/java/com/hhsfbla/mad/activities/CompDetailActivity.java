@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +35,7 @@ import com.hhsfbla.mad.data.Competition;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 import com.hhsfbla.mad.ui.comps.CompsFragment;
+import com.hhsfbla.mad.ui.home.HomeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,7 +133,9 @@ public class CompDetailActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(CompDetailActivity.this, CompsFragment.class));
+                Intent intent = new Intent(CompDetailActivity.this, HomeActivity.class);
+                intent.putExtra("fragmentToLoad", "CompsFragment");
+                startActivity(intent);
             }
         });
 

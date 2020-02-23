@@ -28,6 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:text="fillerrrrrrrrr"
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/compIcon"
@@ -41,7 +42,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@drawable/baseline_emoji_events_24" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

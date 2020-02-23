@@ -1,5 +1,6 @@
 package com.hhsfbla.mad.data;
 
+import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.adapters.CompsAdapter;
 
 import java.util.ArrayList;
@@ -11,7 +12,6 @@ public class Competition {
     private String name;
     private String description;
     private int pic;
-
 
     public Competition() {
         this("", "", null, 0);
