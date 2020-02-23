@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+
+import com.google.firebase.firestore.DocumentReference;
+import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.dialogs.TimePicker;
 import com.hhsfbla.mad.dialogs.DatePicker;
 import android.content.ContentResolver;
@@ -73,7 +76,6 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         user = FirebaseAuth.getInstance().getCurrentUser();
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
-//        progressDialog.setContentView(R.layout.dialog_progress);
         backBtn2 = findViewById(R.id.backBtn2);
         doneBtn = findViewById(R.id.doneBtn);
         nameEditTxt = findViewById(R.id.nameEditTxt);
@@ -85,7 +87,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         imageBtn = findViewById(R.id.imageBtn);
         setDate = findViewById(R.id.setDateButton);
         setTime = findViewById(R.id.setTimeButton);
-        storageReference = FirebaseStorage.getInstance().getReference("images");
+        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
         backBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,7 +103,15 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
                 if(uploadTask != null && uploadTask.isInProgress()) {
                     Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_LONG).show();
                 } else {
-                    uploadFile();
+                    db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot snapshot) {
+                            DocumentReference ref = db.collection("chapters").document(snapshot.toObject(User.class).getChapter()).collection("events").document();
+
+                            uploadFile(ref.getId());
+
+                        }
+                    });
                 }
             }
         });
@@ -134,7 +144,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         });
     }
 
-    public void addEvent(Uri uri) {
+    public void addEvent(Uri uri, final String id) {
 //        Bitmap bitmap = ((BitmapDrawable) imageBtn.getDrawable()).getBitmap();
         final ChapterEvent event = new ChapterEvent(
                 nameEditTxt.getText().toString(),
@@ -144,17 +154,13 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
                 descrEditTxt.getText().toString(),
                 linkEditTxt.getText().toString(),
                 uri == null ? "" : uri.toString());
-//        if(uploadTask != null && uploadTask.isInProgress()) {
-//            Toast.makeText(this, "Upload in Progress", Toast.LENGTH_LONG).show();
-//        } else {
-//            uploadFile();
-//        }
         progressDialog.setMessage("Saving...");
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot userSnap) {
                 Log.d(TAG, "Adding event");
-                db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document().set(event).addOnSuccessListener(new OnSuccessListener<Void>() {
+                DocumentReference ref = db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document(id);
+                ref.set(event).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         progressDialog.dismiss();
@@ -175,11 +181,12 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         }
     }
 
-    private void uploadFile() {
+    private void uploadFile(final String id) {
         if(imageUri != null) {
+            Log.d(TAG, imageUri.toString());
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
-            final StorageReference fileRef = storageReference.child(nameEditTxt.getText().toString());
+            final StorageReference fileRef = storageReference.child(id);
             uploadTask = fileRef.putFile(imageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -187,7 +194,8 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
                             fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    addEvent(uri);
+                                    Log.d(TAG, uri.toString());
+                                    addEvent(uri, id);
                                 }
                             });
                         }
@@ -207,7 +215,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         } else {
             //TODO add dialog
             Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
-            addEvent(null);
+            addEvent(null, id);
         }
     }
 

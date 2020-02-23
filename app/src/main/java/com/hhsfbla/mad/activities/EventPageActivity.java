@@ -1,6 +1,7 @@
 package com.hhsfbla.mad.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -69,6 +70,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     private Button unJoinButton;
     private ImageButton back;
     private Button shareButton, editButton, deleteButton;
+    private ProgressDialog progressDialog;
     private static final String TAG = "Event Details Page";
 
     @Override
@@ -77,7 +79,9 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_event_page);
         setTitle("Event Details");
-        storageReference = FirebaseStorage.getInstance().getReference("images");
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Deleting...");
+        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
         title = findViewById(R.id.eventTitleDetail);
         date = findViewById(R.id.eventDateDetail);
         time = findViewById(R.id.eventTimeDetail);
@@ -87,6 +91,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = auth.getCurrentUser();
+        Log.d("hello", user.getPhotoUrl().toString());
         mainEvent = new ChapterEvent();
         joinButton = findViewById(R.id.joinButton);
         unJoinButton = findViewById(R.id.unJoinButton);
@@ -248,6 +253,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
 
     private void deleteInDB() {
         Log.d(TAG, "hello");
+        progressDialog.show();
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -274,11 +280,12 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                                                     db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
                                                 }
                                             }
+                                            progressDialog.dismiss();
                                             startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
                                         }
                                     });                                    return;
                                 }
-                                StorageReference storageRef = storageReference.child(name);
+                                StorageReference storageRef = storageReference.child(snap.getId());
                                 storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -294,7 +301,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                                                         db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
                                                     }
                                                 }
-                                                Toast.makeText(getApplicationContext(), "Event Deleted", Toast.LENGTH_LONG).show();
+                                                progressDialog.dismiss();
                                                 startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
                                             }
                                         });

@@ -2,6 +2,7 @@ package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -57,13 +58,23 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
         return new UserAdapter.ViewHolder(view);
     }
 
+
+
     @Override
-    public void onBindViewHolder(@NonNull UserAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final @NonNull UserAdapter.ViewHolder holder, final int position) {
         final User user = users.get(position);
         holder.name.setText(user.getName());
         holder.rank.setText(user.getUserType().toString());
         String photo = String.valueOf(fuser.getPhotoUrl());
-        Picasso.get().load(photo).into(holder.pic);
+        db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot snapshot) {
+                if(snapshot.toObject(User.class).getPic() == null || snapshot.toObject(User.class).getPic() == "") {
+                    return;
+                }
+                Picasso.get().load(Uri.parse(snapshot.toObject(User.class).getPic())).into(holder.pic);
+            }
+        });
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -135,7 +146,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
     }
 
     public void setUsers(List<User> users) {
+        Log.d(TAG, allItems.toString());
         this.users = users;
+        allItems.clear();
+        this.allItems.addAll(users);
+        Log.d(TAG, allItems.toString());
+
     }
 
     @Override
@@ -151,6 +167,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
             Log.d(TAG, charSequence.toString());
             Log.d(TAG, allItems.toString());
             if(charSequence == null || charSequence.length() == 0) {
+
                 filteredUsers.addAll(allItems);
             } else {
                 String filterPattern = charSequence.toString().toLowerCase().trim();

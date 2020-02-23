@@ -87,6 +87,8 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
 
     public void setEvents(List<Competition> events) {
         this.comps = events;
+        this.allItems.clear();
+        allItems = new ArrayList<>(comps);
     }
 
     @Override

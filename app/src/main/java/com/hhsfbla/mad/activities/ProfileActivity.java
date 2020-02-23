@@ -32,6 +32,9 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.data.Chapter;
+import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.data.UserType;
 import com.hhsfbla.mad.dialogs.ChangeChapterDialog;
 import com.hhsfbla.mad.dialogs.DeleteAccountDialog;
 import com.hhsfbla.mad.dialogs.DeleteEventDialog;
@@ -114,6 +117,12 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                 signOut();
             }
         });
+        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                name.setText(documentSnapshot.toObject(User.class).getName());
+            }
+        });
     }
 
     public void signOut() {
@@ -160,14 +169,18 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                                     db.collection("users").document(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "hihihi");
+//                                            user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                @Override
+//                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "hihihi2");
                                                     progressDialog.dismiss();
                                                     FirebaseAuth.getInstance().signOut();
                                                     startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-                                                }
-                                            });
+//                                                }
+//                                            });
+                                            Log.d(TAG, "hihihi3");
+
                                         }
                                     });
                                 }
@@ -188,22 +201,44 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
             db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(final DocumentSnapshot documentSnapshot) {
-                    db.collection("chapters").document(documentSnapshot.get("chapter").toString()).update("users", FieldValue.arrayRemove(user.getUid()));
-                    db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    final String chapter = documentSnapshot.get("chapter").toString();
+                    db.collection("users").document(user.getUid()).update("userType", UserType.MEMBER);
+                    db.collection("chapters").document(chapter).update("users", FieldValue.arrayRemove(user.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                                if(((List<String>)snap.get("attendees")).contains(user.getUid())) {
-                                    db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
+                        public void onSuccess(Void aVoid) {
+                            db.collection("chapters").document(chapter).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if(documentSnapshot.toObject(Chapter.class).getUsers() == null || documentSnapshot.toObject(Chapter.class).getUsers().isEmpty()) {
+                                        db.collection("chapters").document(chapter).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                progressDialog.dismiss();
+                                                finish();
+                                                Intent intent = new Intent(ProfileActivity.this, SignupActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                    } else {
+                                        db.collection("chapters").document(chapter).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                for(DocumentSnapshot snap : queryDocumentSnapshots) {
+                                                    if(((List<String>)snap.get("attendees")).contains(user.getUid())) {
+                                                        db.collection("chapters").document(chapter).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
+                                                    }
+                                                }
+                                                progressDialog.dismiss();
+                                                finish();
+                                                Intent intent = new Intent(ProfileActivity.this, SignupActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                    }
                                 }
-                            }
-                            progressDialog.dismiss();
-                            finish();
-                            Intent intent = new Intent(ProfileActivity.this, SignupActivity.class);
-                            startActivity(intent);
+                            });
                         }
                     });
-
                 }
             });
         }

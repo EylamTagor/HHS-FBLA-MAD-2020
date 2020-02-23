@@ -114,6 +114,7 @@ public class CompDetailActivity extends AppCompatActivity {
                                 }
 
                                 adapter.notifyDataSetChanged();
+                                adapter.setUsers(competitors);
                             }
                         });
                     }
