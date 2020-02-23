@@ -85,7 +85,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         imageBtn = findViewById(R.id.imageBtn);
         setDate = findViewById(R.id.setDateButton);
         setTime = findViewById(R.id.setTimeButton);
-        storageReference = FirebaseStorage.getInstance().getReference("images");
+        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
         backBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

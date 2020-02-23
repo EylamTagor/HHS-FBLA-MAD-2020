@@ -14,6 +14,7 @@ public class User {
     private String blurb;  // Officers
     private String phoneNumber;
     private ArrayList<String> comps;
+    private String pic;
 
     public User() {
         this("", null, "");
@@ -26,6 +27,7 @@ public class User {
         this.email = email;
         myEvents = new ArrayList<String>();
         comps = new ArrayList<String>();
+        pic = null;
     }
 
     public String getName() {
@@ -91,5 +93,13 @@ public class User {
 
     public void setComps(ArrayList<String> comps) {
         this.comps = comps;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 }

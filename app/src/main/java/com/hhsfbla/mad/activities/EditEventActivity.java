@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -65,13 +66,14 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     private Uri imageUri;
     private Button setDateButton, setTimeButton;
     private static final String TAG = "EDIT EVENT PAGE";
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_event);
         setTitle("Edit Event");
-
+        progressDialog = new ProgressDialog(this);
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -174,6 +176,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                 descrEditTxt.getText().toString(),
                 linkEditTxt.getText().toString(),
                 uri == null ? "" : uri.toString());
+        progressDialog.setMessage("Saving...");
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(final DocumentSnapshot userSnap) {
@@ -188,6 +191,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                                 db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document(snap.getId()).set(event, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        progressDialog.dismiss();
                                         startActivity(new Intent(EditEventActivity.this, HomeActivity.class));
                                     }
                                 });
@@ -210,6 +214,8 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 
     private void uploadFile() {
         if(imageUri != null) {
+            progressDialog.setMessage("Uploading...");
+            progressDialog.show();
             final StorageReference fileRef = storageReference.child(nameEditTxt.getText().toString());
             uploadTask = fileRef.putFile(imageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
