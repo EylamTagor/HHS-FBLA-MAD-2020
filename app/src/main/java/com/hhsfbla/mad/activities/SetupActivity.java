@@ -25,7 +25,7 @@ import com.hhsfbla.mad.data.User;
 
 public class SetupActivity extends AppCompatActivity {
 
-    private TextView chapName, chapDesc, facebookPage, insta, location;
+    private TextView chapName, chapDesc, facebookPage, insta, location, website;
     private Button create;
     private FirebaseFirestore db;
     private FirebaseUser user;
@@ -41,7 +41,7 @@ public class SetupActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating...");
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
-
+        website = findViewById(R.id.chapterWebsite);
         create = findViewById(R.id.createChapterButton);
         chapDesc = findViewById(R.id.chapterName);
         chapName = findViewById(R.id.chapterName);
@@ -55,43 +55,54 @@ public class SetupActivity extends AppCompatActivity {
                 db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        Chapter example = new Chapter(chapName.getText().toString(), location.getText().toString());
-                        for(Chapter chapter : queryDocumentSnapshots.toObjects(Chapter.class)) {
-                            if(chapter.equals(example)) {
-                                progressDialog.dismiss();
-                                Toast.makeText(getApplicationContext(), "Chapter already Exists", Toast.LENGTH_LONG).show();
-                                return;
-                            }
+
+                        if(doesChapterExist(queryDocumentSnapshots)) {
+                            return;
                         }
-                    }
-                });
-                db.collection("users").document(user.getUid()).set(new User(user.getDisplayName(), null, user.getEmail())).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Chapter chapter = new Chapter(chapName.getText().toString(), location.getText().toString());
-                        Log.d(TAG, chapName.getText().toString());
-                        chapter.setDescription(chapDesc.getText().toString());
-                        chapter.setFacebookPage(facebookPage.getText().toString());
-                        chapter.setInstagramTag(insta.getText().toString());
-                        chapter.addMember(user.getUid());
-                        final DocumentReference newChap = db.collection("chapters").document();
-                        newChap.set(chapter).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
-                            public void onSuccess(Void aVoid) {
-                                db.collection("users").document(user.getUid()).update("chapter", newChap.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        progressDialog.dismiss();
-                                        startActivity(new Intent(SetupActivity.this, HomeActivity.class));
-                                    }
-                                });
+                            public void onSuccess(DocumentSnapshot snapshot) {
+                                DocumentReference ref = db.collection("chapters").document();
+                                String id = ref.getId();
+                                User test;
+                                if(snapshot.toObject(User.class) == null) {
+                                    test = new User(user.getDisplayName(), id, user.getEmail());
+                                    test.setPic(user.getPhotoUrl().toString());
+                                    db.collection("users").document(user.getUid()).set(test);
+                                } else {
+                                    db.collection("users").document(user.getUid()).update("chapter", id);
+                                }
+
+                                Chapter example = new Chapter(chapName.getText().toString(), location.getText().toString());
+                                example.setInstagramTag("https://www.instagram.com/" + insta.getText().toString().trim());
+                                example.setFacebookPage("https://www.facebook.com/" + facebookPage.getText().toString().trim());
+                                example.setWebsite(website.getText().toString().trim());
+                                example.setDescription(chapDesc.getText().toString().trim());
+                                example.addMember(user.getUid());
+                                ref.set(example);
                             }
                         });
                     }
                 });
-
             }
         });
 
     }
+
+    private boolean doesChapterExist(QuerySnapshot queryDocumentSnapshots) {
+        Chapter example = new Chapter(chapName.getText().toString(), location.getText().toString());
+        example.setInstagramTag(insta.getText().toString().trim());
+        example.setFacebookPage(facebookPage.getText().toString().trim());
+        example.setDescription(chapDesc.getText().toString().trim());
+        example.setWebsite(website.getText().toString().trim());
+        for(Chapter chapter : queryDocumentSnapshots.toObjects(Chapter.class)) {
+            if(chapter.equals(example)) {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Chapter already Exists", Toast.LENGTH_LONG).show();
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

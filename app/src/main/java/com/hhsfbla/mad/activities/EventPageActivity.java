@@ -283,7 +283,8 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                                             progressDialog.dismiss();
                                             startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
                                         }
-                                    });                                    return;
+                                    });
+                                    return;
                                 }
                                 StorageReference storageRef = storageReference.child(snap.getId());
                                 storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {

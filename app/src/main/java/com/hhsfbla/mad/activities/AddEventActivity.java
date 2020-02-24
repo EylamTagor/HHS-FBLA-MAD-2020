@@ -48,6 +48,8 @@ import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+
 public class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private static final int RESULT_LOAD_IMAGE = 1;
     private Uri imageUri;
@@ -88,6 +90,15 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         setDate = findViewById(R.id.setDateButton);
         setTime = findViewById(R.id.setTimeButton);
         storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int hour = c.get(Calendar.HOUR);
+        int minute = c.get(Calendar.MINUTE);
+        onDateSet(null, year, month, day);
+        onTimeSet(null, hour, minute);
+
         backBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,12 +158,12 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     public void addEvent(Uri uri, final String id) {
 //        Bitmap bitmap = ((BitmapDrawable) imageBtn.getDrawable()).getBitmap();
         final ChapterEvent event = new ChapterEvent(
-                nameEditTxt.getText().toString(),
-                dateEditTxt.getText().toString(),
-                timeEditTxt.getText().toString(),
-                locaEditTxt.getText().toString(),
-                descrEditTxt.getText().toString(),
-                linkEditTxt.getText().toString(),
+                nameEditTxt.getText().toString().trim(),
+                dateEditTxt.getText().toString().trim(),
+                timeEditTxt.getText().toString().trim(),
+                locaEditTxt.getText().toString().trim(),
+                descrEditTxt.getText().toString().trim(),
+                linkEditTxt.getText().toString().trim(),
                 uri == null ? "" : uri.toString());
         progressDialog.setMessage("Saving...");
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

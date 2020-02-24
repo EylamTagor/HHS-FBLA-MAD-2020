@@ -21,7 +21,7 @@
         android:id="@+id/chapterInstagram"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chapter Insta"
+        android:text="Instagram Tag"
         app:layout_constraintBottom_toTopOf="@+id/chapterDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,11 +31,21 @@
         android:id="@+id/chapterFacebook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chapter FB"
+        android:text="Facebook Tag"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chapterDescription" />
+
+    <EditText
+        android:id="@+id/chapterWebsite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chapter Website"
+        app:layout_constraintBottom_toTopOf="@+id/chapterDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chapterInstagram" />
 
     <EditText
         android:id="@+id/chapterDescription"

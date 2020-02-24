@@ -10,6 +10,7 @@ public class Chapter {
 
     private String instagramTag;
     private String facebookPage;
+    private String website;
     private String description;
     private String location;
 
@@ -97,5 +98,11 @@ public class Chapter {
         this.location = location;
     }
 
+    public String getWebsite() {
+        return website;
+    }
 
+    public void setWebsite(String website) {
+        this.website = website;
+    }
 }

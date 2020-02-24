@@ -38,6 +38,7 @@ import com.hhsfbla.mad.adapters.UserAdapter;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +61,7 @@ public class AboutChapterFragment extends Fragment implements UserAdapter.OnItem
     private FirebaseUser user;
     private static final String TAG = "fragaboutchap";
     private TextView chapLink;
-    private ImageButton facebook, insta, twitter;
+    private ImageButton facebook, insta;
     private ProgressDialog progressDialog;
     private boolean isAdvisor = false;
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -83,7 +84,9 @@ public class AboutChapterFragment extends Fragment implements UserAdapter.OnItem
         adapter.setOnItemClickListener(this);
         userRecyclerView.setAdapter(adapter);
         initRecyclerView(UserType.MEMBER);
-
+        chapLink = root.findViewById(R.id.chapWebLink);
+        facebook = root.findViewById(R.id.facebookBtn);
+        insta = root.findViewById(R.id.instaBtn);
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -93,50 +96,63 @@ public class AboutChapterFragment extends Fragment implements UserAdapter.OnItem
                 db.collection("chapters").document(currentUSer.getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Chapter chapter = documentSnapshot.toObject(Chapter.class);
+                        final Chapter chapter = documentSnapshot.toObject(Chapter.class);
                         if(!(chapter.getDescription() == null || chapter.getDescription().isEmpty())) {
                             aboutChap.setText(chapter.getDescription());
+                        } else {
+                            aboutChap.setText("No Description");
                         }
-                        if(!(chapter.getLocation() == null || chapter.getLocation().isEmpty())) {
+                        if(!(chapter.getLocation() == null || chapter.getLocation().equalsIgnoreCase(""))) {
                             locaChap.setText(chapter.getLocation());
+                        } else {
+                            locaChap.setText("No Location");
                         }
+                        if(!(chapter.getFacebookPage() == null || chapter.getFacebookPage().equalsIgnoreCase(""))) {
+                            Log.d(TAG, "hello1");
+                            facebook.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chapter.getFacebookPage())));
+                                }
+                            });
+                        } else {
+                            Log.d(TAG, "hello2");
+                            facebook.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(getContext(), "No facebook account set", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                        if(!(chapter.getInstagramTag() == null || chapter.getInstagramTag().equalsIgnoreCase(""))) {
+                            insta.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chapter.getInstagramTag())));
+                                }
+                            });
+                        } else {
+                            insta.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(getContext(), "No instagram account set", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                        if(!(chapter.getWebsite() == null || chapter.getWebsite().equalsIgnoreCase(""))) {
+                            chapLink.setText(Html.fromHtml("<a href=" + chapter.getWebsite() + ">" + chapter.getName().trim() + " Website</androidx.constraintlayout.widget.ConstraintLayout</a>"));
+                            chapLink.setMovementMethod(LinkMovementMethod.getInstance());
+                        } else {
+                            chapLink.setText("No Website");
+                        }
+
 
                     }
                 });
             }
         });
 
-
-        chapLink = root.findViewById(R.id.chapWebLink);
-        chapLink.setText(Html.fromHtml("<a href='http://hhsfbla.com'>Homestead FBLA Website</androidx.constraintlayout.widget.ConstraintLayout</a>"));
-        chapLink.setMovementMethod(LinkMovementMethod.getInstance());
         chapLink.setTextColor(Color.BLACK);
-
-        facebook = root.findViewById(R.id.facebookBtn);
-        facebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/homestead8990")));
-            }
-        });
-
-        insta = root.findViewById(R.id.instaBtn);
-        insta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/homesteadfbla/")));
-            }
-        });
-
-        twitter = root.findViewById(R.id.twitterBtn);
-        twitter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/graemecrackerz")));
-            }
-        });
-
-
         return root;
     }
 

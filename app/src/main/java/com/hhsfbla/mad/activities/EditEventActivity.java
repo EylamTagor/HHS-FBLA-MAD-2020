@@ -200,12 +200,12 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                         for(DocumentSnapshot snap : queryDocumentSnapshots) {
                             if(snap.toObject(ChapterEvent.class).getName().equalsIgnoreCase(name)) {
                                 final ChapterEvent event = new ChapterEvent(
-                                        nameEditTxt.getText().toString(),
-                                        dateEditTxt.getText().toString(),
-                                        timeEditTxt.getText().toString(),
-                                        locaEditTxt.getText().toString(),
-                                        descrEditTxt.getText().toString(),
-                                        linkEditTxt.getText().toString(),
+                                        nameEditTxt.getText().toString().trim(),
+                                        dateEditTxt.getText().toString().trim(),
+                                        timeEditTxt.getText().toString().trim(),
+                                        locaEditTxt.getText().toString().trim(),
+                                        descrEditTxt.getText().toString().trim(),
+                                        linkEditTxt.getText().toString().trim(),
                                         uri == null ? snap.toObject(ChapterEvent.class).getPic() : uri.toString());
                                 db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document(snap.getId()).set(event, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
