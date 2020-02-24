@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.EventPageActivity;
 import com.hhsfbla.mad.data.ChapterEvent;
@@ -28,6 +29,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     private List<ChapterEvent> events;
     private Context context;
     private static final String TAG = "Event Adapter";
+    private EventAdapter.OnItemClickListener listener;
+
     public EventAdapter(List<ChapterEvent> events, Context context) {
         this.events = events;
         this.context = context;
@@ -53,16 +56,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             Picasso.get().load(Uri.parse(event.getPic())).fit().centerCrop().into(holder.pic);
         } else
             holder.pic.setVisibility(View.GONE);
-        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "event clicked");
-                Intent intent = new Intent(context, EventPageActivity.class);
-                intent.putExtra("EVENT_POSITION", events.get(position).getName());
-                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -88,6 +81,23 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             location = itemView.findViewById(R.id.eventLocation);
             pic = itemView.findViewById(R.id.eventPic);
             constraintLayout = itemView.findViewById(R.id.eventConstraintLayout);
+            constraintLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "helllo");
+                    if(getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
+                        listener.onItemClick(events.get(getAdapterPosition()).getName(), getAdapterPosition());
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(String name, int position);
+    }
+
+    public void setOnItemClickListener(EventAdapter.OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

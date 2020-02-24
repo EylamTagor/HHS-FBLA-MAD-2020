@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.CompDetailActivity;
 import com.hhsfbla.mad.data.CompType;
@@ -32,6 +33,7 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
     private List<Competition> allItems;
     private Context context;
     private static final String TAG = "Event Adapter";
+    private CompsAdapter.OnItemClickListener listener;
 
     public CompsAdapter(List<Competition> comps, Context context) {
         this.comps = comps;
@@ -68,16 +70,6 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
             pic = R.drawable.project_icon;
 
         holder.pic.setImageResource(pic);
-        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "event clicked");
-                Intent intent = new Intent(context, CompDetailActivity.class);
-                intent.putExtra("COMP_POSITION", comps.get(position).getName());
-                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -138,6 +130,23 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
             name = itemView.findViewById(R.id.competitionName);
             pic = itemView.findViewById(R.id.compIcon);
             constraintLayout = itemView.findViewById(R.id.competitionConstraintLayout);
+            constraintLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
+                        Log.d(TAG, comps.get(getAdapterPosition()).getName());
+                        listener.onItemClick(comps.get(getAdapterPosition()).getName(), getAdapterPosition());
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(String id, int position);
+    }
+
+    public void setOnItemClickListener(CompsAdapter.OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

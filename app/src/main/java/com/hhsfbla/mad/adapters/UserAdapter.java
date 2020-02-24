@@ -34,6 +34,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> implements Filterable {
 
     private FirebaseFirestore db;
@@ -42,6 +44,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
     private List<User> allItems;
     private Context context;
     private static final String TAG = "User Adapter";
+    private UserAdapter.OnItemClickListener listener;
 
     public UserAdapter(List<User> users, Context context) {
         this.users = users;
@@ -65,79 +68,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
         final User user = users.get(position);
         holder.name.setText(user.getName());
         holder.rank.setText(user.getUserType().toString());
-        String photo = String.valueOf(fuser.getPhotoUrl());
-        db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot snapshot) {
-                if(snapshot.toObject(User.class).getPic() == null || snapshot.toObject(User.class).getPic() == "") {
-                    return;
-                }
-                Picasso.get().load(Uri.parse(snapshot.toObject(User.class).getPic())).into(holder.pic);
-            }
-        });
-        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                Log.d(TAG, "user clicked");
-                db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
-                        for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                            if(snap.getId().equalsIgnoreCase(fuser.getUid())) {
-                                if(snap.toObject(User.class).getUserType() != UserType.ADVISOR) {
-                                    return;
-                                }
-                                break;
-                            }
-                        }
-                        PopupMenu menu = new PopupMenu(context, v);
-                        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem menuItem) {
-                                if(menuItem.getItemId() == R.id.promoteButton) {
-                                    for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                                        User thisuser = snap.toObject(User.class);
-                                        if(user.getName().equalsIgnoreCase(thisuser.getName())) {
-                                            UserType update = thisuser.getUserType();
-                                            if(update.equals(UserType.OFFICER)) {
-                                                update = UserType.ADVISOR;
-                                            } else if(update.equals(UserType.MEMBER)) {
-                                                update = UserType.OFFICER;
-                                            } else {
-                                                Toast.makeText(context, "User is already an advisor", Toast.LENGTH_LONG).show();
-                                            }
-                                            db.collection("users").document(snap.getId()).update("userType", update);
-                                        }
-                                    }
-                                    return true;
-                                } else if(menuItem.getItemId() == R.id.demoteButton) {
-                                    for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                                        User thisuser = snap.toObject(User.class);
-                                        if(user.getName().equalsIgnoreCase(thisuser.getName())) {
-                                            UserType update = thisuser.getUserType();
-                                            if(update.equals(UserType.OFFICER)) {
-                                                update = UserType.MEMBER;
-                                            } else if(update.equals(UserType.ADVISOR)) {
-                                                update = UserType.OFFICER;
-                                            } else {
-                                                Toast.makeText(context, "User is already an member", Toast.LENGTH_LONG).show();
-                                            }
-                                            db.collection("users").document(snap.getId()).update("userType", update);
-                                        }
-                                    }
-                                    return true;
-                                }
-                                //TODO REFRESH
-                                return false;
-                            }
-                        });
-                        menu.inflate(R.menu.promotion_popup_menu);
-                        menu.show();
-
-                    }
-                });
-            }
-        });
+        if(users.get(position).getPic() != "" && users.get(position).getPic() != null) {
+            Picasso.get().load(Uri.parse(users.get(position).getPic())).into(holder.pic);
+        } else {
+            Picasso.get().load(R.drawable.com_facebook_profile_picture_blank_square).into(holder.pic);
+        }
     }
 
     @Override
@@ -195,7 +130,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name, rank;
-        public ImageView pic;
+        public CircleImageView pic;
         public ConstraintLayout constraintLayout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -205,6 +140,37 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
             rank = itemView.findViewById(R.id.rank);
             pic = itemView.findViewById(R.id.userImageDetail);
             constraintLayout = itemView.findViewById(R.id.userConstraintLayout);
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Log.d(TAG, "hellllo");
+//                }
+//            });
+            constraintLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    if(getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
+                        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for(DocumentSnapshot snap : queryDocumentSnapshots) {
+                                    if(snap.toObject(User.class).getName().equalsIgnoreCase(users.get(getAdapterPosition()).getName())) {
+                                        listener.onItemClick(snap, view,  getAdapterPosition());
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(DocumentSnapshot snapshot, View v, int position);
+    }
+
+    public void setOnItemClickListener(UserAdapter.OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

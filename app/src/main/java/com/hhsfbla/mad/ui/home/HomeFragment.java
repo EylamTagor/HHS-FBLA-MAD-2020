@@ -23,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.AddEventActivity;
+import com.hhsfbla.mad.activities.EventPageActivity;
 import com.hhsfbla.mad.adapters.EventAdapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
@@ -31,7 +32,9 @@ import com.hhsfbla.mad.data.UserType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
+public class HomeFragment extends Fragment implements EventAdapter.OnItemClickListener{
 
     private HomeViewModel homeViewModel;
     private TextView noEventsYet;
@@ -58,6 +61,7 @@ public class HomeFragment extends Fragment {
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         events = new ArrayList<>();
         adapter = new EventAdapter(events, root.getContext());
+        adapter.setOnItemClickListener(this);
         eventRecyclerView.setAdapter(adapter);
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -91,5 +95,13 @@ public class HomeFragment extends Fragment {
             }
         });
         return root;
+    }
+
+    @Override
+    public void onItemClick(String name, int position) {
+        Log.d(TAG, "event clicked");
+        Intent intent = new Intent(getContext(), EventPageActivity.class);
+        intent.putExtra("EVENT_POSITION", name);
+        getContext().startActivity(intent);
     }
 }

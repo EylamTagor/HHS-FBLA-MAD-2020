@@ -1,5 +1,6 @@
 package com.hhsfbla.mad.ui.myevents;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.activities.EventPageActivity;
 import com.hhsfbla.mad.adapters.EventAdapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
@@ -27,7 +29,9 @@ import com.hhsfbla.mad.data.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyEventsFragment extends Fragment {
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
+public class MyEventsFragment extends Fragment implements EventAdapter.OnItemClickListener{
 
     private TextView noEventsYet;
     private RecyclerView eventRecyclerView;
@@ -57,6 +61,7 @@ public class MyEventsFragment extends Fragment {
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         events = new ArrayList<>();
         adapter = new EventAdapter(events, root.getContext());
+        adapter.setOnItemClickListener(this);
         eventRecyclerView.setAdapter(adapter);
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -96,4 +101,13 @@ public class MyEventsFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+
+    @Override
+    public void onItemClick(String name, int position) {
+        Log.d(TAG, "event clicked");
+        Intent intent = new Intent(getContext(), EventPageActivity.class);
+        intent.putExtra("EVENT_POSITION", events.get(position).getName());
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        getActivity().startActivity(intent);
+    }
 }
