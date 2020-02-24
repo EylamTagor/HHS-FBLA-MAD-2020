@@ -50,21 +50,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="20dp"
         app:boxBackgroundColor="#FFFFFF"
         app:boxStrokeColor="#000000"
         app:boxStrokeWidth="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profilePic">
+        app:layout_constraintTop_toBottomOf="@+id/chapterTextView">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/nameTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"
-            android:textSize="22sp" />
+            android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -89,57 +89,118 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:textSize="22sp"/>
+            android:textSize="18sp" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <Button
         android:id="@+id/chapterButton"
-        android:text="Change Chapter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/button_border"
         android:ems="10"
-        android:textSize="22sp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:text="Change Chapter"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout2" />
-
-
 
 
     <Button
         android:id="@+id/sign_outBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:text="Sign Out"
-        android:background="@drawable/button_border"
-        android:textSize="20sp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="240dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/chapterButton"
+        android:background="@drawable/button_border"
+        android:ems="10"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:text="Sign Out"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chapterButton" />
 
 
     <Button
         android:id="@+id/deleteAccountButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Delete Account"
-        android:background="@drawable/button_border"
-        android:textSize="20sp"
-        android:layout_marginEnd="32dp"
         android:layout_marginStart="240dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button_border"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:text="Delete Account"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chapterButton"/>
+        app:layout_constraintTop_toBottomOf="@+id/chapterButton" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout3"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:boxBackgroundColor="#FFFFFF"
+        app:boxStrokeColor="#000000"
+        app:boxStrokeWidth="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sign_outBtn">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/posTextField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Officer Position"
+            android:textSize="18sp"
+            android:visibility="gone" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout4"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:boxBackgroundColor="#FFFFFF"
+        app:boxStrokeColor="#000000"
+        app:boxStrokeWidth="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout3">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/blurbTextField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Officer Bio"
+            android:textSize="18sp"
+            android:visibility="gone" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/chapterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Chapter"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilePic" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

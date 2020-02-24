@@ -30,6 +30,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.adapters.OfficerAdapter;
 import com.hhsfbla.mad.adapters.UserAdapter;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
@@ -38,11 +39,11 @@ import com.hhsfbla.mad.data.UserType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OfficerFragment extends Fragment implements UserAdapter.OnItemClickListener{
+public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemClickListener{
 
     private OfficerViewModel mViewModel;
     private RecyclerView officerRecyclerView;
-    private UserAdapter adapter;
+    private OfficerAdapter adapter;
     private List<User> officers;
     private SearchView searchView;
     private FirebaseFirestore db;
@@ -66,7 +67,7 @@ public class OfficerFragment extends Fragment implements UserAdapter.OnItemClick
         officerRecyclerView.setHasFixedSize(true);
         officerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         officers = new ArrayList<>();
-        adapter = new UserAdapter(officers, root.getContext());
+        adapter = new OfficerAdapter(officers, root.getContext());
         adapter.setOnItemClickListener(this);
         officerRecyclerView.setAdapter(adapter);
         initRecyclerView(UserType.OFFICER);
@@ -85,7 +86,7 @@ public class OfficerFragment extends Fragment implements UserAdapter.OnItemClick
                         officers.clear();
                         officers.addAll(queryDocumentSnapshots.toObjects(User.class));
                         adapter.notifyDataSetChanged();
-                        adapter.setUsers(officers);
+                        adapter.setOfficers(officers);
                         if(officers.isEmpty()) {
                             noOfficersYet.setVisibility(View.VISIBLE);
                         } else {
@@ -119,6 +120,8 @@ public class OfficerFragment extends Fragment implements UserAdapter.OnItemClick
 
     @Override
     public void onItemClick(DocumentSnapshot snapshot, View v, int position) {
-
+//        Intent intent = new Intent(getContext(), OfficerEditActivity.class);
+//        intent.putExtra("SELECTED_OFFICER", );
+//        TODO
     }
 }

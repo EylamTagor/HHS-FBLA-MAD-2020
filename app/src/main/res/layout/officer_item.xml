@@ -16,13 +16,13 @@
         android:foreground="?android:attr/selectableItemBackground">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/userConstraintLayout"
+            android:id="@+id/officerConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="16dp">
 
             <TextView
-                android:id="@+id/userNameDetail"
+                android:id="@+id/officerNameDetail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -30,11 +30,11 @@
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/userImageDetail"
-                app:layout_constraintTop_toTopOf="@+id/userImageDetail" />
+                app:layout_constraintStart_toEndOf="@+id/officerImageDetail"
+                app:layout_constraintTop_toTopOf="@+id/officerImageDetail" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/userImageDetail"
+            <ImageView
+                android:id="@+id/officerImageDetail"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="16dp"
@@ -44,16 +44,30 @@
                 app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
 
             <TextView
-                android:id="@+id/rank"
+                android:id="@+id/officerPosition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Rank"
+                android:text="Position"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/userNameDetail"
-                app:layout_constraintTop_toBottomOf="@+id/userNameDetail" />
+                app:layout_constraintStart_toStartOf="@+id/officerNameDetail"
+                app:layout_constraintTop_toBottomOf="@+id/officerNameDetail" />
+
+            <TextView
+                android:id="@+id/officerBlurb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:text="Blurb"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/officerPosition"
+                app:layout_constraintTop_toBottomOf="@+id/officerPosition" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -83,10 +83,11 @@ public class AboutChapterFragment extends Fragment implements UserAdapter.OnItem
         adapter = new UserAdapter(users, root.getContext());
         adapter.setOnItemClickListener(this);
         userRecyclerView.setAdapter(adapter);
-        initRecyclerView(UserType.MEMBER);
         chapLink = root.findViewById(R.id.chapWebLink);
         facebook = root.findViewById(R.id.facebookBtn);
         insta = root.findViewById(R.id.instaBtn);
+        initRecyclerView();
+
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -156,7 +157,8 @@ public class AboutChapterFragment extends Fragment implements UserAdapter.OnItem
         return root;
     }
 
-    public void initRecyclerView(final UserType type) {
+    public void initRecyclerView() {
+
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -254,7 +256,7 @@ public class AboutChapterFragment extends Fragment implements UserAdapter.OnItem
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "hi there");
                 progressDialog.dismiss();
-                initRecyclerView(UserType.MEMBER);
+                initRecyclerView();
             }
         });
     }
@@ -273,7 +275,7 @@ public class AboutChapterFragment extends Fragment implements UserAdapter.OnItem
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "hi there");
                 progressDialog.dismiss();
-                initRecyclerView(UserType.MEMBER);
+                initRecyclerView();
             }
         });
     }

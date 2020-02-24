@@ -15,6 +15,7 @@ public class User {
     private String phoneNumber;
     private ArrayList<String> comps;
     private String pic;
+    private String officerPos;
 
     public User() {
         this("", null, "");
@@ -28,6 +29,7 @@ public class User {
         myEvents = new ArrayList<String>();
         comps = new ArrayList<String>();
         pic = null;
+        officerPos = "";
     }
 
     public String getName() {
@@ -101,5 +103,13 @@ public class User {
 
     public void setPic(String pic) {
         this.pic = pic;
+    }
+
+    public String getOfficerPos() {
+        return officerPos;
+    }
+
+    public void setOfficerPos(String officerPos) {
+        this.officerPos = officerPos;
     }
 }

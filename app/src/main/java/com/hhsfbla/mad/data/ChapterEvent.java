@@ -40,7 +40,6 @@ public class ChapterEvent {
     }
 
 
-
     public String getName() {
         return name;
     }
