@@ -38,7 +38,7 @@ import java.util.List;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity implements ChapterAdapter.OnItemClickListener{
     private RecyclerView recyclerView;
     private SearchView searchView;
     private ChapterAdapter adapter;
@@ -69,6 +69,7 @@ public class SignupActivity extends AppCompatActivity {
 
         chapterList = new ArrayList<>();
         adapter = new ChapterAdapter(getApplicationContext(), chapterList);
+        adapter.setOnItemCLickListener(this);
         recyclerView.setAdapter(adapter);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -99,5 +100,89 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void updateUser(final DocumentSnapshot snapshot, final Uri uri) {
+        db.collection("chapters").document(snapshot.getId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot queryDocumentSnapshots) {
+//                                db.collection("users").document(fuser.getUid()).set(new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail()));
+                db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User user = documentSnapshot.toObject(User.class);
+                        if(user == null) {
+                            user = new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail());
+                            if(uri != null){
+                                user.setPic(uri.toString());
+                            }
+                            db.collection("users").document(fuser.getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
+//                                                    progressDialog.dismiss();
+                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                    startActivity(intent);
+                                    return;
+                                }
+                            });
+                        } else {
+                            db.collection("users").document(fuser.getUid()).update("chapter", snapshot.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
+//                                                    progressDialog.dismiss();
+                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                    startActivity(intent);
+                                    return;
+                                }
+                            });
+                        }
+                    }
+                });
+
+            }
+        });
+    }
+
+    private void uploadFile(final DocumentSnapshot snapshot) {
+        if(fuser.getPhotoUrl() != null) {
+//            progressDialog.setMessage("Uploading...");
+//            progressDialog.show();
+            final StorageReference fileRef = storageReference.child(fuser.getUid());
+            uploadTask = fileRef.putFile(fuser.getPhotoUrl())
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    updateUser(snapshot, uri);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+
+                        }
+                    });
+        } else {
+            //TODO add dialog
+            Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
+            updateUser(snapshot, null);
+        }
+    }
+
+    @Override
+    public void onItemClick(DocumentSnapshot snapshot, int position) {
+        updateUser(snapshot, fuser.getPhotoUrl());
     }
 }

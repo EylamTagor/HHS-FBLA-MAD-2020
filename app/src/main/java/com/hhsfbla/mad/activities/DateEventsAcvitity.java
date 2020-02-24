@@ -1,5 +1,6 @@
 package com.hhsfbla.mad.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +25,9 @@ import com.hhsfbla.mad.data.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DateEventsAcvitity extends AppCompatActivity {
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
+public class DateEventsAcvitity extends AppCompatActivity implements EventAdapter.OnItemClickListener {
     private RecyclerView recyclerView;
     private EventAdapter adapter;
     private List<ChapterEvent> events;
@@ -65,6 +68,7 @@ public class DateEventsAcvitity extends AppCompatActivity {
 
         events = new ArrayList<>();
         adapter = new EventAdapter(events, this);
+        adapter.setOnItemClickListener(this);
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -89,5 +93,12 @@ public class DateEventsAcvitity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    public void onItemClick(String name, int position) {
+        Intent intent = new Intent(DateEventsAcvitity.this, EventPageActivity.class);
+        intent.putExtra("EVENT_POSITION", name);
+        startActivity(intent);
     }
 }

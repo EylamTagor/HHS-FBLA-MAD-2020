@@ -2,6 +2,7 @@ package com.hhsfbla.mad.ui.aboutchapter;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -17,9 +18,11 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +42,7 @@ import com.hhsfbla.mad.data.UserType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AboutChapterFragment extends Fragment {
+public class AboutChapterFragment extends Fragment implements UserAdapter.OnItemClickListener{
 
     private AboutChapterViewModel mViewModel;
 
@@ -58,11 +61,13 @@ public class AboutChapterFragment extends Fragment {
     private static final String TAG = "fragaboutchap";
     private TextView chapLink;
     private ImageButton facebook, insta, twitter;
-
+    private ProgressDialog progressDialog;
+    private boolean isAdvisor = false;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_about_chapter, container, false);
+        progressDialog = new ProgressDialog(getContext());
         searchView = root.findViewById(R.id.userSearch);
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -75,13 +80,16 @@ public class AboutChapterFragment extends Fragment {
         userRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         users = new ArrayList<>();
         adapter = new UserAdapter(users, root.getContext());
+        adapter.setOnItemClickListener(this);
         userRecyclerView.setAdapter(adapter);
-        initRecyclerView(UserType.MEMBER, root);
+        initRecyclerView(UserType.MEMBER);
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currentUSer = documentSnapshot.toObject(User.class);
+                if(currentUSer.getUserType() == UserType.ADVISOR)
+                    isAdvisor = true;
                 db.collection("chapters").document(currentUSer.getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -132,47 +140,34 @@ public class AboutChapterFragment extends Fragment {
         return root;
     }
 
-    public void initRecyclerView(final UserType type, final View root) {
+    public void initRecyclerView(final UserType type) {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 final String chap = documentSnapshot.get("chapter").toString();
-                db.collection("users").whereEqualTo("userType", type).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("users").whereEqualTo("chapter", chap).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
-                        Log.d(TAG, chap);
-                        for(DocumentSnapshot l : queryDocumentSnapshots) {
-                            Log.d(TAG, l.getId());
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        users.clear();
+                        users.addAll(queryDocumentSnapshots.toObjects(User.class));
+                        adapter.notifyDataSetChanged();
+                        adapter.setUsers(users);
+                        if(users.isEmpty()) {
+                            noUsersYet.setVisibility(View.VISIBLE);
+                        } else {
+                            noUsersYet.setVisibility(View.GONE);
                         }
-                        db.collection("chapters").document(chap).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                List<String> chapUsers = (List<String>)documentSnapshot.get("users");
-                                Log.d(TAG, chapUsers.toString());
-                                for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                                    if(chapUsers.contains(snap.getId())) {
-                                        users.add(snap.toObject(User.class));
-                                    }
-                                }
-                                adapter.notifyDataSetChanged();
-                                adapter.setUsers(users);
-                                if(users.isEmpty()) {
-                                    noUsersYet.setVisibility(View.VISIBLE);
-                                } else {
-                                    noUsersYet.setVisibility(View.GONE);
-                                }
-                                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                                    @Override
-                                    public boolean onQueryTextSubmit(String s) {
-                                        return false;
-                                    }
 
-                                    @Override
-                                    public boolean onQueryTextChange(String s) {
-                                        adapter.getFilter().filter(s);
-                                        return false;
-                                    }
-                                });
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String s) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onQueryTextChange(String s) {
+                                adapter.getFilter().filter(s);
+                                return false;
                             }
                         });
                     }
@@ -189,4 +184,81 @@ public class AboutChapterFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+    @Override
+    public void onItemClick(final DocumentSnapshot snapshot, View v, int position) {
+
+        Log.d(TAG, "user clicked");
+        final User thisuser = snapshot.toObject(User.class);
+//        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot userSnap) {
+//                if(userSnap.toObject(User.class).getUserType() != UserType.ADVISOR){
+//                    return;
+//                }  else {
+        Log.d(TAG, isAdvisor ? "Advisor" : "non advisor");
+        if(!isAdvisor) {
+            return;
+        }
+                    PopupMenu menu = new PopupMenu(v.getContext(), v);
+                    menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            if(menuItem.getItemId() == R.id.promoteButton) {
+                                progressDialog.setMessage("Promoting...");
+                                progressDialog.show();
+                                promoteUser(snapshot, thisuser);
+                                return true;
+                            } else if(menuItem.getItemId() == R.id.demoteButton) {
+                                progressDialog.setMessage("Promoting...");
+                                progressDialog.show();
+                                demoteUser(snapshot, thisuser);
+                                return true;
+                            }
+                            return false;
+                        }
+                    });
+                    menu.inflate(R.menu.promotion_popup_menu);
+                    menu.show();
+//                }
+//            }
+//        });
+    }
+
+    private void promoteUser(DocumentSnapshot snapshot, User user) {
+        UserType update = user.getUserType();
+        if(update.equals(UserType.OFFICER)) {
+            update = UserType.ADVISOR;
+        } else if(update.equals(UserType.MEMBER)) {
+            update = UserType.OFFICER;
+        } else {
+            Toast.makeText(getContext(), "User is already an advisor", Toast.LENGTH_LONG).show();
+        }
+        db.collection("users").document(snapshot.getId()).update("userType", update).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "hi there");
+                progressDialog.dismiss();
+                initRecyclerView(UserType.MEMBER);
+            }
+        });
+    }
+
+    private void demoteUser(DocumentSnapshot snapshot, User user) {
+        UserType update = user.getUserType();
+        if(update.equals(UserType.OFFICER)) {
+            update = UserType.MEMBER;
+        } else if(update.equals(UserType.ADVISOR)) {
+            update = UserType.OFFICER;
+        } else {
+            Toast.makeText(getContext(), "User is already an member", Toast.LENGTH_LONG).show();
+        }
+        db.collection("users").document(snapshot.getId()).update("userType", update).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "hi there");
+                progressDialog.dismiss();
+                initRecyclerView(UserType.MEMBER);
+            }
+        });
+    }
 }

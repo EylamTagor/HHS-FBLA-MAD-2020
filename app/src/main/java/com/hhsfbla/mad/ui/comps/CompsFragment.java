@@ -1,6 +1,7 @@
 package com.hhsfbla.mad.ui.comps;
 
 import android.accounts.Account;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.activities.CompDetailActivity;
 import com.hhsfbla.mad.adapters.CompsAdapter;
 import com.hhsfbla.mad.data.CompType;
 import com.hhsfbla.mad.data.Competition;
@@ -31,7 +33,9 @@ import com.hhsfbla.mad.data.Competition;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompsFragment extends Fragment {
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
+public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickListener{
 
     private CompsViewModel mViewModel;
     private RecyclerView eventRecyclerView;
@@ -60,6 +64,7 @@ public class CompsFragment extends Fragment {
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         comps = new ArrayList<>();
         adapter = new CompsAdapter(comps, root.getContext());
+        adapter.setOnItemClickListener(this);
         eventRecyclerView.setAdapter(adapter);
         db.collection("comps").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -94,4 +99,12 @@ public class CompsFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+    @Override
+    public void onItemClick(String id, int position) {
+        Log.d(TAG, "event clicked");
+        Intent intent = new Intent(getContext(), CompDetailActivity.class);
+        intent.putExtra("COMP_POSITION", id);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        getContext().startActivity(intent);
+    }
 }
