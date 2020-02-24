@@ -1,6 +1,8 @@
 package com.hhsfbla.mad.ui.mycomps;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.activities.CompDetailActivity;
 import com.hhsfbla.mad.adapters.CompsAdapter;
 import com.hhsfbla.mad.data.Competition;
 import com.hhsfbla.mad.data.User;
@@ -25,7 +28,9 @@ import com.hhsfbla.mad.data.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyCompsFragment extends Fragment {
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
+public class MyCompsFragment extends Fragment implements CompsAdapter.OnItemClickListener{
     private TextView noCompsYet;
     private RecyclerView compsRecyclerView;
     private CompsAdapter adapter;
@@ -53,6 +58,7 @@ public class MyCompsFragment extends Fragment {
         compsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         comps = new ArrayList<>();
         adapter = new CompsAdapter(comps, root.getContext());
+        adapter.setOnItemClickListener(this);
         compsRecyclerView.setAdapter(adapter);
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -64,20 +70,27 @@ public class MyCompsFragment extends Fragment {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             comps.add(documentSnapshot.toObject(Competition.class));
-
-                            if (comps.size() == 0) {
-                                noCompsYet.setVisibility(View.VISIBLE);
-                                return;
-                            } else {
-                                noCompsYet.setVisibility(View.INVISIBLE);
-                            }
-                            adapter.notifyDataSetChanged();
                         }
                     });
-
                 }
+                if (comps.size() == 0) {
+                    noCompsYet.setVisibility(View.VISIBLE);
+                    return;
+                } else {
+                    noCompsYet.setVisibility(View.INVISIBLE);
+                }
+                adapter.notifyDataSetChanged();
             }
         });
         return root;
+    }
+
+    @Override
+    public void onItemClick(String id, int position) {
+        Log.d(TAG, "event clicked");
+        Intent intent = new Intent(getContext(), CompDetailActivity.class);
+        intent.putExtra("COMP_POSITION", id);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        getContext().startActivity(intent);
     }
 }

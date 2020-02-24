@@ -53,6 +53,8 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     private ProgressDialog progressDialog;
     private FirebaseFirestore db;
     private FirebaseUser fuser;
+    private ChapterAdapter.OnItemClickListener listener;
+
     public ChapterAdapter(Context context, final List<Chapter> chapterList) {
         this.context = context;
         this.chapterList = chapterList;
@@ -70,87 +72,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         return new ChapterAdapter.ChapterViewHolder(view);
     }
 
-    private void updateUser(final DocumentSnapshot snapshot, final Uri uri) {
-        db.collection("chapters").document(snapshot.getId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot queryDocumentSnapshots) {
-//                                db.collection("users").document(fuser.getUid()).set(new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail()));
-                db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        User user = documentSnapshot.toObject(User.class);
-                        if(user == null) {
-                            user = new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail());
-                            if(uri != null){
-                                user.setPic(uri.toString());
-                            }
-                            db.collection("users").document(fuser.getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
-//                                                    progressDialog.dismiss();
-                                    Intent intent = new Intent(context, HomeActivity.class);
-                                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                                    context.startActivity(intent);
-                                    return;
-                                }
-                            });
-                        } else {
-                            db.collection("users").document(fuser.getUid()).update("chapter", snapshot.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
-//                                                    progressDialog.dismiss();
-                                    Intent intent = new Intent(context, HomeActivity.class);
-                                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                                    context.startActivity(intent);
-                                    return;
-                                }
-                            });
-                        }
-                    }
-                });
-
-            }
-        });
-    }
-
-    private void uploadFile(final DocumentSnapshot snapshot) {
-        if(fuser.getPhotoUrl() != null) {
-//            progressDialog.setMessage("Uploading...");
-//            progressDialog.show();
-            final StorageReference fileRef = storageReference.child(fuser.getUid());
-            uploadTask = fileRef.putFile(fuser.getPhotoUrl())
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    updateUser(snapshot, uri);
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-
-                        }
-                    });
-        } else {
-            //TODO add dialog
-            Toast.makeText(context, "No Image Selected", Toast.LENGTH_LONG).show();
-            updateUser(snapshot, null);
-        }
-    }
-
     @Override
     public void onBindViewHolder(@NonNull final ChapterViewHolder holder, final int position) {
         Chapter chapter = chapterList.get(position);
@@ -161,24 +82,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         } else
             holder.location.setText(chapter.getLocation());
 
-        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                progressDialog.setMessage("Joining...");
-//                progressDialog.show();
-                db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for(final DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
-                            if(snapshot.toObject(Chapter.class).getName().equalsIgnoreCase(chapterList.get(position).getName())) {
-                                updateUser(snapshot, fuser.getPhotoUrl());
-                            }
-                        }
-                    }
-                });
-
-            }
-        });
     }
 
     @Override
@@ -237,6 +140,32 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
             name = itemView.findViewById(R.id.chapterName);
             location = itemView.findViewById(R.id.chapterLocation);
             constraintLayout = itemView.findViewById(R.id.chapterConstraintLayout);
+            constraintLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
+
+                        db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for(final DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
+                                    if(snapshot.toObject(Chapter.class).getName().equalsIgnoreCase(chapterList.get(getAdapterPosition()).getName())) {
+                                        listener.onItemClick(snapshot, getAdapterPosition());
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(DocumentSnapshot snapshot, int position);
+    }
+
+    public void setOnItemCLickListener(ChapterAdapter.OnItemClickListener listener) {
+        this.listener = listener;
     }
 }
