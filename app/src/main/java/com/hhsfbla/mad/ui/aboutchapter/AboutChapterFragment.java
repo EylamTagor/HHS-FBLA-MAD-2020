@@ -76,7 +76,7 @@ public class AboutChapterFragment extends Fragment {
         users = new ArrayList<>();
         adapter = new UserAdapter(users, root.getContext());
         userRecyclerView.setAdapter(adapter);
-        initRecyclerView(UserType.MEMBER, root);
+        initRecyclerView();
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -132,12 +132,12 @@ public class AboutChapterFragment extends Fragment {
         return root;
     }
 
-    public void initRecyclerView(final UserType type, final View root) {
+    public void initRecyclerView() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 final String chap = documentSnapshot.get("chapter").toString();
-                db.collection("users").whereEqualTo("userType", type).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
                         Log.d(TAG, chap);
