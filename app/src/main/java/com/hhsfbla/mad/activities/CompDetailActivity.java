@@ -132,6 +132,11 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
         db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.toObject(User.class).getComps().contains(compName)) {
+                    unJoinButton.setVisibility(View.VISIBLE);
+                } else {
+                    joinButton.setVisibility(View.VISIBLE);
+                }
                 final String chap = documentSnapshot.get("chapter").toString();
                 db.collection("users").whereEqualTo("chapter", chap).whereArrayContains("comps", compName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
