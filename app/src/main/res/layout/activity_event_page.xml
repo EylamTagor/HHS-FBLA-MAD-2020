@@ -173,6 +173,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:background="@drawable/button_border"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="Share"
         app:layout_constraintEnd_toStartOf="@+id/deleteEvent"
         app:layout_constraintStart_toEndOf="@+id/editButton"

@@ -62,13 +62,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
     }
 
 
-
     @Override
     public void onBindViewHolder(final @NonNull UserAdapter.ViewHolder holder, final int position) {
         final User user = users.get(position);
         holder.name.setText(user.getName());
         holder.rank.setText(user.getUserType().toString());
-        if(users.get(position).getPic() != "" && users.get(position).getPic() != null) {
+        if (users.get(position).getPic() != null && !users.get(position).getPic().equals("")) {
             Picasso.get().load(Uri.parse(users.get(position).getPic())).into(holder.pic);
         } else {
             Picasso.get().load(R.drawable.com_facebook_profile_picture_blank_square).into(holder.pic);
@@ -101,14 +100,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
             List<User> filteredUsers = new ArrayList<>();
             Log.d(TAG, charSequence.toString());
             Log.d(TAG, allItems.toString());
-            if(charSequence == null || charSequence.length() == 0) {
+            if (charSequence == null || charSequence.length() == 0) {
 
                 filteredUsers.addAll(allItems);
             } else {
                 String filterPattern = charSequence.toString().toLowerCase().trim();
 
-                for(User user : allItems) {
-                    if(user.getName().toLowerCase().startsWith(filterPattern)) {
+                for (User user : allItems) {
+                    if (user.getName().toLowerCase().startsWith(filterPattern)) {
                         filteredUsers.add(user);
                     }
                 }
@@ -122,7 +121,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             users.clear();
-            users.addAll((List)filterResults.values);
+            users.addAll((List) filterResults.values);
             notifyDataSetChanged();
         }
     };
@@ -149,13 +148,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
             constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View view) {
-                    if(getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
                         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                                    if(snap.toObject(User.class).getName().equalsIgnoreCase(users.get(getAdapterPosition()).getName())) {
-                                        listener.onItemClick(snap, view,  getAdapterPosition());
+                                for (DocumentSnapshot snap : queryDocumentSnapshots) {
+                                    if (snap.toObject(User.class).getName().equalsIgnoreCase(users.get(getAdapterPosition()).getName())) {
+                                        listener.onItemClick(snap, view, getAdapterPosition());
                                     }
                                 }
                             }
