@@ -38,7 +38,7 @@ import com.hhsfbla.mad.data.UserType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OfficerFragment extends Fragment {
+public class OfficerFragment extends Fragment implements UserAdapter.OnItemClickListener{
 
     private OfficerViewModel mViewModel;
     private RecyclerView officerRecyclerView;
@@ -67,53 +67,41 @@ public class OfficerFragment extends Fragment {
         officerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         officers = new ArrayList<>();
         adapter = new UserAdapter(officers, root.getContext());
+        adapter.setOnItemClickListener(this);
         officerRecyclerView.setAdapter(adapter);
-        initRecyclerView(UserType.OFFICER, root);
+        initRecyclerView(UserType.OFFICER);
 
         return root;
     }
 
-    public void initRecyclerView(final UserType type, final View root) {
+    public void initRecyclerView(final UserType type) {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 final String chap = documentSnapshot.get("chapter").toString();
-                db.collection("users").whereEqualTo("userType", type).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("users").whereEqualTo("chapter", chap).whereEqualTo("userType", type).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
-                        Log.d(TAG, chap);
-                        for (DocumentSnapshot l : queryDocumentSnapshots) {
-                            Log.d(TAG, l.getId());
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        officers.clear();
+                        officers.addAll(queryDocumentSnapshots.toObjects(User.class));
+                        adapter.notifyDataSetChanged();
+                        adapter.setUsers(officers);
+                        if(officers.isEmpty()) {
+                            noOfficersYet.setVisibility(View.VISIBLE);
+                        } else {
+                            noOfficersYet.setVisibility(View.GONE);
                         }
-                        db.collection("chapters").document(chap).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                List<String> chapUsers = (List<String>) documentSnapshot.get("users");
-                                Log.d(TAG, chapUsers.toString());
-                                for (DocumentSnapshot snap : queryDocumentSnapshots) {
-                                    if (chapUsers.contains(snap.getId())) {
-                                        officers.add(snap.toObject(User.class));
-                                    }
-                                }
-                                adapter.notifyDataSetChanged();
-                                adapter.setUsers(officers);
-                                if (officers.isEmpty()) {
-                                    noOfficersYet.setVisibility(View.VISIBLE);
-                                } else {
-                                    noOfficersYet.setVisibility(View.GONE);
-                                }
-                                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                                    @Override
-                                    public boolean onQueryTextSubmit(String s) {
-                                        return false;
-                                    }
 
-                                    @Override
-                                    public boolean onQueryTextChange(String s) {
-                                        adapter.getFilter().filter(s);
-                                        return false;
-                                    }
-                                });
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String s) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onQueryTextChange(String s) {
+                                adapter.getFilter().filter(s);
+                                return false;
                             }
                         });
                     }
@@ -129,4 +117,8 @@ public class OfficerFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+    @Override
+    public void onItemClick(DocumentSnapshot snapshot, View v, int position) {
+
+    }
 }
