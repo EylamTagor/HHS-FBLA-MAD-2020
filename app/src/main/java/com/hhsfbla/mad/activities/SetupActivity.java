@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -25,7 +26,7 @@ import com.hhsfbla.mad.data.User;
 
 public class SetupActivity extends AppCompatActivity {
 
-    private TextView chapName, chapDesc, facebookPage, insta, location, website;
+    private TextInputEditText chapName, chapDesc, facebookPage, insta, location, website;
     private Button create;
     private FirebaseFirestore db;
     private FirebaseUser user;
