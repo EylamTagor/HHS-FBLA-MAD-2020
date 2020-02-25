@@ -91,7 +91,9 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
 
 
     public void setChapterList(List<Chapter> chapters) {
-        this.chapterList = chapters;
+        chapterList = chapters;
+        fullList.clear();
+        fullList.addAll(chapters);
     }
 
     @Override
