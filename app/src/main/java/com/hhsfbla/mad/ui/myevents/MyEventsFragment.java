@@ -79,7 +79,7 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
                                 }
                             }
                         }
-                        if (events == null) {
+                        if (events == null || events.size() == 0) {
                             noEventsYet.setVisibility(View.VISIBLE);
                             return;
                         } else {
