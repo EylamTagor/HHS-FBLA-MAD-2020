@@ -39,7 +39,7 @@ public class MyCompsFragment extends Fragment implements CompsAdapter.OnItemClic
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private FirebaseUser user;
-    private static final String TAG = "fraghome";
+    private static final String TAG = "mycompsfrag";
 
     public static MyCompsFragment newInstance() {
         return new MyCompsFragment();

@@ -2,7 +2,6 @@ package com.hhsfbla.mad.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,16 +17,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.adapters.EventAdapter;
-import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-
-public class DateEventsAcvitity extends AppCompatActivity implements EventAdapter.OnItemClickListener {
+public class DateEventsActivity extends AppCompatActivity implements EventAdapter.OnItemClickListener {
     private RecyclerView recyclerView;
     private EventAdapter adapter;
     private List<ChapterEvent> events;
@@ -41,7 +37,7 @@ public class DateEventsAcvitity extends AppCompatActivity implements EventAdapte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_date_events_acvitity);
+        setContentView(R.layout.activity_date_events);
 
         String year = getIntent().getStringExtra("year");
         String month = getIntent().getStringExtra("month");
@@ -97,7 +93,7 @@ public class DateEventsAcvitity extends AppCompatActivity implements EventAdapte
 
     @Override
     public void onItemClick(String name, int position) {
-        Intent intent = new Intent(DateEventsAcvitity.this, EventPageActivity.class);
+        Intent intent = new Intent(DateEventsActivity.this, EventPageActivity.class);
         intent.putExtra("EVENT_POSITION", name);
         startActivity(intent);
     }

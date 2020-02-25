@@ -7,34 +7,39 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/home"
+        android:checkable="true"
         android:title="@string/menu_home" />
     <item
         android:id="@+id/nav_my_events"
         android:icon="@drawable/myevents"
+        android:checkable="true"
         android:title="@string/menu_my_events" />
 
     <item
         android:id="@+id/nav_calendar"
         android:icon="@drawable/calendar_icon"
+        android:checkable="true"
         android:title="@string/menu_calendar" />
 
 
-    <item android:title="Competitive Events" >
-        <menu >
-            <item
-
-                android:id="@+id/nav_comps"
-                android:icon="@drawable/comps"
-                android:title="Competition List" />
-            <item
-                android:id="@+id/nav_mycomps"
-                android:icon="@drawable/mycomps_icon"
-                android:title="My Competitions" />
+    <item android:title="Competitive Events">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_comps"
+                    android:icon="@drawable/comps"
+                    android:title="Competition List" />
+                <item
+                    android:id="@+id/nav_mycomps"
+                    android:icon="@drawable/mycomps_icon"
+                    android:title="My Competitions" />
+            </group>
         </menu>
     </item>
 
-    <item android:title="About Chapter" >
-            <menu>
+    <item android:title="About Chapter">
+        <menu>
+            <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_about_chapter"
                     android:icon="@drawable/info_icon"
@@ -43,12 +48,14 @@
                     android:id="@+id/nav_officer"
                     android:icon="@drawable/officer_icon"
                     android:title="@string/menu_officer" />
-            </menu>
-        </item>
+            </group>
+        </menu>
+    </item>
 
 
-        <item android:title="About FBLA" >
-            <menu>
+    <item android:title="About FBLA">
+        <menu>
+            <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_about"
                     android:icon="@drawable/info_icon"
@@ -57,7 +64,8 @@
                     android:id="@+id/nav_contact"
                     android:icon="@drawable/contact_icon"
                     android:title="@string/menu_contact" />
-            </menu>
-        </item>
+            </group>
+        </menu>
+    </item>
 
 </menu>

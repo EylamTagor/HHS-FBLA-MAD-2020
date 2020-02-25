@@ -127,7 +127,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                 db.collection("chapters").document(u.getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot snapshot) {
-                        chapterDisplay.setText(snapshot.toObject(Chapter.class).getName());
+                        chapterDisplay.setText("Chapter: " + snapshot.toObject(Chapter.class).getName());
                     }
                 });
 

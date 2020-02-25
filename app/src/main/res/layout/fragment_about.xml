@@ -14,70 +14,56 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:padding="16dp">
 
 
+            <TextView
+                android:id="@+id/aboutTxtView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mission Statement"
+                android:textColor="@color/black"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/aboutTxtView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="Mission Statement"
-        android:textSize="32sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/about2TxtView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="15dp"
-        app:layout_constraintTop_toBottomOf="@+id/aboutTxtView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="FBLA-PBL inspires and prepares students to become community-minded business leaders in a global society through relevant career preparation and leadership experiences."
-        android:textSize="22sp"
-        android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/about2TxtView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FBLA-PBL inspires and prepares students to become community-minded business leaders in a global society through relevant career preparation and leadership experiences."
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/aboutTxtView" />
 
 
-    <TextView
-        android:id="@+id/about3TxtView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/about2TxtView"
-        android:text="FBLA-PBL’s programs focus on:"
-        android:textSize="28sp"
-        android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/about3TxtView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="FBLA-PBL’s programs focus on:"
+                android:textColor="@color/black"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/about2TxtView" />
 
-    <TextView
-        android:id="@+id/about4TxtView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="15dp"
-        app:layout_constraintTop_toBottomOf="@+id/about3TxtView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="Leadership Development—members develop essential soft skills by holding chapter officer positions at the local, state, and national levels; by networking with accomplished business professionals; and by participating in business-focused workshops, seminars, and academic competitions.
-Academic Competitions—members demonstrate their business expertise at high-profile regional, state, and national competitive events. The top students are recognized with trophies and cash awards. Learn more about FBLA, PBL, and FBLA-Middle Level competitive events.
-Educational Programs—members create career portfolios, enhance their knowledge with world-recognized skills certifications, and have access to select college scholarships. Learn more about educational programs for FBLA, PBL, and FBLA-Middle Level.
-Membership Benefits—members receive exclusive discounts and enhanced benefits for travel, education, and more. Learn about the benefits available to FBLA, PBL, and FBLA-Middle Level members.
-Community Service—members work with the March of Dimes to help end premature births by participating in awareness campaigns and the March for Babies fundraiser. Discover how FBLA, PBL, and FBLA-Middle Level members support the March of Dimes.
-Awards &amp; Recognition—members build a portfolio of accomplishments with a wide range of awards programs. Learn more about FBLA, PBL, and FBLA-Middle Level awards programs."
-        android:textSize="22sp"
-        android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/about4TxtView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Leadership Development—members develop essential soft skills by holding chapter officer positions at the local, state, and national levels; by networking with accomplished business professionals; and by participating in business-focused workshops, seminars, and academic competitions.\n\nAcademic Competitions—members demonstrate their business expertise at high-profile regional, state, and national competitive events. The top students are recognized with trophies and cash awards.\n\nEducational Programs—members create career portfolios, enhance their knowledge with world-recognized skills certifications, and have access to select college scholarships.\n\nMembership Benefits—members receive exclusive discounts and enhanced benefits for travel, education, and more.\n\nCommunity Service—members work with the March of Dimes to help end premature births by participating in awareness campaigns and the March for Babies fundraiser.\n\nAwards &amp; Recognition—members build a portfolio of accomplishments with a wide range of awards programs."
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/about3TxtView" />
 
 
         </LinearLayout>

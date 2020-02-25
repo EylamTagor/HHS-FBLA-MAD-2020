@@ -32,8 +32,6 @@ import com.hhsfbla.mad.data.UserType;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-
 public class HomeFragment extends Fragment implements EventAdapter.OnItemClickListener{
 
     private HomeViewModel homeViewModel;

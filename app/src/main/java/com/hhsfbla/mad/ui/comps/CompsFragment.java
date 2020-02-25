@@ -1,12 +1,9 @@
 package com.hhsfbla.mad.ui.comps;
 
-import android.accounts.Account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
@@ -23,11 +20,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.CompDetailActivity;
 import com.hhsfbla.mad.adapters.CompsAdapter;
-import com.hhsfbla.mad.data.CompType;
 import com.hhsfbla.mad.data.Competition;
 
 import java.util.ArrayList;

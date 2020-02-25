@@ -3,81 +3,121 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
 
     <TextView
         android:id="@+id/fblaWebLinkTxtView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="40dp"
-        android:text="Link"
-        android:textSize="25sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="FBLA Website"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/feelFree" />
 
     <ImageButton
         android:id="@+id/facebookButton"
         android:layout_width="64sp"
         android:layout_height="64sp"
-        android:padding="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/facebook"
+        android:padding="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="120dp"
-        app:layout_constraintTop_toBottomOf="@id/fblaWebLinkTxtView" />
+        app:layout_constraintTop_toBottomOf="@+id/qaForm" />
+
 
     <ImageButton
         android:id="@+id/instaButton"
         android:layout_width="64sp"
         android:layout_height="64sp"
-        android:padding="10dp"
+        android:layout_marginStart="24dp"
         android:background="@drawable/instagram"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="120dp"
-        app:layout_constraintTop_toBottomOf="@id/fblaWebLinkTxtView" />
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/twitterButton"
+        app:layout_constraintStart_toEndOf="@+id/twitterButton"
+        app:layout_constraintTop_toTopOf="@+id/twitterButton" />
 
     <ImageButton
         android:id="@+id/twitterButton"
         android:layout_width="64sp"
         android:layout_height="64sp"
-        android:padding="10dp"
+        android:layout_marginStart="24dp"
         android:background="@drawable/twitter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="120dp"
-        app:layout_constraintTop_toBottomOf="@id/facebookButton" />
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/facebookButton"
+        app:layout_constraintStart_toEndOf="@+id/facebookButton"
+        app:layout_constraintTop_toTopOf="@+id/facebookButton" />
 
     <ImageButton
         android:id="@+id/linkedinButton"
         android:layout_width="64sp"
         android:layout_height="64sp"
-        android:padding="10dp"
+        android:layout_marginStart="24dp"
         android:background="@drawable/linkedin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="120dp"
-        app:layout_constraintTop_toBottomOf="@id/instaButton" />
-
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/instaButton"
+        app:layout_constraintStart_toEndOf="@+id/instaButton"
+        app:layout_constraintTop_toTopOf="@+id/instaButton" />
 
     <TextView
         android:id="@+id/qaForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:text="QA Form"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fblaWebLinkTxtView" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Thanks for using our app!"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/feelFree"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Have any questions or problems? Feel free to contact us!"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="40dp"
-        android:text="Link"
-        android:textSize="25sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/twitterButton" />
+        app:srcCompat="@mipmap/logo_round" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,110 +6,137 @@
     android:layout_height="match_parent">
 
 
-    <TextView
-        android:id="@+id/aboutChapTxtView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="32dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="description"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/locaChapTxtView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="32dp"
-        app:layout_constraintTop_toBottomOf="@+id/aboutChapTxtView"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="location"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/chapWebLink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="32dp"
-        android:text="Link"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locaChapTxtView" />
-
-
-    <ImageButton
-        android:id="@+id/facebookBtn"
-        android:layout_width="64sp"
-        android:layout_height="64sp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="240dp"
-        android:background="@drawable/facebook"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.86"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chapWebLink" />
-
-    <ImageButton
-        android:id="@+id/instaBtn"
-        android:layout_width="64sp"
-        android:layout_height="64sp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/instagram"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.73"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chapWebLink" />
-
-    <TextView
-        android:id="@+id/member"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="32dp"
-        app:layout_constraintTop_toBottomOf="@+id/facebookBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="Members:"
-        android:textStyle="bold"
-        android:textSize="24sp" />
-
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/member">
-
-    <SearchView
-        android:id="@+id/userSearch"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:padding="4dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/userFeed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <TextView
-        android:id="@+id/noUsersYet"
-        android:layout_width="match_parent"
-        android:layout_height="128dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="No Users Have Joined Yet"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userFeed"
-        tools:visibility="invisible" />
-</LinearLayout>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/aboutChapTxtView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Chapter Description"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/chapWebLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Link to Chapter Website"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/locaChapTxtView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Chapter Location"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/socialMedia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:text="Find us on\nsocial media!"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/facebookBtn"
+                    android:layout_width="64sp"
+                    android:layout_height="64sp"
+                    android:layout_marginStart="32dp"
+                    android:background="@drawable/facebook"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/socialMedia"
+                    app:layout_constraintStart_toEndOf="@+id/socialMedia"
+                    app:layout_constraintTop_toTopOf="@+id/socialMedia" />
+
+                <ImageButton
+                    android:id="@+id/instaBtn"
+                    android:layout_width="64sp"
+                    android:layout_height="64sp"
+                    android:layout_marginStart="32dp"
+                    android:background="@drawable/instagram"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/facebookBtn"
+                    app:layout_constraintStart_toEndOf="@+id/facebookBtn"
+                    app:layout_constraintTop_toTopOf="@+id/facebookBtn" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/member"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="Members:"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <SearchView
+                    android:id="@+id/userSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:padding="4dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/userFeed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <TextView
+                    android:id="@+id/noUsersYet"
+                    android:layout_width="match_parent"
+                    android:layout_height="128dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="No Users Have Joined Yet"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userFeed"
+                    tools:visibility="invisible" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
