@@ -34,7 +34,6 @@ import java.util.List;
 
 public class HomeFragment extends Fragment implements EventAdapter.OnItemClickListener{
 
-    private HomeViewModel homeViewModel;
     private TextView noEventsYet;
     private FloatingActionButton fab;
     private RecyclerView eventRecyclerView;
@@ -49,6 +48,7 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
+        getActivity().setTitle("Home");
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();

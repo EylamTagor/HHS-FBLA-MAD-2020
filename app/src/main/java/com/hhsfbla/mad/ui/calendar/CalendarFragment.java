@@ -29,6 +29,7 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_calendar, container, false);
+        getActivity().setTitle("Calendar");
 
         db = FirebaseFirestore.getInstance();
 

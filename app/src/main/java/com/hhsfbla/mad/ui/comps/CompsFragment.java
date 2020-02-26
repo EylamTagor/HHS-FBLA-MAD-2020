@@ -32,7 +32,6 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickListener{
 
-    private CompsViewModel mViewModel;
     private RecyclerView eventRecyclerView;
     private CompsAdapter adapter;
     private SearchView searchView;
@@ -50,6 +49,7 @@ public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickL
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_comps, container, false);
+        getActivity().setTitle("Competitions");
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -90,8 +90,6 @@ public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickL
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(CompsViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     @Override

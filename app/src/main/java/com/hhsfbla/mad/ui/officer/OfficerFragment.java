@@ -41,7 +41,6 @@ import java.util.List;
 
 public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemClickListener{
 
-    private OfficerViewModel mViewModel;
     private RecyclerView officerRecyclerView;
     private OfficerAdapter adapter;
     private List<User> officers;
@@ -59,6 +58,7 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_officer, container, false);
+        getActivity().setTitle("Officers");
         searchView = root.findViewById(R.id.officerSearch);
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -114,7 +114,6 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(OfficerViewModel.class);
         // TODO: Use the ViewModel
     }
 

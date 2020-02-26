@@ -16,7 +16,6 @@ import com.hhsfbla.mad.R;
 
 public class AboutFragment extends Fragment {
 
-    private AboutViewModel mViewModel;
 
     public static AboutFragment newInstance() {
         return new AboutFragment();
@@ -25,14 +24,13 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        getActivity().setTitle("About FBLA");
         return inflater.inflate(R.layout.fragment_about, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(AboutViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

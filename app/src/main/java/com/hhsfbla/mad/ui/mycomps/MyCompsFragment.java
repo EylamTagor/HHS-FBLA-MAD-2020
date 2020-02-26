@@ -48,6 +48,7 @@ public class MyCompsFragment extends Fragment implements CompsAdapter.OnItemClic
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_my_comps, container, false);
+        getActivity().setTitle("My Competitions");
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();

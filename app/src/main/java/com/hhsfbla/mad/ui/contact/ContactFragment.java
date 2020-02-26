@@ -24,7 +24,6 @@ import com.hhsfbla.mad.R;
 
 public class ContactFragment extends Fragment {
 
-    private ContactViewModel mViewModel;
     TextView fblaLink, formLink;
     ImageButton facebook, insta, twitter, linkedin;
 
@@ -39,6 +38,7 @@ public class ContactFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_contact, container, false);
+        getActivity().setTitle("Contact Us");
 
         fblaLink = root.findViewById(R.id.fblaWebLinkTxtView);
         fblaLink.setText(Html.fromHtml("<a href='https://www.fbla-pbl.org'>FBLA Website</androidx.constraintlayout.widget.ConstraintLayout</a>"));
@@ -90,8 +90,6 @@ public class ContactFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ContactViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }
