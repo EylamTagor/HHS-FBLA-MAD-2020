@@ -2,46 +2,31 @@ package com.hhsfbla.mad.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
-import com.google.firebase.storage.UploadTask;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.activities.HomeActivity;
-import com.hhsfbla.mad.activities.SignupActivity;
 import com.hhsfbla.mad.data.Chapter;
-import com.hhsfbla.mad.data.User;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder> implements Filterable {
 
@@ -49,7 +34,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     private List<Chapter> chapterList;
     private List<Chapter> fullList;
     private StorageReference storageReference;
-    private StorageTask uploadTask;
     private ProgressDialog progressDialog;
     private FirebaseFirestore db;
     private FirebaseUser fuser;
@@ -108,8 +92,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
 
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(fullList);
-            }
-            else {
+            } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
                 for (Chapter c : fullList) {
@@ -145,13 +128,13 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
             constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
 
                         db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                for(final DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
-                                    if(snapshot.toObject(Chapter.class).getName().equalsIgnoreCase(chapterList.get(getAdapterPosition()).getName())) {
+                                for (final DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
+                                    if (snapshot.toObject(Chapter.class).getName().equalsIgnoreCase(chapterList.get(getAdapterPosition()).getName())) {
                                         listener.onItemClick(snapshot, getAdapterPosition());
                                     }
                                 }

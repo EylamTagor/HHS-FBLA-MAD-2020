@@ -1,8 +1,6 @@
 package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,16 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.activities.CompDetailActivity;
 import com.hhsfbla.mad.data.CompType;
 import com.hhsfbla.mad.data.Competition;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> implements Filterable {
 
@@ -93,13 +87,13 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<Competition> filteredComps = new ArrayList<>();
 
-            if(charSequence == null || charSequence.length() == 0) {
+            if (charSequence == null || charSequence.length() == 0) {
                 filteredComps.addAll(allItems);
             } else {
                 String filterPattern = charSequence.toString().toLowerCase().trim();
 
-                for(Competition comp : allItems) {
-                    if(comp.getName().toLowerCase().startsWith(filterPattern)) {
+                for (Competition comp : allItems) {
+                    if (comp.getName().toLowerCase().startsWith(filterPattern)) {
                         filteredComps.add(comp);
                     }
                 }
@@ -113,7 +107,7 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             comps.clear();
-            comps.addAll((List)filterResults.values);
+            comps.addAll((List) filterResults.values);
             notifyDataSetChanged();
         }
     };
@@ -133,7 +127,7 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
             constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
                         Log.d(TAG, comps.get(getAdapterPosition()).getName());
                         listener.onItemClick(comps.get(getAdapterPosition()).getName(), getAdapterPosition());
                     }

@@ -1,27 +1,19 @@
 package com.hhsfbla.mad.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -41,7 +33,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.dialogs.DatePicker;
@@ -114,7 +105,6 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                                     for(DocumentSnapshot snap : queryDocumentSnapshots) {
                                         String name = getIntent().getStringExtra("EVENT_NAME");
                                         if(snap.toObject(ChapterEvent.class).getName().equalsIgnoreCase(name)) {
-                                            Log.d(TAG, snap.getId());
                                             uploadFile(snap.getId());
 
                                         }
@@ -162,7 +152,6 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         String name = getIntent().getStringExtra("EVENT_NAME");
-                        Log.d(TAG, name);
 
                         List<ChapterEvent> events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
                         for(ChapterEvent event : events) {
@@ -191,7 +180,6 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(final DocumentSnapshot userSnap) {
-                Log.d(TAG, "Adding event");
                 db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

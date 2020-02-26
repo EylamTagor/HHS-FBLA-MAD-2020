@@ -39,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
 
     private FirebaseUser user;
     private CircleImageView profilePic;
-    private ImageButton backBtn, doneBtn2;
+    private ImageButton backBtn, doneBtn;
     private TextInputEditText name, pos, blurb;
     private TextView chapterDisplay;
     private Button chapter;
@@ -63,7 +63,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
         chapter = findViewById(R.id.chapterButton);
         profilePic = findViewById(R.id.profilePic);
         sign_outBtn = findViewById(R.id.sign_outBtn);
-        doneBtn2 = findViewById(R.id.doneBtn2);
+        doneBtn = findViewById(R.id.doneBtn2);
         pos = findViewById(R.id.posTextField);
         blurb = findViewById(R.id.blurbTextField);
         deleteAccount = findViewById(R.id.deleteAccountButton);
@@ -80,7 +80,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
             }
         });
 
-        doneBtn2.setOnClickListener(new View.OnClickListener() {
+        doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 db.collection("users").document(user.getUid()).update("name", name.getText().toString());
@@ -110,17 +110,13 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                 signOut();
             }
         });
-        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                name.setText(documentSnapshot.toObject(User.class).getName());
-            }
-        });
+
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot snapshot) {
                 User u = snapshot.toObject(User.class);
+                name.setText(snapshot.toObject(User.class).getName());
 
                 db.collection("chapters").document(u.getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -184,17 +180,14 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                                     db.collection("users").document(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "hihihi");
 //                                            user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
 //                                                @Override
 //                                                public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "hihihi2");
                                             progressDialog.dismiss();
                                             FirebaseAuth.getInstance().signOut();
                                             startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
 //                                                }
 //                                            });
-                                            Log.d(TAG, "hihihi3");
 
                                         }
                                     });

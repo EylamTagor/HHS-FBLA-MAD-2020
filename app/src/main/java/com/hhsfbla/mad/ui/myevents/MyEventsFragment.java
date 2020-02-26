@@ -31,7 +31,7 @@ import java.util.List;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
-public class MyEventsFragment extends Fragment implements EventAdapter.OnItemClickListener{
+public class MyEventsFragment extends Fragment implements EventAdapter.OnItemClickListener {
 
     private TextView noEventsYet;
     private RecyclerView eventRecyclerView;
@@ -75,7 +75,6 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
                         for (DocumentSnapshot snap : queryDocumentSnapshots) {
                             for (String event : currentUser.getMyEvents()) {
                                 if (event.equalsIgnoreCase(snap.getId())) {
-                                    Log.d(TAG, snap.toObject(ChapterEvent.class).toString());
                                     events.add(snap.toObject(ChapterEvent.class));
                                 }
                             }
@@ -103,7 +102,6 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
 
     @Override
     public void onItemClick(String name, int position) {
-        Log.d(TAG, "event clicked");
         Intent intent = new Intent(getContext(), EventPageActivity.class);
         intent.putExtra("EVENT_POSITION", events.get(position).getName());
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);

@@ -32,7 +32,7 @@ import com.hhsfbla.mad.data.UserType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements EventAdapter.OnItemClickListener{
+public class HomeFragment extends Fragment implements EventAdapter.OnItemClickListener {
 
     private TextView noEventsYet;
     private FloatingActionButton fab;
@@ -97,7 +97,6 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
 
     @Override
     public void onItemClick(String name, int position) {
-        Log.d(TAG, "event clicked");
         Intent intent = new Intent(getContext(), EventPageActivity.class);
         intent.putExtra("EVENT_POSITION", name);
         getContext().startActivity(intent);

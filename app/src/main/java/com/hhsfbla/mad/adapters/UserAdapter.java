@@ -1,19 +1,14 @@
 package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -26,9 +21,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
-
 import com.hhsfbla.mad.data.User;
-import com.hhsfbla.mad.data.UserType;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,7 +32,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> implements Filterable {
 
     private FirebaseFirestore db;
-    private FirebaseUser fuser;
     private List<User> users;
     private List<User> allItems;
     private Context context;
@@ -50,7 +42,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
         this.users = users;
         allItems = new ArrayList<>(users);
         this.context = context;
-        fuser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
     }
 
@@ -80,11 +71,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
     }
 
     public void setUsers(List<User> users) {
-        Log.d(TAG, allItems.toString());
         this.users = users;
         allItems.clear();
         this.allItems.addAll(users);
-        Log.d(TAG, allItems.toString());
 
     }
 
@@ -139,12 +128,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
             rank = itemView.findViewById(R.id.rank);
             pic = itemView.findViewById(R.id.userImageDetail);
             constraintLayout = itemView.findViewById(R.id.userConstraintLayout);
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Log.d(TAG, "hellllo");
-//                }
-//            });
             constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View view) {

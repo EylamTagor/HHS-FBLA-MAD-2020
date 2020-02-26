@@ -175,7 +175,6 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
                         }
                     });
         } else {
-            //TODO add dialog
             Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
             updateUser(snapshot, null);
         }
