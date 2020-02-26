@@ -3,7 +3,6 @@ package com.hhsfbla.mad.ui.home;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +31,9 @@ import com.hhsfbla.mad.data.UserType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a fragment that displays all of the user's chapter's events with some details
+ */
 public class HomeFragment extends Fragment implements EventAdapter.OnItemClickListener {
 
     private TextView noEventsYet;
@@ -45,6 +47,14 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
     private FirebaseUser user;
     private static final String TAG = "fraghome";
 
+    /**
+     * Creates and inflates a new HomeFragment with the following parameters
+     *
+     * @param inflater to inflate the fragment
+     * @param container ViewGroup into which the fragment is inflated
+     * @param savedInstanceState used to save activity regarding this fragment
+     * @return the inflated fragment
+     */
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
@@ -95,6 +105,12 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
         return root;
     }
 
+    /**
+     * Handles any clicking action done inside this fragment
+     *
+     * @param name the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param position the numbered position of snapshot in the full item list
+     */
     @Override
     public void onItemClick(String name, int position) {
         Intent intent = new Intent(getContext(), EventPageActivity.class);

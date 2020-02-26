@@ -29,6 +29,9 @@ import java.util.List;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
+/**
+ * Represents a fragment consisting of a list of all available  competitive events in FBLA as a RecyclerView
+ */
 public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickListener{
 
     private RecyclerView eventRecyclerView;
@@ -40,10 +43,14 @@ public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickL
     private FirebaseUser user;
     private static final String TAG = "COMPS";
 
-    public static CompsFragment newInstance() {
-        return new CompsFragment();
-    }
-
+    /**
+     * Creates and inflates a new CompsFragment with the following parameters
+     *
+     * @param inflater to inflate the fragment
+     * @param container ViewGroup into which the fragment is inflated
+     * @param savedInstanceState used to save activity regarding this fragment
+     * @return the inflated fragment
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -86,11 +93,22 @@ public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickL
         return root;
     }
 
+    /**
+     * Handles actions upon successful creation of the host activity
+     *
+     * @param savedInstanceState used to save activity regarding this fragment
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
 
+    /**
+     * Handles any clicking action done inside this fragment
+     *
+     * @param id the comp object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param position the numbered position of snapshot in the full comp list
+     */
     @Override
     public void onItemClick(String id, int position) {
         Intent intent = new Intent(getContext(), CompDetailActivity.class);
