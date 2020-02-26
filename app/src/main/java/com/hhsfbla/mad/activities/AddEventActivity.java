@@ -62,8 +62,8 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     private static final int RESULT_LOAD_IMAGE = 1;
     private Uri imageUri;
     private Bitmap bitmap;
-    private StorageTask uploadTask;
-    private ImageButton backBtn2, doneBtn, imageBtn;
+//    private StorageTask uploadTask;
+    private ImageButton backBtn2, doneBtn/*, imageBtn*/;
     private TextInputEditText nameEditTxt;
     private TextInputEditText dateEditTxt;
     private TextInputEditText timeEditTxt;
@@ -73,7 +73,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     private FirebaseFirestore db;
     private FirebaseUser user;
     private static final String TAG = "ADDEVENTPAGE";
-    private StorageReference storageReference;
+//    private StorageReference storageReference;
     private ProgressDialog progressDialog;
     private Button setDate, setTime;
     private byte[] uploadBytes;
@@ -96,15 +96,15 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         locaEditTxt = findViewById(R.id.locaEditTxt);
         descrEditTxt = findViewById(R.id.descrEditTxt);
         linkEditTxt = findViewById(R.id.linkEditTxt);
-        imageBtn = findViewById(R.id.imageBtn);
+//        imageBtn = findViewById(R.id.imageBtn);
         setDate = findViewById(R.id.setDateButton);
         setTime = findViewById(R.id.setTimeButton);
-        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
+//        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-        int hour = c.get(Calendar.HOUR);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
         onDateSet(null, year, month, day);
         onTimeSet(null, hour, minute);
@@ -121,9 +121,9 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
             //TODO: save information typed on this page
             @Override
             public void onClick(View view) {
-                if(uploadTask != null && uploadTask.isInProgress()) {
-                    Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_LONG).show();
-                } else {
+//                if(uploadTask != null && uploadTask.isInProgress()) {
+//                    Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_LONG).show();
+//                } else {
                     db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot snapshot) {
@@ -133,20 +133,20 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
 
                         }
                     });
-                }
+//                }
             }
         });
 
-        imageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, RESULT_LOAD_IMAGE);
-            }
-        });
+//        imageBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(intent, RESULT_LOAD_IMAGE);
+//            }
+//        });
 
         setDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,8 +173,8 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
                 timeEditTxt.getText().toString().trim(),
                 locaEditTxt.getText().toString().trim(),
                 descrEditTxt.getText().toString().trim(),
-                linkEditTxt.getText().toString().trim(),
-                uri == null ? "" : uri.toString());
+                linkEditTxt.getText().toString().trim()/*,
+                uri == null ? "" : uri.toString()*/);
         progressDialog.setMessage("Saving...");
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -196,60 +196,60 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
-            imageUri = data.getData();
-            bitmap = loadImage(imageUri);
-            imageBtn.setImageBitmap(bitmap);
-//            Picasso.get().load(imageUri).into(imageBtn);
-        }
+//        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+//
+//            imageUri = data.getData();
+//            bitmap = loadImage(imageUri);
+//            imageBtn.setImageBitmap(bitmap);
+////            Picasso.get().load(imageUri).into(imageBtn);
+//        }
     }
 
     private void uploadFile(final String id) {
-        if(imageUri != null && bitmap != null) {
-            Log.d(TAG, imageUri.toString());
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] data = baos.toByteArray();
-            progressDialog.setMessage("Uploading...");
-            progressDialog.show();
-            final StorageReference fileRef = storageReference.child(id);
-            uploadTask = fileRef.putBytes(data)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Log.d(TAG, uri.toString());
-                                    addEvent(uri, id);
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-
-                        }
-                    });
-        } else {
+//        if(imageUri != null && bitmap != null) {
+//            Log.d(TAG, imageUri.toString());
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//            byte[] data = baos.toByteArray();
+//            progressDialog.setMessage("Uploading...");
+//            progressDialog.show();
+//            final StorageReference fileRef = storageReference.child(id);
+//            uploadTask = fileRef.putBytes(data)
+//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                @Override
+//                                public void onSuccess(Uri uri) {
+//                                    Log.d(TAG, uri.toString());
+//                                    addEvent(uri, id);
+//                                }
+//                            });
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception exception) {
+//
+//                        }
+//                    })
+//                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                        }
+//                    });
+//        } else {
             //TODO add dialog
-            Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
             addEvent(null, id);
-        }
+//        }
     }
 
     @Override
     public void onDateSet(android.widget.DatePicker datePicker, int i, int i1, int i2) {
-        String month = i1 < 10 ? "0" + i1 : i1 + "";
+        String month = (i1 + 1) < 10 ? "0" + (i1 + 1) : (i1  +1) + "";
         String day = i2 < 10 ? "0" + i2 : i2 + "";
 
         dateEditTxt.setText(month + "/" + day + "/" + i);
@@ -262,89 +262,89 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         timeEditTxt.setText(hour + ":" + minute);
     }
 
-    public Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.setRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
-    }
+//    public Bitmap rotateImage(Bitmap source, float angle) {
+//        Matrix matrix = new Matrix();
+//        matrix.setRotate(angle);
+//        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+//                matrix, true);
+//    }
 
-    public Bitmap decodeUriToBitmap(Uri sendUri) {
-        Bitmap getBitmap = null;
-        try {
-            InputStream image_stream;
-            try {
-                image_stream = getContentResolver().openInputStream(sendUri);
-                getBitmap = BitmapFactory.decodeStream(image_stream);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return getBitmap;
-    }
-
-    private Bitmap loadImage(Uri imageUri) {
-        Log.d(TAG, "helllllllllo");
-        Log.d(TAG, imageUri.toString());
-        Bitmap bitmap = decodeUriToBitmap(imageUri);
-        InputStream imageStream = null;
-        try {
-            try {
-                imageStream = getContentResolver().openInputStream(imageUri);
-                bitmap = BitmapFactory.decodeStream(imageStream);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        ExifInterface ei = null;
+//    public Bitmap decodeUriToBitmap(Uri sendUri) {
+//        Bitmap getBitmap = null;
 //        try {
-//            if(imageStream == null) {
-//                Log.d(TAG, "errrorr");
-//            } else {
-//                ei = new ExifInterface(imageStream);
+//            InputStream image_stream;
+//            try {
+//                image_stream = getContentResolver().openInputStream(sendUri);
+//                getBitmap = BitmapFactory.decodeStream(image_stream);
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
 //            }
-//        } catch (IOException e) {
+//        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-//        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-//                ExifInterface.ORIENTATION_UNDEFINED);
-//        Bitmap rotatedBitmap = null;
-//        switch(orientation) {
-//
-//            case ExifInterface.ORIENTATION_ROTATE_90:
-//                Log.d(TAG, "helllllllllo");
-//
-//                rotatedBitmap = rotateImage(bitmap, 90);
-//                break;
-//
-//            case ExifInterface.ORIENTATION_ROTATE_180:
-//                Log.d(TAG, "helllllllllo");
-//
-//                rotatedBitmap = rotateImage(bitmap, 180);
-//                break;
-//
-//            case ExifInterface.ORIENTATION_ROTATE_270:
-//                Log.d(TAG, "helllllllllo");
-//
-//                rotatedBitmap = rotateImage(bitmap, 270);
-//                break;
-//
-//            case ExifInterface.ORIENTATION_NORMAL:
-//                rotatedBitmap = bitmap;
-//            default:
-//                rotatedBitmap = bitmap;
+//        return getBitmap;
+//    }
+
+//    private Bitmap loadImage(Uri imageUri) {
+//        Log.d(TAG, "helllllllllo");
+//        Log.d(TAG, imageUri.toString());
+//        Bitmap bitmap = decodeUriToBitmap(imageUri);
+//        InputStream imageStream = null;
+//        try {
+//            try {
+//                imageStream = getContentResolver().openInputStream(imageUri);
+//                bitmap = BitmapFactory.decodeStream(imageStream);
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
 //        }
-        Log.d(TAG, bitmap.getWidth() + "");
-        Log.d(TAG, bitmap.getHeight() + "");
-        if(bitmap.getWidth() > bitmap.getHeight()) {
-            return bitmap;
-        } else {
-            return rotateImage(bitmap, 270);
-        }
-    }
+////        ExifInterface ei = null;
+////        try {
+////            if(imageStream == null) {
+////                Log.d(TAG, "errrorr");
+////            } else {
+////                ei = new ExifInterface(imageStream);
+////            }
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
+////        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+////                ExifInterface.ORIENTATION_UNDEFINED);
+////        Bitmap rotatedBitmap = null;
+////        switch(orientation) {
+////
+////            case ExifInterface.ORIENTATION_ROTATE_90:
+////                Log.d(TAG, "helllllllllo");
+////
+////                rotatedBitmap = rotateImage(bitmap, 90);
+////                break;
+////
+////            case ExifInterface.ORIENTATION_ROTATE_180:
+////                Log.d(TAG, "helllllllllo");
+////
+////                rotatedBitmap = rotateImage(bitmap, 180);
+////                break;
+////
+////            case ExifInterface.ORIENTATION_ROTATE_270:
+////                Log.d(TAG, "helllllllllo");
+////
+////                rotatedBitmap = rotateImage(bitmap, 270);
+////                break;
+////
+////            case ExifInterface.ORIENTATION_NORMAL:
+////                rotatedBitmap = bitmap;
+////            default:
+////                rotatedBitmap = bitmap;
+////        }
+//        Log.d(TAG, bitmap.getWidth() + "");
+//        Log.d(TAG, bitmap.getHeight() + "");
+//        if(bitmap.getWidth() > bitmap.getHeight()) {
+//            return bitmap;
+//        } else {
+//            return rotateImage(bitmap, 270);
+//        }
+//    }
 
 }

@@ -99,8 +99,6 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
-
-
     @Override
     public void onItemClick(String name, int position) {
         Log.d(TAG, "event clicked");

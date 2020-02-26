@@ -52,10 +52,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.date.setText(event.getDate());
         holder.time.setText(event.getTime());
         holder.location.setText(event.getLocation());
-        if(event.getPic() != "" && event.getPic() != null) {
-            Picasso.get().load(Uri.parse(event.getPic())).fit().centerCrop().into(holder.pic);
-        } else
-            holder.pic.setVisibility(View.GONE);
+//        if(event.getPic() != "" && event.getPic() != null) {
+//            Picasso.get().load(Uri.parse(event.getPic())).fit().centerCrop().into(holder.pic);
+//        } else
+//            holder.pic.setVisibility(View.GONE);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView title, date, time, location;
-        public ImageView pic;
+//        public ImageView pic;
         public ConstraintLayout constraintLayout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -79,7 +79,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             date = itemView.findViewById(R.id.eventDate);
             time = itemView.findViewById(R.id.eventTime);
             location = itemView.findViewById(R.id.eventLocation);
-            pic = itemView.findViewById(R.id.eventPic);
+//            pic = itemView.findViewById(R.id.eventPic);
             constraintLayout = itemView.findViewById(R.id.eventConstraintLayout);
             constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

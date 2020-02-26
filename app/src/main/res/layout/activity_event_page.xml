@@ -64,17 +64,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/eventPicDetail"
-                android:layout_width="match_parent"
-                android:layout_height="192dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/com_facebook_button_background_color_disabled"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/eventTitleDetail" />
+<!--            <ImageView-->
+            <!--                android:id="@+id/eventPicDetail"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="192dp"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="16dp"-->
+            <!--                android:layout_marginEnd="16dp"-->
+            <!--                android:background="@color/com_facebook_button_background_color_disabled"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/eventTitleDetail" />-->
 
             <ImageView
                 android:id="@+id/calendarIconDetail"
@@ -83,7 +83,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/eventPicDetail"
+                app:layout_constraintTop_toBottomOf="@id/eventTitleDetail"
                 app:srcCompat="@drawable/calendar_icon" />
 
             <TextView
@@ -97,7 +97,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/locationIconDetail"
-                app:layout_constraintTop_toBottomOf="@+id/eventPicDetail" />
+                app:layout_constraintTop_toBottomOf="@+id/eventTitleDetail" />
 
             <ImageView
                 android:id="@+id/clockIconDetail"

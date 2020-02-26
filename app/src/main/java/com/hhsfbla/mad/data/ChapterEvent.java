@@ -1,8 +1,5 @@
 package com.hhsfbla.mad.data;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
-
 import java.util.ArrayList;
 
 public class ChapterEvent {
@@ -14,20 +11,20 @@ public class ChapterEvent {
     private String location;
     private String description;
     private String facebookLink;
-    private String pic;
+//    private String pic;
 
     public ChapterEvent() {
-        this("", "", "", "", "", "", null);
+        this("", "", "", "", "", ""/*, null*/);
     }
 
-    public ChapterEvent(String name, String date, String time, String location, String description, String facebookLink, String pic) {
+    public ChapterEvent(String name, String date, String time, String location, String description, String facebookLink/*, String pic*/) {
         this.name = name;
         this.date = date;
         this.time = time;
         this.location = location;
         this.description = description;
         this.facebookLink = facebookLink;
-        this.pic = pic;
+//        this.pic = pic;
         attendees = new ArrayList<String>();
     }
 
@@ -88,13 +85,13 @@ public class ChapterEvent {
         this.time = time;
     }
 
-    public String getPic() {
-        return pic;
-    }
-
-    public void setPic(String pic) {
-        this.pic = pic;
-    }
+//    public String getPic() {
+//        return pic;
+//    }
+//
+//    public void setPic(String pic) {
+//        this.pic = pic;
+//    }
 
     public String getFacebookLink() {
         return facebookLink;

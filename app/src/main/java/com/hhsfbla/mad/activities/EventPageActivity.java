@@ -60,12 +60,12 @@ import java.util.List;
 
 public class EventPageActivity extends AppCompatActivity implements DeleteEventDialog.DeleteEventDialogListener, UserAdapter.OnItemClickListener {
 
-    private StorageReference storageReference;
+//    private StorageReference storageReference;
     private ShareDialog shareDialog;
     private CallbackManager callbackManager;
     private LoginManager manager;
     private TextView title, date, time, location, desc, link, memberCount;
-    private ImageView eventImage;
+//    private ImageView eventImage;
     private ChapterEvent mainEvent;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -88,7 +88,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         setTitle("Event Details");
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Deleting...");
-        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
+//        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
         title = findViewById(R.id.eventTitleDetail);
         date = findViewById(R.id.eventDateDetail);
         time = findViewById(R.id.eventTimeDetail);
@@ -107,7 +107,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         editButton = findViewById(R.id.editButton);
         back = findViewById(R.id.doneBtn4);
         deleteButton = findViewById(R.id.deleteEvent);
-        eventImage = findViewById(R.id.eventPicDetail);
+//        eventImage = findViewById(R.id.eventPicDetail);
         recyclerView = findViewById(R.id.attendeeRecylerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -153,11 +153,11 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                                 link.setText(mainEvent.getFacebookLink());
                                 link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click here for more information</a>"));
                                 link.setMovementMethod(LinkMovementMethod.getInstance());
-                                if(mainEvent.getPic() != null && mainEvent.getPic() != "") {
-                                    Log.d(TAG, mainEvent.getPic());
-                                    Picasso.get().load(Uri.parse(mainEvent.getPic())).fit().centerCrop().into(eventImage);
-                                } else
-                                    eventImage.setVisibility(View.GONE);
+//                                if(mainEvent.getPic() != null && mainEvent.getPic() != "") {
+//                                    Log.d(TAG, mainEvent.getPic());
+//                                    Picasso.get().load(Uri.parse(mainEvent.getPic())).fit().centerCrop().into(eventImage);
+//                                } else
+//                                    eventImage.setVisibility(View.GONE);
 
                                 db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                     @Override
@@ -296,7 +296,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                             ChapterEvent event = snap.toObject(ChapterEvent.class);
 
                             if(event.getName().equals(name)) {
-                                if(event.getPic() == null || event.getPic() == "") {
+//                                if(event.getPic() == null || event.getPic() == "") {
                                     Log.d(TAG, "event has no pic");
                                     db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
                                     Log.d(TAG, "deleting in db");
@@ -313,30 +313,30 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                                             startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
                                         }
                                     });
-                                    return;
-                                }
-                                StorageReference storageRef = storageReference.child(snap.getId());
-                                storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "deleted in storage");
-                                        db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
-                                        Log.d(TAG, "deleting in db");
-                                        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                                                    if(snap.toObject(User.class).getMyEvents().contains(snap.getId())) {
-                                                        Log.d(TAG, "hithere");
-                                                        db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
-                                                    }
-                                                }
-                                                progressDialog.dismiss();
-                                                startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
-                                            }
-                                        });
-                                    }
-                                });
+//                                    return;
+//                                }
+//                                StorageReference storageRef = storageReference.child(snap.getId());
+//                                storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                    @Override
+//                                    public void onSuccess(Void aVoid) {
+//                                        Log.d(TAG, "deleted in storage");
+//                                        db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
+//                                        Log.d(TAG, "deleting in db");
+//                                        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                                            @Override
+//                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                                                for(DocumentSnapshot snap : queryDocumentSnapshots) {
+//                                                    if(snap.toObject(User.class).getMyEvents().contains(snap.getId())) {
+//                                                        Log.d(TAG, "hithere");
+//                                                        db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
+//                                                    }
+//                                                }
+//                                                progressDialog.dismiss();
+//                                                startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
+//                                            }
+//                                        });
+//                                    }
+//                                });
                             }
                         }
                     }

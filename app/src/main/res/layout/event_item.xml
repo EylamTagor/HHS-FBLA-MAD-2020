@@ -36,17 +36,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/eventPic"
-                android:layout_width="match_parent"
-                android:layout_height="192dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/eventTitle"
-                app:srcCompat="@color/colorPrimaryDark" />
+<!--            <ImageView-->
+            <!--                android:id="@+id/eventPic"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="192dp"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="16dp"-->
+            <!--                android:layout_marginEnd="16dp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/eventTitle"-->
+            <!--                app:srcCompat="@color/colorPrimaryDark" />-->
 
             <ImageView
                 android:id="@+id/calendarIcon"
@@ -55,7 +55,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/eventPic"
+                app:layout_constraintTop_toBottomOf="@+id/eventTitle"
                 app:srcCompat="@drawable/calendar_icon" />
 
             <TextView
@@ -70,7 +70,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/calendarIcon"
-                app:layout_constraintTop_toBottomOf="@+id/eventPic" />
+                app:layout_constraintTop_toBottomOf="@+id/eventTitle" />
 
             <ImageView
                 android:id="@+id/clockIcon"
