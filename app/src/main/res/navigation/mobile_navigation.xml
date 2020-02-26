@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/nav_about_chapter"
         android:name="com.hhsfbla.mad.ui.aboutchapter.AboutChapterFragment"
-        android:label="About FBLA Chapter"
+        android:label="My Chapter"
         tools:layout="@layout/fragment_about_chapter" />
     <fragment
         android:id="@+id/nav_comps"
