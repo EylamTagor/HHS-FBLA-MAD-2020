@@ -29,6 +29,9 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * Adapter for RecyclerViews that display a list of all existing users (and ranks) in a chapter
+ */
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> implements Filterable {
 
     private FirebaseFirestore db;
@@ -38,6 +41,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
     private static final String TAG = "User Adapter";
     private UserAdapter.OnItemClickListener listener;
 
+    /**
+     * Creates a new EventAdapter object with the following parameters
+     *
+     * @param context the Activity, Fragment, etc. hosting the RecyclerView that uses this adapter
+     * @param users a list of all existing users (each of which is an item in this adapter)
+     */
     public UserAdapter(List<User> users, Context context) {
         this.users = users;
         allItems = new ArrayList<>(users);
@@ -47,12 +56,24 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
 
     @NonNull
     @Override
+    /**
+     * Creates and inflates a new item ViewHolder to be included in the corresponding RecyclerView
+     *
+     * @param parent the parent ViewGroup of the ViewHolder
+     * @param viewType the type of view, represented by numeric coding
+     * @return the ViewHolder object to be used in initializing the RecyclerView
+     */
     public UserAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item, parent, false);
         return new UserAdapter.ViewHolder(view);
     }
 
-
+    /**
+     * Sets the appropriate parameters for each item according to its placement in the item list
+     *
+     * @param holder the ViewHolder to contain all of the items
+     * @param position the position of the corresponding item in the list (to order the item in the RecyclerView)
+     */
     @Override
     public void onBindViewHolder(final @NonNull UserAdapter.ViewHolder holder, final int position) {
         final User user = users.get(position);
@@ -65,11 +86,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
         }
     }
 
+    /**
+     * @return the amount of items in the item list
+     */
     @Override
     public int getItemCount() {
         return users.size();
     }
 
+    /**
+     * Updates the list of users using a new list
+     *
+     * @param users new list to replace the old list
+     */
     public void setUsers(List<User> users) {
         this.users = users;
         allItems.clear();
@@ -77,9 +106,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
 
     }
 
+    /**
+     * @return the Filter object used to search for specific users in a chapter
+     */
     @Override
     public Filter getFilter() {
-        Log.d(TAG, "hello");
         return userFilter;
     }
 
@@ -115,12 +146,31 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
         }
     };
 
+    /**
+     * Represents the container of all items to be included in the RecyclerView that utilizes UserAdapter
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        /**
+         * the name and rank of the user, to be displayed
+         */
         public TextView name, rank;
+
+        /**
+         * the profile picture of the user, to be displayed
+         */
         public CircleImageView pic;
+
+        /**
+         * the parent layout of the RecyclerView that utilizes UserAdapter
+         */
         public ConstraintLayout constraintLayout;
 
+        /**
+         * Creates a new ViewHolder object with the following parameters
+         *
+         * @param itemView the item that will be contained in this object
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -148,10 +198,25 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
         }
     }
 
+    /**
+     * Used to specify action after clicking on the RecyclerView that utilizes this adapter
+     */
     public interface OnItemClickListener {
+        /**
+         * Specifies the action after clicking on the RecyclerView that utilizes this adapter
+         *
+         * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+         * @param position the numbered position of snapshot in the full item list
+         * @param v the View that will contain the click action
+         */
         void onItemClick(DocumentSnapshot snapshot, View v, int position);
     }
 
+    /**
+     * Determines the object to listen to and manage clicking actions on the RecyclerView that utilizes this adapter
+     *
+     * @param listener the object to listen to and manage clicking actions on the RecyclerView that utilizes this adapter
+     */
     public void setOnItemClickListener(UserAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }

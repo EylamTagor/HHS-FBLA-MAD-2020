@@ -28,6 +28,9 @@ import com.hhsfbla.mad.data.Chapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter for RecyclerViews that display a list of all existing Chapters (names and locations) for users to join
+ */
 public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder> implements Filterable {
 
     private Context context;
@@ -39,6 +42,12 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     private FirebaseUser fuser;
     private ChapterAdapter.OnItemClickListener listener;
 
+    /**
+     * Creates a new ChapterAdapter object with the following parameters
+     *
+     * @param context the Activity, Fragment, etc. hosting the RecyclerView that uses this adapter
+     * @param chapterList a list of all existing chapters for users to pick from and join (each of which is an item in this adapter)
+     */
     public ChapterAdapter(Context context, final List<Chapter> chapterList) {
         this.context = context;
         this.chapterList = chapterList;
@@ -49,6 +58,13 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         storageReference = FirebaseStorage.getInstance().getReference("images").child("pfps");
     }
 
+    /**
+     * Creates and inflates a new Chapter item ChapterViewHolder to be included in the corresponding RecyclerView
+     *
+     * @param parent the parent ViewGroup of the ChapterViewHolder
+     * @param viewType the type of view, represented by numeric coding
+     * @return the ChapterViewHolder object to be used in initializing the RecyclerView
+     */
     @NonNull
     @Override
     public ChapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -56,6 +72,12 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         return new ChapterAdapter.ChapterViewHolder(view);
     }
 
+    /**
+     * Sets the appropriate parameters for each chapter item according to its placement in the chapter list
+     *
+     * @param holder the ChapterViewHolder to contain all of the chapter items
+     * @param position the position of the corresponding chapter item in the chapter list (to order the chapter item in the RecyclerView)
+     */
     @Override
     public void onBindViewHolder(@NonNull final ChapterViewHolder holder, final int position) {
         Chapter chapter = chapterList.get(position);
@@ -68,18 +90,28 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
 
     }
 
+    /**
+     * @return the amount of items in the list of chapters
+     */
     @Override
     public int getItemCount() {
         return chapterList.size();
     }
 
-
+    /**
+     * Updates the list of chapters using a new list
+     *
+     * @param chapters new list to replace the old chapter list
+     */
     public void setChapterList(List<Chapter> chapters) {
         chapterList = chapters;
         fullList.clear();
         fullList.addAll(chapters);
     }
 
+    /**
+     * @return the Filter object, used to search for a specific chapter in the full list of existing chapters
+     */
     @Override
     public Filter getFilter() {
         return chapterFilter;
@@ -115,10 +147,26 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         }
     };
 
+    /**
+     * Represents the container of all chapter items to be included in the RecyclerView that utilizes ChapterAdapter
+     */
     class ChapterViewHolder extends RecyclerView.ViewHolder {
+
+        /**
+         * the name and location of the chapter, to be displayed
+         */
         public TextView name, location;
+
+        /**
+         * the parent layout of the RecyclerView that utilizes ChapterAdapter
+         */
         public ConstraintLayout constraintLayout;
 
+        /**
+         * Creates a new ChapterViewHolder object with the following parameters
+         *
+         * @param itemView the chapter item that will be contained in this object
+         */
         public ChapterViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -146,10 +194,24 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
         }
     }
 
+    /**
+     * Used to specify action after clicking on the RecyclerView that utilizes this adapter
+     */
     public interface OnItemClickListener {
+        /**
+         * Specifies the action after clicking on the RecyclerView that utilizes this adapter
+         *
+         * @param snapshot the chapter object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+         * @param position the numbered position of snapshot in the full chapter list
+         */
         void onItemClick(DocumentSnapshot snapshot, int position);
     }
 
+    /**
+     * Determines the object to listen to and manage clicking actions on the RecyclerView that utilizes this adapter
+     *
+     * @param listener the object to listen to and manage clicking actions on the RecyclerView that utilizes this adapter
+     */
     public void setOnItemCLickListener(ChapterAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
