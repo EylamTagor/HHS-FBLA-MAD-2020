@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    if(document.getId().equals(mAuth.getCurrentUser().getUid()) && document.get("chapter") != null) {
+                    if(document.getId().equals(mAuth.getCurrentUser().getUid()) && !document.get("chapter").equals("")) {
                         progressDialog.dismiss();
                         updateUI();
                         return;

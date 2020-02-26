@@ -210,6 +210,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                 @Override
                 public void onSuccess(final DocumentSnapshot documentSnapshot) {
                     final String chapter = documentSnapshot.get("chapter").toString();
+                    db.collection("users").document(user.getUid()).update("chapter", "");
                     db.collection("users").document(user.getUid()).update("userType", UserType.MEMBER);
                     db.collection("chapters").document(chapter).update("users", FieldValue.arrayRemove(user.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

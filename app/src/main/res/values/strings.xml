@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My FBLA Chapter</string>
+    <string name="app_name">MyFBLA</string>
     <string name="facebook_app_id">824878607959677</string>
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
