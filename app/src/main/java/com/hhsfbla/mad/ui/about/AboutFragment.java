@@ -16,7 +16,6 @@ import com.hhsfbla.mad.R;
 
 public class AboutFragment extends Fragment {
 
-    private AboutViewModel mViewModel;
 
     public static AboutFragment newInstance() {
         return new AboutFragment();
@@ -32,8 +31,6 @@ public class AboutFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(AboutViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

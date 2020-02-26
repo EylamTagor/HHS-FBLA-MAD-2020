@@ -41,7 +41,6 @@ import java.util.List;
 
 public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemClickListener{
 
-    private OfficerViewModel mViewModel;
     private RecyclerView officerRecyclerView;
     private OfficerAdapter adapter;
     private List<User> officers;
@@ -115,7 +114,6 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(OfficerViewModel.class);
         // TODO: Use the ViewModel
     }
 
