@@ -39,6 +39,7 @@ public class ContactFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_contact, container, false);
+        getActivity().setTitle("Contact Us");
 
         fblaLink = root.findViewById(R.id.fblaWebLinkTxtView);
         fblaLink.setText(Html.fromHtml("<a href='https://www.fbla-pbl.org'>FBLA Website</androidx.constraintlayout.widget.ConstraintLayout</a>"));

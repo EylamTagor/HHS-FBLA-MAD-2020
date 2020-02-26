@@ -49,6 +49,7 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
+        getActivity().setTitle("Home");
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();

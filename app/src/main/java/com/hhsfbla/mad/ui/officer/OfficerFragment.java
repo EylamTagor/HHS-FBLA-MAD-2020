@@ -59,6 +59,7 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_officer, container, false);
+        getActivity().setTitle("Officers");
         searchView = root.findViewById(R.id.officerSearch);
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();

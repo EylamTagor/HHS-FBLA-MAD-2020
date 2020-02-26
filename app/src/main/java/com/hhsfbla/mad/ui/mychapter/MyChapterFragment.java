@@ -1,4 +1,4 @@
-package com.hhsfbla.mad.ui.aboutchapter;
+package com.hhsfbla.mad.ui.mychapter;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -38,17 +38,16 @@ import com.hhsfbla.mad.adapters.UserAdapter;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AboutChapterFragment extends Fragment implements UserAdapter.OnItemClickListener{
+public class MyChapterFragment extends Fragment implements UserAdapter.OnItemClickListener{
 
-    private AboutChapterViewModel mViewModel;
+    private MyChapterViewModel mViewModel;
 
-    public static AboutChapterFragment newInstance() {
-        return new AboutChapterFragment();
+    public static MyChapterFragment newInstance() {
+        return new MyChapterFragment();
     }
 
     private TextView noUsersYet, aboutChap, locaChap;
@@ -67,7 +66,8 @@ public class AboutChapterFragment extends Fragment implements UserAdapter.OnItem
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_about_chapter, container, false);
+        View root = inflater.inflate(R.layout.fragment_my_chapter, container, false);
+        getActivity().setTitle("My Chapter");
         progressDialog = new ProgressDialog(getContext());
         searchView = root.findViewById(R.id.userSearch);
         db = FirebaseFirestore.getInstance();
@@ -198,7 +198,7 @@ public class AboutChapterFragment extends Fragment implements UserAdapter.OnItem
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(AboutChapterViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(MyChapterViewModel.class);
         // TODO: Use the ViewModel
     }
 

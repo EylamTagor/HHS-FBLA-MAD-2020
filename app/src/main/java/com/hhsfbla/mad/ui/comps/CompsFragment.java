@@ -50,6 +50,7 @@ public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickL
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_comps, container, false);
+        getActivity().setTitle("Competitions");
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();

@@ -52,6 +52,7 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
                              Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_my_events, container, false);
+        getActivity().setTitle("My Events");
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
