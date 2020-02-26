@@ -34,7 +34,6 @@ import java.util.List;
 
 public class HomeFragment extends Fragment implements EventAdapter.OnItemClickListener{
 
-    private HomeViewModel homeViewModel;
     private TextView noEventsYet;
     private FloatingActionButton fab;
     private RecyclerView eventRecyclerView;

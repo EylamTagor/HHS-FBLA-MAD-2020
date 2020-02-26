@@ -24,7 +24,6 @@ import com.hhsfbla.mad.R;
 
 public class ContactFragment extends Fragment {
 
-    private ContactViewModel mViewModel;
     TextView fblaLink, formLink;
     ImageButton facebook, insta, twitter, linkedin;
 
@@ -91,8 +90,6 @@ public class ContactFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ContactViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }
