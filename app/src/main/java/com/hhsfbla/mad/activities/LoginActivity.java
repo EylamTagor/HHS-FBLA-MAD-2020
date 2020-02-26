@@ -70,25 +70,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCallbackManager = CallbackManager.Factory.create();
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    getPackageName(),
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest messageDigest = MessageDigest.getInstance("SHA");
-                messageDigest.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT));
-            }
-        }
-        catch (PackageManager.NameNotFoundException e) {
-
-        }
-        catch (NoSuchAlgorithmException e) {
-
-        }
         setContentView(R.layout.activity_login);
-
+//        mCallbackManager = CallbackManager.Factory.create();
         if (fuser != null)
             addUser();
 
@@ -109,27 +92,28 @@ public class LoginActivity extends AppCompatActivity {
         });
         setGooglePlusButtonProperties();
 
-        loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
+//        loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
+//
+//        loginFacebookBtn.setReadPermissions(Arrays.asList("email", "public_profile"));
+//        loginFacebookBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//                progressDialog.setMessage("Loading...");
+//                progressDialog.show();
+//                handleFacebookAccessToken(loginResult.getAccessToken());
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//
+//            }
+//
+//            @Override
+//            public void onError(FacebookException error) {
+//                Toast.makeText(LoginActivity.this, "Facebook Login Failed", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
-        loginFacebookBtn.setReadPermissions(Arrays.asList("email", "public_profile"));
-        loginFacebookBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                progressDialog.setMessage("Loading...");
-                progressDialog.show();
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Toast.makeText(LoginActivity.this, "Facebook Login Failed", Toast.LENGTH_SHORT).show();
-            }
-        });
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
         mAuth = FirebaseAuth.getInstance();
