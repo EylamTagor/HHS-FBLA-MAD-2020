@@ -14,8 +14,12 @@ import com.hhsfbla.mad.dialogs.DatePicker;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
@@ -48,11 +52,16 @@ import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 
 public class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private static final int RESULT_LOAD_IMAGE = 1;
     private Uri imageUri;
+    private Bitmap bitmap;
     private StorageTask uploadTask;
     private ImageButton backBtn2, doneBtn, imageBtn;
     private TextInputEditText nameEditTxt;
@@ -67,6 +76,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     private StorageReference storageReference;
     private ProgressDialog progressDialog;
     private Button setDate, setTime;
+    private byte[] uploadBytes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,18 +197,25 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
             imageUri = data.getData();
-            Picasso.get().load(imageUri).into(imageBtn);
+            bitmap = loadImage(imageUri);
+            imageBtn.setImageBitmap(bitmap);
+//            Picasso.get().load(imageUri).into(imageBtn);
         }
     }
 
     private void uploadFile(final String id) {
-        if(imageUri != null) {
+        if(imageUri != null && bitmap != null) {
             Log.d(TAG, imageUri.toString());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
             final StorageReference fileRef = storageReference.child(id);
-            uploadTask = fileRef.putFile(imageUri)
+            uploadTask = fileRef.putBytes(data)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -244,4 +261,90 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         String minute = i1 < 10 ? "0" + i1 : i1 + "";
         timeEditTxt.setText(hour + ":" + minute);
     }
+
+    public Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.setRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+
+    public Bitmap decodeUriToBitmap(Uri sendUri) {
+        Bitmap getBitmap = null;
+        try {
+            InputStream image_stream;
+            try {
+                image_stream = getContentResolver().openInputStream(sendUri);
+                getBitmap = BitmapFactory.decodeStream(image_stream);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return getBitmap;
+    }
+
+    private Bitmap loadImage(Uri imageUri) {
+        Log.d(TAG, "helllllllllo");
+        Log.d(TAG, imageUri.toString());
+        Bitmap bitmap = decodeUriToBitmap(imageUri);
+        InputStream imageStream = null;
+        try {
+            try {
+                imageStream = getContentResolver().openInputStream(imageUri);
+                bitmap = BitmapFactory.decodeStream(imageStream);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        ExifInterface ei = null;
+//        try {
+//            if(imageStream == null) {
+//                Log.d(TAG, "errrorr");
+//            } else {
+//                ei = new ExifInterface(imageStream);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+//                ExifInterface.ORIENTATION_UNDEFINED);
+//        Bitmap rotatedBitmap = null;
+//        switch(orientation) {
+//
+//            case ExifInterface.ORIENTATION_ROTATE_90:
+//                Log.d(TAG, "helllllllllo");
+//
+//                rotatedBitmap = rotateImage(bitmap, 90);
+//                break;
+//
+//            case ExifInterface.ORIENTATION_ROTATE_180:
+//                Log.d(TAG, "helllllllllo");
+//
+//                rotatedBitmap = rotateImage(bitmap, 180);
+//                break;
+//
+//            case ExifInterface.ORIENTATION_ROTATE_270:
+//                Log.d(TAG, "helllllllllo");
+//
+//                rotatedBitmap = rotateImage(bitmap, 270);
+//                break;
+//
+//            case ExifInterface.ORIENTATION_NORMAL:
+//                rotatedBitmap = bitmap;
+//            default:
+//                rotatedBitmap = bitmap;
+//        }
+        Log.d(TAG, bitmap.getWidth() + "");
+        Log.d(TAG, bitmap.getHeight() + "");
+        if(bitmap.getWidth() > bitmap.getHeight()) {
+            return bitmap;
+        } else {
+            return rotateImage(bitmap, 270);
+        }
+    }
+
 }

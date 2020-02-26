@@ -10,12 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/noSignups"
-            android:layout_width="match_parent"
-            android:layout_height="128dp"
-            android:text="You haven't signed up for any events yet"
-            tools:visibility="invisible" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myEvents"
@@ -24,6 +19,12 @@
             android:layout_marginTop="0dp">
 
         </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:id="@+id/noSignups"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You haven't signed up for any events yet"
+            tools:visibility="invisible" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -168,6 +168,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                                             }
                                         }
                                         adapter.setUsers(users);
+                                        memberCount.setText(users.size() + "");
                                         adapter.notifyDataSetChanged();
                                     }
                                 });

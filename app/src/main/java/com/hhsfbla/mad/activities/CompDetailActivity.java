@@ -137,6 +137,10 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
                 } else {
                     joinButton.setVisibility(View.VISIBLE);
                 }
+                if(documentSnapshot.toObject(User.class).getUserType().equals(UserType.ADVISOR)) {
+                    unJoinButton.setVisibility(View.GONE);
+                    joinButton.setVisibility(View.GONE);
+                }
                 final String chap = documentSnapshot.get("chapter").toString();
                 db.collection("users").whereEqualTo("chapter", chap).whereArrayContains("comps", compName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override

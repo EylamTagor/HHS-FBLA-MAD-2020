@@ -80,7 +80,13 @@ public class SetupActivity extends AppCompatActivity {
                                 example.setWebsite(website.getText().toString().trim());
                                 example.setDescription(chapDesc.getText().toString().trim());
                                 example.addMember(user.getUid());
-                                ref.set(example);
+                                ref.set(example).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        progressDialog.dismiss();
+                                        startActivity(new Intent(SetupActivity.this, HomeActivity.class));
+                                    }
+                                });
                             }
                         });
                     }
