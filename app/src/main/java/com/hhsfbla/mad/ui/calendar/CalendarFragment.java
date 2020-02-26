@@ -15,16 +15,23 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.DateEventsActivity;
 
+/**
+ * Represents a fragment consisting of a CalendarView with an option to pick specific dates to view events
+ */
 public class CalendarFragment extends Fragment {
 
     private FirebaseFirestore db;
 
     private CalendarView calendar;
 
-    public static CalendarFragment newInstance() {
-        return new CalendarFragment();
-    }
-
+    /**
+     * Creates and inflates a new CalendarFragment with the following parameters
+     *
+     * @param inflater to inflate the fragment
+     * @param container ViewGroup into which the fragment is inflated
+     * @param savedInstanceState used to save activity regarding this fragment
+     * @return the inflated fragment
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {

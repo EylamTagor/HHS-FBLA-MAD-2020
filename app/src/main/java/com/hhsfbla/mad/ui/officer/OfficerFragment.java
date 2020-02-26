@@ -1,27 +1,17 @@
 package com.hhsfbla.mad.ui.officer;
 
-import androidx.lifecycle.ViewModelProviders;
-
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,14 +21,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.adapters.OfficerAdapter;
-import com.hhsfbla.mad.adapters.UserAdapter;
-import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a fragment that consists of a list of all of the user's chapter's officers with details
+ */
 public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemClickListener{
 
     private RecyclerView officerRecyclerView;
@@ -50,10 +41,14 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
     private TextView noOfficersYet;
     private static final String TAG = "OFFICERPAGE";
 
-    public static OfficerFragment newInstance() {
-        return new OfficerFragment();
-    }
-
+    /**
+     * Creates and inflates a new AboutFragment with the following parameters
+     *
+     * @param inflater to inflate the fragment
+     * @param container ViewGroup into which the fragment is inflated
+     * @param savedInstanceState used to save activity regarding this fragment
+     * @return the inflated fragment
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -75,6 +70,11 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
         return root;
     }
 
+    /**
+     * Initializes the fragment's RecyclerView of officers by pulling officer data from Firebase Firestore
+     *
+     * @param type the rank of users wanted to be in the RecyclerView (i.e. officers only)
+     */
     public void initRecyclerView(final UserType type) {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -111,13 +111,26 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
         });
 
     }
+
+    /**
+     * Handles actions upon successful creation of the parent activity
+     *
+     * @param savedInstanceState used to save activity regarding this fragment
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
 
+    /**
+     * Handles any clicking action done inside this fragment
+     *
+     * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param v the view to host the click action
+     * @param position the numbered position of snapshot in the full item list
+     */
     @Override
     public void onItemClick(DocumentSnapshot snapshot, View v, int position) {
-
+        // nothing (yet?)
     }
 }

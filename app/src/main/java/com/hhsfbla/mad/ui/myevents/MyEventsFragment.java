@@ -31,6 +31,9 @@ import java.util.List;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
+/**
+ * Represents a fragment that includes all of the events a user is signed up for, in a RecyclerView
+ */
 public class MyEventsFragment extends Fragment implements EventAdapter.OnItemClickListener {
 
     private TextView noEventsYet;
@@ -43,10 +46,14 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
     private FirebaseUser user;
     private static final String TAG = "MYEVENTS";
 
-    public static MyEventsFragment newInstance() {
-        return new MyEventsFragment();
-    }
-
+    /**
+     * Creates and inflates a new MyEventsFragment with the following parameters
+     *
+     * @param inflater to inflate the fragment
+     * @param container ViewGroup into which the fragment is inflated
+     * @param savedInstanceState used to save activity regarding this fragment
+     * @return the inflated fragment
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,10 +101,22 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
         return root;
     }
 
+    /**
+     * Handles any action upon successful creation of the host activity
+     *
+     * @param savedInstanceState used to save activity regarding this fragment
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
+
+    /**
+     * Handles any clicking action done inside this fragment
+     *
+     * @param name the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param position the numbered position of snapshot in the full item list
+     */
     @Override
     public void onItemClick(String name, int position) {
         Intent intent = new Intent(getContext(), EventPageActivity.class);
