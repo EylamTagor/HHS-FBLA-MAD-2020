@@ -249,6 +249,9 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                                                 startActivity(intent);
                                             }
                                         });
+                                        if(documentSnapshot.toObject(Chapter.class).getUsers().size() == 1) {
+                                            db.collection("users").document(documentSnapshot.toObject(Chapter.class).getUsers().get(0)).update("userType", UserType.ADVISOR);
+                                        }
                                     }
                                 }
                             });

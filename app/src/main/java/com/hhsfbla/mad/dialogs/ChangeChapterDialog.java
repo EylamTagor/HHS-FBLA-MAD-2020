@@ -14,7 +14,11 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.hhsfbla.mad.R;
 
+/**
+ *
+ */
 public class ChangeChapterDialog extends AppCompatDialogFragment {
+
     private ChangeChapterDialog.ChangeChapterDialogListener listener;
 
     @NonNull
