@@ -36,6 +36,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.activities.EditChapterActivity;
 import com.hhsfbla.mad.adapters.UserAdapter;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
@@ -90,11 +91,11 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
         chapLink = root.findViewById(R.id.chapWebLink);
         facebook = root.findViewById(R.id.facebookBtn);
         insta = root.findViewById(R.id.instaBtn);
-        editChapter.findViewById(R.id.editChapter);
+        editChapter = root.findViewById(R.id.editChapter);
         editChapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // arnav do ur thing
+                getContext().startActivity(new Intent(getContext(), EditChapterActivity.class));
             }
         });
         initRecyclerView();
@@ -103,8 +104,10 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currentUSer = documentSnapshot.toObject(User.class);
-                if(currentUSer.getUserType() == UserType.ADVISOR)
+                if(currentUSer.getUserType() == UserType.ADVISOR) {
                     isAdvisor = true;
+                    editChapter.setVisibility(View.VISIBLE);
+                }
                 db.collection("chapters").document(currentUSer.getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -124,7 +127,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
                             facebook.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chapter.getFacebookPage())));
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + chapter.getFacebookPage())));
                                 }
                             });
                         } else {
@@ -140,7 +143,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
                             insta.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chapter.getInstagramTag())));
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/" + chapter.getInstagramTag())));
                                 }
                             });
                         } else {

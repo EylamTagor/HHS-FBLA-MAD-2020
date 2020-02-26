@@ -76,8 +76,8 @@ public class SetupActivity extends AppCompatActivity {
                                 }
                                 db.collection("users").document(user.getUid()).update("userType", UserType.ADVISOR);
                                 Chapter example = new Chapter(chapName.getText().toString(), location.getText().toString());
-                                example.setInstagramTag("https://www.instagram.com/" + insta.getText().toString().trim());
-                                example.setFacebookPage("https://www.facebook.com/" + facebookPage.getText().toString().trim());
+                                example.setInstagramTag(insta.getText().toString().trim());
+                                example.setFacebookPage(facebookPage.getText().toString().trim());
                                 example.setWebsite(website.getText().toString().trim());
                                 example.setDescription(chapDesc.getText().toString().trim());
                                 example.addMember(user.getUid());

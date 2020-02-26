@@ -142,7 +142,8 @@
                 android:layout_margin="16dp"
                 android:background="@drawable/button_border"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:text="Edit Chapter" />
+                android:text="Edit Chapter"
+                android:visibility="gone"/>
 
         </LinearLayout>
     </ScrollView>
