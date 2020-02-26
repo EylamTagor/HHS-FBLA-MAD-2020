@@ -52,7 +52,7 @@
                     android:id="@+id/chapterWebsite"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Chapter Website"
+                    android:hint="Chapter Website Link"
                     android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,7 +70,7 @@
                     android:id="@+id/chapterDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Chapter Description"
+                    android:hint="Chapter Description (about a paragraph)"
                     android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
