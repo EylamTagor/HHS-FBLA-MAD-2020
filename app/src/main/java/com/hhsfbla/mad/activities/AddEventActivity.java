@@ -46,7 +46,11 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Calendar;
 
+/**
+ * Represents a page where officers and advisors can create chapter events
+ */
 public class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+
     private static final int RESULT_LOAD_IMAGE = 1;
     private Uri imageUri;
     private Bitmap bitmap;
@@ -66,6 +70,11 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     private Button setDate, setTime;
     private byte[] uploadBytes;
 
+    /**
+     * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
+     * with data from the database
+     * @param savedInstanceState the save state of the activity or page
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,8 +162,13 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         });
     }
 
+    /**
+     * Creates a new chapter event in the database using the textfields on this page and selected image
+     *
+     * @param uri the uri of the event image
+     * @param id the id of the event in the database
+     */
     public void addEvent(Uri uri, final String id) {
-//        Bitmap bitmap = ((BitmapDrawable) imageBtn.getDrawable()).getBitmap();
         final ChapterEvent event = new ChapterEvent(
                 nameEditTxt.getText().toString().trim(),
                 dateEditTxt.getText().toString().trim(),
@@ -181,6 +195,13 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
 
     }
 
+    /**
+     * This method gets called after an action to get data from the user
+     *
+     * @param requestCode the request code of the request
+     * @param resultCode a code representing the state of the result of the action
+     * @param data the data gained from the activity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -193,6 +214,10 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
 //        }
     }
 
+    /**
+     * Uploads the event image to cloud storage with the file name as id
+     * @param id the name of the file
+     */
     private void uploadFile(final String id) {
 //        if(imageUri != null && bitmap != null) {
 //            Log.d(TAG, imageUri.toString());
@@ -229,6 +254,13 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
 //        }
     }
 
+    /**
+     * Sets the date textfield to the newly selected data in the format mm/dd/yyyy
+     * @param datePicker the dialog that chooses the date
+     * @param i the newly selected year
+     * @param i1 the newly selected month
+     * @param i2 the newly selected day
+     */
     @Override
     public void onDateSet(android.widget.DatePicker datePicker, int i, int i1, int i2) {
         String month = (i1 + 1) < 10 ? "0" + (i1 + 1) : (i1  +1) + "";
@@ -237,6 +269,12 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         dateEditTxt.setText(month + "/" + day + "/" + i);
     }
 
+    /**
+     * Sets the time textfield to the newly selected time in the format hh:mm, military time
+     * @param timePicker the dialog that chooses the time
+     * @param i the newly selected hour
+     * @param i1 the newly selected minute
+     */
     @Override
     public void onTimeSet(android.widget.TimePicker timePicker, int i, int i1) {
         String hour = i < 10 ? "0" + i : i + "";

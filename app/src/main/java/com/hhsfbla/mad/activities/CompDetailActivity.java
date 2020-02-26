@@ -25,6 +25,9 @@ import com.hhsfbla.mad.data.UserType;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a page where officers and advisors can create chapter events
+ */
 public class CompDetailActivity extends AppCompatActivity implements UserAdapter.OnItemClickListener{
 
     private FirebaseFirestore db;
@@ -38,6 +41,11 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
     private UserAdapter adapter;
     private static final String TAG = "COMPDETAIL";
 
+    /**
+     * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
+     * with data of the existing competition from the database
+     * @param savedInstanceState the save state of the activity or page
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +120,10 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
 
     }
 
+    /**
+     * Initializes the recycler view, or the list of competitors competing in this competition
+     * @param compName the name of the competition
+     */
     public void initRecyclerView(final String compName) {
         db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -144,6 +156,12 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
         });
     }
 
+    /**
+     * Describes what to do when an item of the recycler view is clicked
+     * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param v the View that will contain the click action
+     * @param position the numbered position of snapshot in the full item list
+     */
     @Override
     public void onItemClick(DocumentSnapshot snapshot, View v, int position) {
 

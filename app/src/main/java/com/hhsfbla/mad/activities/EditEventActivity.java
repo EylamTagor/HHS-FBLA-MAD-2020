@@ -41,6 +41,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+/**
+ * Represents a page where members and officers can join competitions,
+ * and general competition details can be viewed, along with the competitors from the user's chapter
+ */
 public class EditEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private static final int RESULT_LOAD_IMAGE = 1;
 //    private StorageTask uploadTask;
@@ -60,6 +64,11 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     private ProgressDialog progressDialog;
     private boolean hasImageChanged;
 
+    /**
+     * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
+     * with data of the existing event from the database
+     * @param savedInstanceState the save state of the activity or page
+     */
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +123,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 
                         }
                     });
-//                }
+//               }
             }
         });
 
@@ -174,6 +183,11 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         });
     }
 
+    /**
+     * Updates the chapter event in the database using the textfields on this page and selected image
+     *
+     * @param uri the new uri of the event image
+     */
     public void editEvent(final Uri uri) {
 
         progressDialog.setMessage("Saving...");
@@ -210,6 +224,13 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         });
     }
 
+    /**
+     * This method gets called after an action to get data from the user
+     * Sets image to newly selected image
+     * @param requestCode the request code of the request
+     * @param resultCode a code representing the state of the result of the action
+     * @param data the data gained from the activity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -220,6 +241,10 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 //        }
     }
 
+    /**
+     * Uploads the event image to cloud storage with the file name as id
+     * @param id the name of the file
+     */
     private void uploadFile(String id) {
 //        if(imageUri != null && hasImageChanged) {
 //            progressDialog.setMessage("Uploading...");
@@ -256,6 +281,13 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 //        }
     }
 
+    /**
+     * Sets the date textfield to the newly selected data in the format mm/dd/yyyy
+     * @param datePicker the dialog that chooses the date
+     * @param i the newly selected year
+     * @param i1 the newly selected month
+     * @param i2 the newly selected day
+     */
     @Override
     public void onDateSet(android.widget.DatePicker datePicker, int i, int i1, int i2) {
         String month = (i1 + 1) < 10 ? "0" + (i1 + 1) : (i1  +1) + "";
@@ -264,6 +296,12 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         dateEditTxt.setText(month + "/" + day + "/" + i);
     }
 
+    /**
+     * Sets the time textfield to the newly selected time in the format hh:mm, military time
+     * @param timePicker the dialog that chooses the time
+     * @param i the newly selected hour
+     * @param i1 the newly selected minute
+     */
     @Override
     public void onTimeSet(android.widget.TimePicker timePicker, int i, int i1) {
         String hour = i < 10 ? "0" + i : i + "";

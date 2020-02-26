@@ -101,6 +101,8 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
                 User currentUSer = documentSnapshot.toObject(User.class);
                 if (currentUSer.getUserType() == UserType.ADVISOR) {
                     isAdvisor = true;
+                }
+                if(currentUSer.getUserType() != UserType.MEMBER) {
                     editChapter.setVisibility(View.VISIBLE);
                 }
                 db.collection("chapters").document(currentUSer.getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

@@ -22,6 +22,9 @@ import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 
+/**
+ * Represents a page where advisors can create new chapters for their schools if one hasn't been created yet
+ */
 public class SetupActivity extends AppCompatActivity {
 
     private TextInputEditText chapName, chapDesc, facebookPage, insta, location, website;
@@ -31,6 +34,11 @@ public class SetupActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private static final String TAG = "Setup Activity";
 
+    /**
+     * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
+     *
+     * @param savedInstanceState the save state of the activity or page
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +102,11 @@ public class SetupActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Checks if the chapter that the user is creating is similar to one that already exists
+     * @param queryDocumentSnapshots a list of the chapters from the database
+     * @return whether the chapter exists or not
+     */
     private boolean doesChapterExist(QuerySnapshot queryDocumentSnapshots) {
         Chapter example = new Chapter(chapName.getText().toString(), location.getText().toString());
         example.setInstagramTag(insta.getText().toString().trim());

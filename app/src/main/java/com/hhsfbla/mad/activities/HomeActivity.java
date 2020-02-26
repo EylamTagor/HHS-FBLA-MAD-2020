@@ -26,6 +26,9 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * Represents the page that users see as soon as they log in, has a list of chapter events
+ */
 public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -38,6 +41,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "DASHBOARD";
 
+    /**
+     * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
+     * with data of the existing event from the database
+     * @param savedInstanceState the save state of the activity or page
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,12 +104,10 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
-
+    /**
+     * Sets up navigation characteristics
+     * @return whether navigation was successful
+     */
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

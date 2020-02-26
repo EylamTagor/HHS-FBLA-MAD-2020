@@ -39,6 +39,9 @@ import com.hhsfbla.mad.R;
 
 import java.util.Arrays;
 
+/**
+ * Represents the first page users see when they open the app; authenticates users with google and facebook sign in methods
+ */
 public class LoginActivity extends AppCompatActivity {
     private SignInButton loginGoogleBtn;
     private LoginButton loginFacebookBtn;
@@ -53,6 +56,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final int GOOGLE_SIGN_IN = 123;
 
+    /**
+     * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
+     *
+     * @param savedInstanceState the save state of the activity or page
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +134,14 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.show();
     }
 
+    /**
+     * This method gets called after an action to get data from the user
+     * Receives callback from sign in method and acts accordingly (tries to sign in with google or facebook)
+     *
+     * @param requestCode the request code of the request
+     * @param resultCode a code representing the state of the result of the action
+     * @param data the data gained from the activity
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -146,6 +162,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Checks if the user has a chapter and is entered in the databse
+     * If they are, sends them to home page
+     * if not, sneds them to choose chapter
+     */
     private void addUser() {
         //Checks if fuser already exists
         db.collection("users")
@@ -165,6 +186,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Handles facebook login
+     *
+     * @param token the token used to get credentials for login
+     */
     private void handleFacebookAccessToken(AccessToken token) {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -183,6 +209,9 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Sends user to homepage
+     */
     private void updateUI() {
         fuser = mAuth.getCurrentUser();
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
@@ -190,6 +219,9 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Sends user to chapter signup page
+     */
     private void sendtoSignup() {
         fuser = mAuth.getCurrentUser();
         Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
@@ -197,6 +229,10 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Runs when the activity starts
+     * adds listener for authentication state
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -204,6 +240,10 @@ public class LoginActivity extends AppCompatActivity {
         fuser = mAuth.getCurrentUser();
     }
 
+    /**
+     * Called when the activity stops
+     * stops listening for authentication changes
+     */
     @Override
     public void onStop() {
         super.onStop();
@@ -211,7 +251,10 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(authListener);
         }
     }
-    
+
+    /**
+     * Sets cosmetics of google sign in button
+     */
     public void setGooglePlusButtonProperties() {
         for (int i = 0; i < loginGoogleBtn.getChildCount(); i++) {
             View v = loginGoogleBtn.getChildAt(i);
@@ -224,6 +267,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Authenticates in firebase with google account
+     *
+     * @param acct the google account that was used to sign in
+     */
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);

@@ -35,6 +35,9 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * Represents a class where users can view and edit their profile, as well as change chapters, sign out, or delete their account
+ */
 public class ProfileActivity extends AppCompatActivity implements DeleteAccountDialog.DeleteAccountDialogListener, ChangeChapterDialog.ChangeChapterDialogListener {
 
     private FirebaseUser user;
@@ -49,6 +52,11 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     private ProgressDialog progressDialog;
     private static final String TAG = "DASHBOARD";
 
+    /**
+     * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
+     * with data of the existing event from the database
+     * @param savedInstanceState the save state of the activity or page
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +144,9 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
         });
     }
 
+    /**
+     * Signs the user out
+     */
     public void signOut() {
         Log.d(TAG, "SIGN OUT: " + user.getEmail());
         AuthUI.getInstance()
@@ -148,16 +159,26 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                 });
     }
 
+    /**
+     * Opens the dialog to confirm changing chapters
+     */
     private void openChangeChapterDialog() {
         ChangeChapterDialog dialog = new ChangeChapterDialog();
         dialog.show(getSupportFragmentManager(), "");
     }
 
+    /**
+     * Opens the dialog to confirm account deletion
+     */
     private void openDeleteAccountDialog() {
         DeleteAccountDialog dialog = new DeleteAccountDialog();
         dialog.show(getSupportFragmentManager(), "");
     }
 
+    /**
+     * Deletes the account based on confirmation and sends the user to the login screen
+     * @param confirm whether or not to delete the account
+     */
     @Override
     public void sendConfirmation(boolean confirm) {
         if (confirm) {
@@ -201,6 +222,10 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
         }
     }
 
+    /**
+     * Changes chapters based on the confirmation and sends the user to the chapter signup screen
+     * @param confirm whether or not to change chapters
+     */
     @Override
     public void sendChangeConfirmation(boolean confirm) {
         if (confirm) {

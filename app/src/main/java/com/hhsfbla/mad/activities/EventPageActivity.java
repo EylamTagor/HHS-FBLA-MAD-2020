@@ -58,6 +58,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Represents a page where users can view further details about an event such as who is attending and join or leave the event
+ * Officers and advisors also have the abitlity to share events to facebook, delete events, or edit existing events
+ */
 public class EventPageActivity extends AppCompatActivity implements DeleteEventDialog.DeleteEventDialogListener, UserAdapter.OnItemClickListener {
 
 //    private StorageReference storageReference;
@@ -80,6 +84,11 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     private ArrayList<User> users;
     private static final String TAG = "Event Details Page";
 
+    /**
+     * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
+     * with data of the existing event from the database
+     * @param savedInstanceState the save state of the activity or page
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -273,6 +282,9 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         });
     }
 
+    /**
+     *
+     */
     private void deleteInDB() {
         progressDialog.show();
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -338,17 +350,31 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
 
     }
 
+    /**
+     * Opens the dialog to confirm deletion of an event
+     */
     private void openDialog() {
         DeleteEventDialog dialog = new DeleteEventDialog();
         dialog.show(getSupportFragmentManager(), "");
     }
 
+    /**
+     * This method gets called after an action to get data from the user
+     * handles callback for facebook sharing
+     * @param requestCode the request code of the request
+     * @param resultCode a code representing the state of the result of the action
+     * @param data the data gained from the activity
+     */
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * Gets the confirmation of whether or not to delete the event from the dialog and acts accordingly
+     * @param confirm whether or not to delete the event
+     */
     @Override
     public void sendConfirmation(boolean confirm) {
         if (confirm) {
@@ -356,6 +382,12 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         }
     }
 
+    /**
+     * Describes what to do when a user from the attendees recycler view is clicked, in this case nothing is necessary
+     * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param v the View that will contain the click action
+     * @param position the numbered position of snapshot in the full item list
+     */
     @Override
     public void onItemClick(DocumentSnapshot snapshot, View v, int position) {
 

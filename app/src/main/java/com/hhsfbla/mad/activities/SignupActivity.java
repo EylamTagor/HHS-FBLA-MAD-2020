@@ -1,10 +1,8 @@
 package com.hhsfbla.mad.activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
@@ -29,15 +27,16 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.adapters.ChapterAdapter;
+import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-
+/**
+ * Represents a class where users can choose their chapter or opt to create a new one
+ */
 public class SignupActivity extends AppCompatActivity implements ChapterAdapter.OnItemClickListener{
     private RecyclerView recyclerView;
     private SearchView searchView;
@@ -50,13 +49,17 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
     private Button createNewChapter;
     private static final String TAG = "signupactivity";
     private StorageReference storageReference;
-    private ProgressDialog progressDialog;
+
+    /**
+     * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
+     * with data of the existing event from the database
+     * @param savedInstanceState the save state of the activity or page
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         setTitle("User Setup");
-        progressDialog = new ProgressDialog(this);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         fuser = auth.getCurrentUser();
@@ -102,7 +105,12 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
 
     }
 
-    private void updateUser(final DocumentSnapshot snapshot, final Uri uri) {
+    /**
+     * Writes the user to the database and sets their chapter to the one selected
+     * @param snapshot a snapshot of the data of the chapter from the databse
+     * @param uri the uri of the users profile picture
+     */
+    public void updateUser(final DocumentSnapshot snapshot, final Uri uri) {
         db.collection("chapters").document(snapshot.getId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot queryDocumentSnapshots) {
@@ -145,7 +153,11 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
         });
     }
 
-    private void uploadFile(final DocumentSnapshot snapshot) {
+    /**
+     * Uploads the profile picture of the user to cloud storage with the file name as id
+     * @param snapshot the id of the users chapter
+     */
+    public void uploadFile(final DocumentSnapshot snapshot) {
         if(fuser.getPhotoUrl() != null) {
 //            progressDialog.setMessage("Uploading...");
 //            progressDialog.show();
@@ -180,6 +192,11 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
         }
     }
 
+    /**
+     * Adds the user to the database when a chapter is clicked
+     * @param snapshot the chapter object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param position the numbered position of snapshot in the full chapter list
+     */
     @Override
     public void onItemClick(DocumentSnapshot snapshot, int position) {
         updateUser(snapshot, fuser.getPhotoUrl());
