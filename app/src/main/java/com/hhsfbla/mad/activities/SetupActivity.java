@@ -23,6 +23,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.data.UserType;
 
 public class SetupActivity extends AppCompatActivity {
 
@@ -73,7 +74,7 @@ public class SetupActivity extends AppCompatActivity {
                                 } else {
                                     db.collection("users").document(user.getUid()).update("chapter", id);
                                 }
-
+                                db.collection("users").document(user.getUid()).update("userType", UserType.ADVISOR);
                                 Chapter example = new Chapter(chapName.getText().toString(), location.getText().toString());
                                 example.setInstagramTag("https://www.instagram.com/" + insta.getText().toString().trim());
                                 example.setFacebookPage("https://www.facebook.com/" + facebookPage.getText().toString().trim());
