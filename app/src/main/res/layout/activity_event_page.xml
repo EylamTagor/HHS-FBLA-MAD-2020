@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".activities.EventPageActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/eventDetailLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
     <TextView
         android:id="@+id/eventTitleDetail"
         android:layout_width="0dp"
@@ -97,7 +113,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:textColor="@android:color/black"
         android:textSize="18sp"
@@ -115,12 +131,22 @@
         app:layout_constraintTop_toBottomOf="@+id/clockIconDetail"
         app:srcCompat="@drawable/location_icon" />
 
+    <ImageView
+        android:id="@+id/memberCountIconDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationIconDetail"
+        app:srcCompat="@drawable/officer_icon" />
+
     <TextView
         android:id="@+id/eventLocationDetail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:textColor="@android:color/black"
         android:textSize="18sp"
@@ -129,24 +155,39 @@
         app:layout_constraintTop_toBottomOf="@+id/eventTimeDetail" />
 
     <TextView
-        android:id="@+id/eventDescriptionDetail"
-        android:layout_width="match_parent"
+        android:id="@+id/eventUserCount"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/calendarIconDetail"
         app:layout_constraintTop_toBottomOf="@+id/eventLocationDetail" />
+
+    <TextView
+        android:id="@+id/eventDescriptionDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventUserCount" />
 
     <TextView
         android:id="@+id/eventLinkDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:textColor="@android:color/black"
         android:textSize="18sp"
@@ -165,7 +206,7 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:text="Edit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventLinkDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/attendeeRecylerview" />
 
     <Button
         android:id="@+id/shareButton"
@@ -177,7 +218,7 @@
         android:text="Share"
         app:layout_constraintEnd_toStartOf="@+id/deleteEvent"
         app:layout_constraintStart_toEndOf="@+id/editButton"
-        app:layout_constraintTop_toBottomOf="@+id/eventLinkDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/attendeeRecylerview" />
 
     <Button
         android:id="@+id/deleteEvent"
@@ -189,7 +230,7 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:text="Delete"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventLinkDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/attendeeRecylerview" />
 
 
     <ImageButton
@@ -204,5 +245,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/shareButton"
         app:srcCompat="@drawable/back_button" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/attendeeRecylerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventLinkDetail" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

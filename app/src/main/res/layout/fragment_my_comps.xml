@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="128dp"
             android:text="You haven't signed up for any competitive events yet"
-            tools:visibility="invisible" />
+            tools:visibility="gone" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

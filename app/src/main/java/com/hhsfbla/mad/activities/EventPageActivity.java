@@ -20,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -45,22 +47,24 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.adapters.UserAdapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 import com.hhsfbla.mad.dialogs.DeleteEventDialog;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class EventPageActivity extends AppCompatActivity implements DeleteEventDialog.DeleteEventDialogListener{
+public class EventPageActivity extends AppCompatActivity implements DeleteEventDialog.DeleteEventDialogListener, UserAdapter.OnItemClickListener {
 
     private StorageReference storageReference;
     private ShareDialog shareDialog;
     private CallbackManager callbackManager;
     private LoginManager manager;
-    private TextView title, date, time, location, desc, link;
+    private TextView title, date, time, location, desc, link, memberCount;
     private ImageView eventImage;
     private ChapterEvent mainEvent;
     private FirebaseAuth auth;
@@ -71,6 +75,9 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     private ImageButton back;
     private Button shareButton, editButton, deleteButton;
     private ProgressDialog progressDialog;
+    private RecyclerView recyclerView;
+    private UserAdapter adapter;
+    private ArrayList<User> users;
     private static final String TAG = "Event Details Page";
 
     @Override
@@ -88,6 +95,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         location = findViewById(R.id.eventLocationDetail);
         desc = findViewById(R.id.eventDescriptionDetail);
         link = findViewById(R.id.eventLinkDetail);
+        memberCount = findViewById(R.id.eventUserCount);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = auth.getCurrentUser();
@@ -100,6 +108,13 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         back = findViewById(R.id.doneBtn4);
         deleteButton = findViewById(R.id.deleteEvent);
         eventImage = findViewById(R.id.eventPicDetail);
+        recyclerView = findViewById(R.id.attendeeRecylerview);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        users = new ArrayList<>();
+        adapter = new UserAdapter(users, this);
+        adapter.setOnItemClickListener(this);
+        recyclerView.setAdapter(adapter);
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(this);
         //this loginManager helps you eliminate adding a LoginButton to your UI
@@ -118,7 +133,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<ChapterEvent> events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
                         String name = getIntent().getStringExtra("EVENT_POSITION");
-                        for(ChapterEvent event : events) {
+                        for(final ChapterEvent event : events) {
                             if(event.getName().equals(name)) {
                                 if(event.getAttendees().contains(user.getUid())) {
                                     joinButton.setVisibility(View.GONE);
@@ -143,6 +158,19 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                                     Picasso.get().load(Uri.parse(mainEvent.getPic())).fit().centerCrop().into(eventImage);
                                 } else
                                     eventImage.setVisibility(View.GONE);
+
+                                db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                        for(DocumentSnapshot user : queryDocumentSnapshots) {
+                                            if(event.getAttendees().contains(user.getId())) {
+                                                users.add(user.toObject(User.class));
+                                            }
+                                        }
+                                        adapter.setUsers(users);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
                                 return;
                             }
                         }
@@ -391,5 +419,10 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         if(confirm) {
             deleteInDB();
         }
+    }
+
+    @Override
+    public void onItemClick(DocumentSnapshot snapshot, View v, int position) {
+
     }
 }

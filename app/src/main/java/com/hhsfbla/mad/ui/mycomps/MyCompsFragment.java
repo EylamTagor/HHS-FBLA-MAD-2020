@@ -64,22 +64,25 @@ public class MyCompsFragment extends Fragment implements CompsAdapter.OnItemClic
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 final User currentUser = documentSnapshot.toObject(User.class);
-
                 for (String id : currentUser.getComps()) {
+                    Log.d(TAG, id);
                     db.collection("comps").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Log.d(TAG, documentSnapshot.getId() + " hello");
                             comps.add(documentSnapshot.toObject(Competition.class));
+                            adapter.setEvents(comps);
+                            adapter.notifyDataSetChanged();
+                            if (comps.size() == 0) {
+                                noCompsYet.setVisibility(View.VISIBLE);
+                                Log.d(TAG, "hihihi");
+                                return;
+                            } else {
+                                noCompsYet.setVisibility(View.GONE);
+                            }
                         }
                     });
                 }
-                if (comps.size() == 0) {
-                    noCompsYet.setVisibility(View.VISIBLE);
-                    return;
-                } else {
-                    noCompsYet.setVisibility(View.INVISIBLE);
-                }
-                adapter.notifyDataSetChanged();
             }
         });
         return root;
