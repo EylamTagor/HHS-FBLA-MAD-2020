@@ -21,6 +21,9 @@ import com.hhsfbla.mad.data.Competition;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter for RecyclerViews that display a list of all existing Competitive Events (name and type) for users to enlist in
+ */
 public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> implements Filterable {
 
     private List<Competition> comps;
@@ -29,20 +32,38 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
     private static final String TAG = "Event Adapter";
     private CompsAdapter.OnItemClickListener listener;
 
+    /**
+     * Creates a new CompsAdapter object with the following parameters
+     *
+     * @param context the Activity, Fragment, etc. hosting the RecyclerView that uses this adapter
+     * @param comps a list of all existing chapters for users to pick from and join (each of which is an item in this adapter)
+     */
     public CompsAdapter(List<Competition> comps, Context context) {
         this.comps = comps;
         allItems = new ArrayList<Competition>(comps);
         this.context = context;
     }
 
+    /**
+     * Creates and inflates a new competition item ViewHolder to be included in the corresponding RecyclerView
+     *
+     * @param parent the parent ViewGroup of the ViewHolder
+     * @param viewType the type of view, represented by numeric coding
+     * @return the ViewHolder object to be used in initializing the RecyclerView
+     */
     @NonNull
     @Override
-
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.competition_item, parent, false);
         return new ViewHolder(view);
     }
 
+    /**
+     * Sets the appropriate parameters for each competition item according to its placement in the competition list
+     *
+     * @param holder the ViewHolder to contain all of the competition items
+     * @param position the position of the corresponding competition item in the competition list (to order the compeititon item in the RecyclerView)
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final Competition comp = comps.get(position);
@@ -66,17 +87,28 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
         holder.pic.setImageResource(pic);
     }
 
+    /**
+     * @return the amount of items in the list of comps
+     */
     @Override
     public int getItemCount() {
         return comps.size();
     }
 
+    /**
+     * Updates the list of competitive events using a new list
+     *
+     * @param events new list to replace the old chapter list
+     */
     public void setEvents(List<Competition> events) {
         this.comps = events;
         this.allItems.clear();
         allItems = new ArrayList<>(comps);
     }
 
+    /**
+     * @return the Filter object, used to search for a specific comp in the full list of comps
+     */
     @Override
     public Filter getFilter() {
         return compFilter;
@@ -112,12 +144,31 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
         }
     };
 
+    /**
+     * Represents the container of all comp items to be included in the RecyclerView that utilizes CompsAdapter
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        /**
+         * the name of the comp, to be displayed
+         */
         public TextView name;
+
+        /**
+         * the icon representing the type of comp
+         */
         public ImageView pic;
+
+        /**
+         * the parent layout of the RecyclerView that utilizes ChapterAdapter
+         */
         public ConstraintLayout constraintLayout;
 
+        /**
+         * Creates a new ViewHolder object with the following parameters
+         *
+         * @param itemView the comp item that will be contained in this object
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -136,10 +187,24 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
         }
     }
 
+    /**
+     * Used to specify action after clicking on the RecyclerView that utilizes this adapter
+     */
     public interface OnItemClickListener {
+        /**
+         * Specifies the action after clicking on the RecyclerView that utilizes this adapter
+         *
+         * @param id the comp object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+         * @param position the numbered position of snapshot in the full comp list
+         */
         void onItemClick(String id, int position);
     }
 
+    /**
+     * Determines the object to listen to and manage clicking actions on the RecyclerView that utilizes this adapter
+     *
+     * @param listener the object to listen to and manage clicking actions on the RecyclerView that utilizes this adapter
+     */
     public void setOnItemClickListener(CompsAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
