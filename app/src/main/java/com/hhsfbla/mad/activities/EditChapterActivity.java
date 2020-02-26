@@ -62,6 +62,11 @@ public class EditChapterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         final Chapter chapter = documentSnapshot.toObject(Chapter.class);
+                        if (!(chapter.getName() == null || chapter.getName().equalsIgnoreCase(""))) {
+                            chapName.setText(chapter.getName());
+                        } else {
+                            chapDesc.setText("No Description");
+                        }
                         if (!(chapter.getDescription() == null || chapter.getDescription().equalsIgnoreCase(""))) {
                             chapDesc.setText(chapter.getDescription());
                         } else {
@@ -75,7 +80,6 @@ public class EditChapterActivity extends AppCompatActivity {
                         if (!(chapter.getFacebookPage() == null || chapter.getFacebookPage().equalsIgnoreCase(""))) {
                             facebookPage.setText(chapter.getFacebookPage());
                         } else {
-                            Log.d(TAG, "hello2");
                             facebookPage.setText("No Facebook Page");
                         }
                         if (!(chapter.getInstagramTag() == null || chapter.getInstagramTag().equalsIgnoreCase(""))) {
