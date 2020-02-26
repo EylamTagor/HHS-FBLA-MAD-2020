@@ -1,21 +1,11 @@
 package com.hhsfbla.mad.ui.mychapter;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Html;
-import android.text.method.CharacterPickerDialog;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +19,12 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +32,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.activities.EditChapterActivity;
 import com.hhsfbla.mad.adapters.UserAdapter;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
@@ -44,8 +41,7 @@ import com.hhsfbla.mad.data.UserType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyChapterFragment extends Fragment implements UserAdapter.OnItemClickListener{
-
+public class MyChapterFragment extends Fragment implements UserAdapter.OnItemClickListener {
 
 
     public static MyChapterFragment newInstance() {
@@ -94,7 +90,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
         editChapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // arnav do ur thing
+                getContext().startActivity(new Intent(getContext(), EditChapterActivity.class));
             }
         });
         initRecyclerView();
@@ -103,32 +99,32 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currentUSer = documentSnapshot.toObject(User.class);
-                if(currentUSer.getUserType() == UserType.ADVISOR)
+                if (currentUSer.getUserType() == UserType.ADVISOR) {
                     isAdvisor = true;
+                    editChapter.setVisibility(View.VISIBLE);
+                }
                 db.collection("chapters").document(currentUSer.getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         final Chapter chapter = documentSnapshot.toObject(Chapter.class);
-                        if(!(chapter.getDescription() == null || chapter.getDescription().isEmpty())) {
+                        if (!(chapter.getDescription() == null || chapter.getDescription().isEmpty())) {
                             aboutChap.setText(chapter.getDescription());
                         } else {
                             aboutChap.setText("No Description");
                         }
-                        if(!(chapter.getLocation() == null || chapter.getLocation().equalsIgnoreCase(""))) {
+                        if (!(chapter.getLocation() == null || chapter.getLocation().equalsIgnoreCase(""))) {
                             locaChap.setText(chapter.getLocation());
                         } else {
                             locaChap.setText("No Location");
                         }
-                        if(!(chapter.getFacebookPage() == null || chapter.getFacebookPage().equalsIgnoreCase(""))) {
-                            Log.d(TAG, "hello1");
+                        if (!(chapter.getFacebookPage() == null || chapter.getFacebookPage().equalsIgnoreCase(""))) {
                             facebook.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chapter.getFacebookPage())));
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + chapter.getFacebookPage())));
                                 }
                             });
                         } else {
-                            Log.d(TAG, "hello2");
                             facebook.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -136,11 +132,11 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
                                 }
                             });
                         }
-                        if(!(chapter.getInstagramTag() == null || chapter.getInstagramTag().equalsIgnoreCase(""))) {
+                        if (!(chapter.getInstagramTag() == null || chapter.getInstagramTag().equalsIgnoreCase(""))) {
                             insta.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(chapter.getInstagramTag())));
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/" + chapter.getInstagramTag())));
                                 }
                             });
                         } else {
@@ -151,7 +147,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
                                 }
                             });
                         }
-                        if(!(chapter.getWebsite() == null || chapter.getWebsite().equalsIgnoreCase(""))) {
+                        if (!(chapter.getWebsite() == null || chapter.getWebsite().equalsIgnoreCase(""))) {
                             chapLink.setText(Html.fromHtml("<a href=" + chapter.getWebsite() + ">" + chapter.getName().trim() + " Website</androidx.constraintlayout.widget.ConstraintLayout</a>"));
                             chapLink.setMovementMethod(LinkMovementMethod.getInstance());
                         } else {
@@ -181,7 +177,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
                         users.addAll(queryDocumentSnapshots.toObjects(User.class));
                         adapter.notifyDataSetChanged();
                         adapter.setUsers(users);
-                        if(users.isEmpty()) {
+                        if (users.isEmpty()) {
                             noUsersYet.setVisibility(View.VISIBLE);
                         } else {
                             noUsersYet.setVisibility(View.GONE);
@@ -216,46 +212,38 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
 
         Log.d(TAG, "user clicked");
         final User thisuser = snapshot.toObject(User.class);
-//        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot userSnap) {
-//                if(userSnap.toObject(User.class).getUserType() != UserType.ADVISOR){
-//                    return;
-//                }  else {
         Log.d(TAG, isAdvisor ? "Advisor" : "non advisor");
-        if(!isAdvisor) {
+        if (!isAdvisor) {
             return;
         }
-                    PopupMenu menu = new PopupMenu(v.getContext(), v);
-                    menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
-                            if(menuItem.getItemId() == R.id.promoteButton) {
-                                progressDialog.setMessage("Promoting...");
-                                progressDialog.show();
-                                promoteUser(snapshot, thisuser);
-                                return true;
-                            } else if(menuItem.getItemId() == R.id.demoteButton) {
-                                progressDialog.setMessage("Promoting...");
-                                progressDialog.show();
-                                demoteUser(snapshot, thisuser);
-                                return true;
-                            }
-                            return false;
-                        }
-                    });
-                    menu.inflate(R.menu.promotion_popup_menu);
-                    menu.show();
-//                }
-//            }
-//        });
+        PopupMenu menu = new PopupMenu(v.getContext(), v);
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.promoteButton) {
+                    progressDialog.setMessage("Promoting...");
+                    progressDialog.show();
+                    promoteUser(snapshot, thisuser);
+                    return true;
+                } else if (menuItem.getItemId() == R.id.demoteButton) {
+                    progressDialog.setMessage("Promoting...");
+                    progressDialog.show();
+                    demoteUser(snapshot, thisuser);
+                    return true;
+                }
+                return false;
+            }
+        });
+        menu.inflate(R.menu.promotion_popup_menu);
+        menu.show();
+
     }
 
     private void promoteUser(DocumentSnapshot snapshot, User user) {
         UserType update = user.getUserType();
-        if(update.equals(UserType.OFFICER)) {
+        if (update.equals(UserType.OFFICER)) {
             update = UserType.ADVISOR;
-        } else if(update.equals(UserType.MEMBER)) {
+        } else if (update.equals(UserType.MEMBER)) {
             update = UserType.OFFICER;
         } else {
             Toast.makeText(getContext(), "User is already an advisor", Toast.LENGTH_LONG).show();
@@ -263,7 +251,6 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
         db.collection("users").document(snapshot.getId()).update("userType", update).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "hi there");
                 progressDialog.dismiss();
                 initRecyclerView();
             }
@@ -272,9 +259,9 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
 
     private void demoteUser(DocumentSnapshot snapshot, User user) {
         UserType update = user.getUserType();
-        if(update.equals(UserType.OFFICER)) {
+        if (update.equals(UserType.OFFICER)) {
             update = UserType.MEMBER;
-        } else if(update.equals(UserType.ADVISOR)) {
+        } else if (update.equals(UserType.ADVISOR)) {
             update = UserType.OFFICER;
         } else {
             Toast.makeText(getContext(), "User is already an member", Toast.LENGTH_LONG).show();
@@ -282,7 +269,6 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
         db.collection("users").document(snapshot.getId()).update("userType", update).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "hi there");
                 progressDialog.dismiss();
                 initRecyclerView();
             }

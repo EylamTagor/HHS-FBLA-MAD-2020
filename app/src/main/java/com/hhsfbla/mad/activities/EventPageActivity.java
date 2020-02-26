@@ -99,7 +99,6 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = auth.getCurrentUser();
-        Log.d("hello", user.getPhotoUrl().toString());
         mainEvent = new ChapterEvent();
         joinButton = findViewById(R.id.joinButton);
         unJoinButton = findViewById(R.id.unJoinButton);
@@ -124,7 +123,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currentUser = documentSnapshot.toObject(User.class);
-                if(currentUser.getUserType() == UserType.MEMBER) {
+                if (currentUser.getUserType() == UserType.MEMBER) {
                     editButton.setVisibility(View.GONE);
                     deleteButton.setVisibility(View.GONE);
                 }
@@ -133,9 +132,9 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<ChapterEvent> events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
                         String name = getIntent().getStringExtra("EVENT_POSITION");
-                        for(final ChapterEvent event : events) {
-                            if(event.getName().equals(name)) {
-                                if(event.getAttendees().contains(user.getUid())) {
+                        for (final ChapterEvent event : events) {
+                            if (event.getName().equals(name)) {
+                                if (event.getAttendees().contains(user.getUid())) {
                                     joinButton.setVisibility(View.GONE);
                                     unJoinButton.setVisibility(View.VISIBLE);
                                 } else {
@@ -162,8 +161,8 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                                 db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                     @Override
                                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                        for(DocumentSnapshot user : queryDocumentSnapshots) {
-                                            if(event.getAttendees().contains(user.getId())) {
+                                        for (DocumentSnapshot user : queryDocumentSnapshots) {
+                                            if (event.getAttendees().contains(user.getId())) {
                                                 users.add(user.toObject(User.class));
                                             }
                                         }
@@ -191,7 +190,6 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Join onclick");
                 final DocumentReference userdoc = db.collection("users").document(user.getUid());
                 userdoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -200,12 +198,9 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                         db.collection("chapters").document(userSnap.toObject(User.class).getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                for(QueryDocumentSnapshot event : queryDocumentSnapshots) {
-                                    if(event.get("name").equals(name)) {
-                                        Log.d(TAG, event.getId());
-                                        Log.d(TAG, event.getId() + "here");
+                                for (QueryDocumentSnapshot event : queryDocumentSnapshots) {
+                                    if (event.get("name").equals(name)) {
                                         userdoc.update("myEvents", FieldValue.arrayUnion(event.getId()));
-                                        Log.d(TAG, "finished");
                                         db.collection("chapters").document(userSnap.toObject(User.class).getChapter()).collection("events").document(event.getId()).update("attendees", FieldValue.arrayUnion(user.getUid()));
                                         finish();
                                         startActivity(getIntent());
@@ -218,10 +213,10 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
 
             }
         });
+
         unJoinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Unjoin onclick");
                 final DocumentReference userdoc = db.collection("users").document(user.getUid());
                 userdoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -229,14 +224,17 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                         final String name = getIntent().getStringExtra("EVENT_POSITION");
                         db.collection("chapters").document(userSnap.toObject(User.class).getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            for(QueryDocumentSnapshot event : queryDocumentSnapshots) {
-                                                if(event.get("name").equals(name)) {
-                                                    userdoc.update("myEvents", FieldValue.arrayRemove(event.getId()));
-                                                    Log.d(TAG, "finished");
-                                        db.collection("chapters").document(userSnap.toObject(User.class).getChapter()).collection("events").document(event.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
-                                                    finish();
-                                                    startActivity(getIntent());
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for (QueryDocumentSnapshot event : queryDocumentSnapshots) {
+                                    if (event.get("name").equals(name)) {
+                                        userdoc.update("myEvents", FieldValue.arrayRemove(event.getId()));
+                                        db.collection("chapters").document(userSnap.toObject(User.class).getChapter()).collection("events").document(event.getId()).update("attendees", FieldValue.arrayRemove(user.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                finish();
+                                                startActivity(getIntent());
+                                            }
+                                        });
                                     }
                                 }
                             }
@@ -246,7 +244,6 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
 
             }
         });
-        Log.d(TAG, "HELLOOO ");
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -269,11 +266,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
             public void onClick(View view) {
 
                 if (ShareDialog.canShow(ShareLinkContent.class)) {
-                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                            .setContentUrl(Uri.parse("http://developers.facebook.com/android")).setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg"))
-                            .build();
-                    SharePhoto p = new SharePhoto.Builder().setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg")).build();
-                    SharePhotoContent heh = new SharePhotoContent.Builder().addPhoto(p).setContentUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg")).build();
+                    ShareLinkContent linkContent = new ShareLinkContent.Builder().build();
                     shareDialog.show(linkContent);
                 }
             }
@@ -281,7 +274,6 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     }
 
     private void deleteInDB() {
-        Log.d(TAG, "hello");
         progressDialog.show();
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -290,22 +282,21 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                 db.collection("chapters").document(user.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<ChapterEvent> events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
                         String name = getIntent().getStringExtra("EVENT_POSITION");
-                        for(final DocumentSnapshot snap : queryDocumentSnapshots) {
+                        for (final DocumentSnapshot snap : queryDocumentSnapshots) {
                             ChapterEvent event = snap.toObject(ChapterEvent.class);
 
                             if(event.getName().equals(name)) {
 //                                if(event.getPic() == null || event.getPic() == "") {
                                     Log.d(TAG, "event has no pic");
+//                            if (event.getName().equals(name)) {
+//                                if (event.getPic() == null || event.getPic() == "") {
                                     db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
-                                    Log.d(TAG, "deleting in db");
                                     db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                         @Override
                                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                                                if(snap.toObject(User.class).getMyEvents().contains(snap.getId())) {
-                                                    Log.d(TAG, "hithere");
+                                            for (DocumentSnapshot snap : queryDocumentSnapshots) {
+                                                if (snap.toObject(User.class).getMyEvents().contains(snap.getId())) {
                                                     db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
                                                 }
                                             }
@@ -337,6 +328,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
 //                                        });
 //                                    }
 //                                });
+                                    return;
                             }
                         }
                     }
@@ -344,64 +336,6 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
             }
         });
 
-    }
-
-    private String getFileExtension(Uri uri) {
-        ContentResolver cR = getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(cR.getType(uri));
-    }
-
-    private void facebookPost() {
-        final List<String> permissionNeeds = Arrays.asList("publish_pages");
-        final Activity lol = this;
-        manager.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
-        {
-            @Override
-            public void onSuccess(LoginResult loginResult)
-            {
-                manager.logInWithPublishPermissions(lol, permissionNeeds);
-                Bitmap image = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.ic_launcher);
-                SharePhoto photo = new SharePhoto.Builder()
-                        .setBitmap(image).setImageUrl(Uri.parse("https://marvelcinematicuniverse.fandom.com/wiki/Spider-Man?file=Spider-Man_FFH_Profile.jpg"))
-                        .build();
-                SharePhotoContent content = new SharePhotoContent.Builder()
-                        .addPhoto(photo)
-
-                        .build();
-                ShareApi.share(content, new FacebookCallback<Sharer.Result>() {
-                    @Override
-                    public void onSuccess(Sharer.Result result)
-                    {
-                        Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onCancel()
-                    {
-                        Log.d("FACEBOOK_TEST", "share api cancel");
-                    }
-
-                    @Override
-                    public void onError(FacebookException e)
-                    {
-                        Log.d("FACEBOOK_TEST", "share api error " + e);
-                    }
-                });
-            }
-
-            @Override
-            public void onCancel()
-            {
-                System.out.println("onCancel");
-            }
-
-            @Override
-            public void onError(FacebookException exception)
-            {
-                System.out.println("onError");
-            }
-        });
     }
 
     private void openDialog() {
@@ -417,7 +351,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
 
     @Override
     public void sendConfirmation(boolean confirm) {
-        if(confirm) {
+        if (confirm) {
             deleteInDB();
         }
     }

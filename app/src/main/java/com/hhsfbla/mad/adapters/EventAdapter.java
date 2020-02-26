@@ -1,7 +1,6 @@
 package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,15 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.activities.EventPageActivity;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
 
@@ -66,6 +61,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public void setEvents(List<ChapterEvent> events) {
         this.events = events;
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView title, date, time, location;
@@ -85,7 +81,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "helllo");
-                    if(getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
                         listener.onItemClick(events.get(getAdapterPosition()).getName(), getAdapterPosition());
                     }
                 }

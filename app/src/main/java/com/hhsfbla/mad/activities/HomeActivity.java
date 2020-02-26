@@ -52,8 +52,6 @@ public class HomeActivity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_my_events, R.id.nav_calendar,
                 R.id.nav_comps, R.id.nav_mycomps, R.id.nav_about_chapter, R.id.nav_officer, R.id.nav_about, R.id.nav_contact)
@@ -100,7 +98,6 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }

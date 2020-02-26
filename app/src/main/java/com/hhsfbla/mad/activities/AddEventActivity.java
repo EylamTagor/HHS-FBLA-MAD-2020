@@ -1,37 +1,22 @@
 package com.hhsfbla.mad.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
-
-import com.google.firebase.firestore.DocumentReference;
-import com.hhsfbla.mad.data.User;
-import com.hhsfbla.mad.dialogs.TimePicker;
-import com.hhsfbla.mad.dialogs.DatePicker;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.format.DateFormat;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -41,6 +26,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -50,11 +36,13 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
+import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.dialogs.DatePicker;
+import com.hhsfbla.mad.dialogs.TimePicker;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 
@@ -208,21 +196,16 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     private void uploadFile(final String id) {
 //        if(imageUri != null && bitmap != null) {
 //            Log.d(TAG, imageUri.toString());
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//            byte[] data = baos.toByteArray();
 //            progressDialog.setMessage("Uploading...");
 //            progressDialog.show();
 //            final StorageReference fileRef = storageReference.child(id);
-//            uploadTask = fileRef.putBytes(data)
+//            uploadTask = fileRef.putFile(imageUri)
 //                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 //                        @Override
 //                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 //                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
 //                                @Override
 //                                public void onSuccess(Uri uri) {
-//                                    Log.d(TAG, uri.toString());
 //                                    addEvent(uri, id);
 //                                }
 //                            });
@@ -241,7 +224,6 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
 //                        }
 //                    });
 //        } else {
-            //TODO add dialog
 //            Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
             addEvent(null, id);
 //        }

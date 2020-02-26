@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,7 +29,7 @@ import java.util.List;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
-public class MyCompsFragment extends Fragment implements CompsAdapter.OnItemClickListener{
+public class MyCompsFragment extends Fragment implements CompsAdapter.OnItemClickListener {
     private TextView noCompsYet;
     private RecyclerView compsRecyclerView;
     private CompsAdapter adapter;
@@ -66,17 +65,14 @@ public class MyCompsFragment extends Fragment implements CompsAdapter.OnItemClic
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 final User currentUser = documentSnapshot.toObject(User.class);
                 for (String id : currentUser.getComps()) {
-                    Log.d(TAG, id);
                     db.collection("comps").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Log.d(TAG, documentSnapshot.getId() + " hello");
                             comps.add(documentSnapshot.toObject(Competition.class));
                             adapter.setEvents(comps);
                             adapter.notifyDataSetChanged();
                             if (comps.size() == 0) {
                                 noCompsYet.setVisibility(View.VISIBLE);
-                                Log.d(TAG, "hihihi");
                                 return;
                             } else {
                                 noCompsYet.setVisibility(View.GONE);
@@ -91,7 +87,6 @@ public class MyCompsFragment extends Fragment implements CompsAdapter.OnItemClic
 
     @Override
     public void onItemClick(String id, int position) {
-        Log.d(TAG, "event clicked");
         Intent intent = new Intent(getContext(), CompDetailActivity.class);
         intent.putExtra("COMP_POSITION", id);
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);

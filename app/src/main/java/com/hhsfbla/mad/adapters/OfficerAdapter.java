@@ -29,7 +29,6 @@ import java.util.List;
 
 public class OfficerAdapter extends RecyclerView.Adapter<OfficerAdapter.ViewHolder> implements Filterable {
     private FirebaseFirestore db;
-    private FirebaseUser fuser;
     private List<User> officers;
     private List<User> allOffs;
     private Context context;
@@ -40,7 +39,6 @@ public class OfficerAdapter extends RecyclerView.Adapter<OfficerAdapter.ViewHold
         this.officers = officers;
         this.context = context;
         allOffs = new ArrayList<>(officers);
-        fuser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
     }
 

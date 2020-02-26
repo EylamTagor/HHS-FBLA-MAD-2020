@@ -11,7 +11,6 @@ import android.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -94,7 +93,6 @@ public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickL
 
     @Override
     public void onItemClick(String id, int position) {
-        Log.d(TAG, "event clicked");
         Intent intent = new Intent(getContext(), CompDetailActivity.class);
         intent.putExtra("COMP_POSITION", id);
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);

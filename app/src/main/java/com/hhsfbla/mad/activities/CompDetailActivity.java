@@ -2,44 +2,28 @@ package com.hhsfbla.mad.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.adapters.UserAdapter;
-import com.hhsfbla.mad.data.ChapterEvent;
-import com.hhsfbla.mad.data.Competition;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
-import com.hhsfbla.mad.ui.comps.CompsFragment;
-import com.hhsfbla.mad.ui.home.HomeFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CompDetailActivity extends AppCompatActivity implements UserAdapter.OnItemClickListener{
 
@@ -158,8 +142,8 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
                 });
             }
         });
-
     }
+
     @Override
     public void onItemClick(DocumentSnapshot snapshot, View v, int position) {
 

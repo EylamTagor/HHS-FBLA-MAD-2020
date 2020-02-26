@@ -114,13 +114,10 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // TODO: Use the ViewModel
     }
 
     @Override
     public void onItemClick(DocumentSnapshot snapshot, View v, int position) {
-//        Intent intent = new Intent(getContext(), OfficerEditActivity.class);
-//        intent.putExtra("SELECTED_OFFICER", );
-//        TODO
+
     }
 }

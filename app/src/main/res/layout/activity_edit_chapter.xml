@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activities.SetupActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editChaplay1"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="#FFFFFF"
+                app:boxStrokeColor="#000000"
+                app:boxStrokeWidth="10sp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editChapterName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Chapter Name"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editlay2"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundColor="#FFFFFF"
+                app:boxStrokeColor="#000000"
+                app:boxStrokeWidth="10sp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editChapterWebsite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Chapter Website Link"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editlay3"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundColor="#FFFFFF"
+                app:boxStrokeColor="#000000"
+                app:boxStrokeWidth="10sp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editChapterDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Chapter Description (about a paragraph)"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editlay4"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundColor="#FFFFFF"
+                app:boxStrokeColor="#000000"
+                app:boxStrokeWidth="10sp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editChapterLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Location"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editlay5"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundColor="#FFFFFF"
+                app:boxStrokeColor="#000000"
+                app:boxStrokeWidth="10sp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editChapterInstagram"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Link to Instagram (optional)"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editlay6"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundColor="#FFFFFF"
+                app:boxStrokeColor="#000000"
+                app:boxStrokeWidth="10sp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editChapterFacebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Link to Facebook (optional)"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/editChapterButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_border"
+                android:padding="13dp"
+                android:text="Save"
+                android:textSize="22sp" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,17 +1,9 @@
 package com.hhsfbla.mad.ui.contact;
 
-import androidx.annotation.ColorRes;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -20,13 +12,16 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.hhsfbla.mad.R;
 
 public class ContactFragment extends Fragment {
 
     TextView fblaLink, formLink;
     ImageButton facebook, insta, twitter, linkedin;
-
 
 
     public static ContactFragment newInstance() {
