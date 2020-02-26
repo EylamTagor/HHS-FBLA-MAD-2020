@@ -14,11 +14,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.hhsfbla.mad.R;
-
+/**
+ * Represents a dialog to confirm that a user wants to delete this event
+ */
 public class DeleteEventDialog extends AppCompatDialogFragment {
 
     private DeleteEventDialogListener listener;
 
+    /**
+     * Creates a dialog that confirms whether or not the user wants to delete this event
+     *
+     * @param savedInstanceState the previous instance state of the dialog
+     * @return the newly created dialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -42,6 +50,11 @@ public class DeleteEventDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * Attaches a listener to the dialog from the activity calling it
+     *
+     * @param context the context of the activity calling the dialog
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -52,7 +65,15 @@ public class DeleteEventDialog extends AppCompatDialogFragment {
         }
     }
 
+    /**
+     * This interface is used to send the selection of this dialog to its attached activity
+     */
     public interface DeleteEventDialogListener {
+        /**
+         * Sends the confirmation of whether or not to delete the event to the attached activity
+         *
+         * @param confirm whether or not to delete the event
+         */
         void sendConfirmation(boolean confirm);
     }
 }

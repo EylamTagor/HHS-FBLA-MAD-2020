@@ -15,12 +15,18 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import com.hhsfbla.mad.R;
 
 /**
- *
+ * Represents a dialog to confirm that the user wants to change chapters
  */
 public class ChangeChapterDialog extends AppCompatDialogFragment {
 
     private ChangeChapterDialog.ChangeChapterDialogListener listener;
 
+    /**
+     * Creates a dialog to confirm that the user wants to change chapters
+     *
+     * @param savedInstanceState the previous state of the dialog
+     * @return the newly created dialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -44,6 +50,11 @@ public class ChangeChapterDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * Attaches a listener to the dialog from the activity calling it
+     *
+     * @param context the context of the activity calling the dialog
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -54,7 +65,16 @@ public class ChangeChapterDialog extends AppCompatDialogFragment {
         }
     }
 
+    /**
+     * This interface is used to send the data of this dialog to its attached activity
+     */
     public interface ChangeChapterDialogListener {
+
+        /**
+         * Sends the confirmation of whether or not to change chapters to the attached activity
+         *
+         * @param confirm whether or not to change chapters
+         */
         void sendChangeConfirmation(boolean confirm);
     }
 }

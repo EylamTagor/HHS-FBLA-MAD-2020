@@ -1,28 +1,54 @@
 package com.hhsfbla.mad.data;
 
+/**
+ * Represents a variable made up by all of the different competitive event types
+ */
 public enum CompType {
 
+    /**
+     * Tech competitions
+     */
     TECH {
         public String toString() {
             return "Tech";
         }
-    }, WRITTEN {
+    },
+    /**
+     * Written competitions
+     */
+    WRITTEN {
         public String toString() {
             return "Written";
         }
-    }, SPEAKING {
+    },
+    /**
+     * Speaking competitions
+     */
+    SPEAKING {
         public String toString() {
             return "Speaking";
         }
-    }, PRODUCTION {
+    },
+    /**
+     * Production competitions
+     */
+    PRODUCTION {
         public String toString() {
             return "Production";
         }
-    }, PROJECT {
+    },
+    /**
+     * Projects
+     */
+    PROJECT {
         public String toString() {
             return "Project";
         }
-    }, CASESTUDY {
+    },
+    /**
+     * Case studies
+     */
+    CASESTUDY {
         public String toString() {
             return "Case Study";
         }

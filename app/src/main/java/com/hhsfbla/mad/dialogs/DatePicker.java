@@ -10,7 +10,17 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 
+/**
+ * Represents a Data Picker that can be used to select dates for events
+ */
 public class DatePicker extends DialogFragment {
+
+    /**
+     * Creates a dialog to select a date, with the current date as the initial selection
+     *
+     * @param savedInstanceState the previous state of the dialog
+     * @return the newly created dialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
