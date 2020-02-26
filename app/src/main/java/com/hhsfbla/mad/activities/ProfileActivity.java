@@ -180,14 +180,14 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                                     db.collection("users").document(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-//                                            user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                                @Override
-//                                                public void onSuccess(Void aVoid) {
-                                            progressDialog.dismiss();
-                                            FirebaseAuth.getInstance().signOut();
-                                            startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-//                                                }
-//                                            });
+                                            user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    progressDialog.dismiss();
+                                                    FirebaseAuth.getInstance().signOut();
+                                                    startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                                                }
+                                            });
 
                                         }
                                     });
@@ -243,7 +243,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                                                 startActivity(intent);
                                             }
                                         });
-                                        if(documentSnapshot.toObject(Chapter.class).getUsers().size() == 1) {
+                                        if (documentSnapshot.toObject(Chapter.class).getUsers().size() == 1) {
                                             db.collection("users").document(documentSnapshot.toObject(Chapter.class).getUsers().get(0)).update("userType", UserType.ADVISOR);
                                         }
                                     }
