@@ -135,6 +135,15 @@
                     tools:visibility="invisible" />
             </LinearLayout>
 
+            <Button
+                android:id="@+id/editChapter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/button_border"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:text="Edit Chapter" />
+
         </LinearLayout>
     </ScrollView>
 
