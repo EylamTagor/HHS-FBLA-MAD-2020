@@ -47,7 +47,7 @@
     <fragment
         android:id="@+id/nav_officer"
         android:name="com.hhsfbla.mad.ui.officer.OfficerFragment"
-        android:label="Officers"
+        android:label="Officer Team"
         tools:layout="@layout/fragment_officer" />
     <fragment
         android:id="@+id/nav_contact"
