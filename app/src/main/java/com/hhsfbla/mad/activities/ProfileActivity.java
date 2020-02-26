@@ -40,7 +40,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     private FirebaseUser user;
     private CircleImageView profilePic;
     private ImageButton backBtn, doneBtn2;
-    private TextInputEditText name, email, pos, blurb;
+    private TextInputEditText name, pos, blurb;
     private TextView chapterDisplay;
     private Button chapter;
     private FirebaseFirestore db;
@@ -60,7 +60,6 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
 
         backBtn = findViewById(R.id.backBtn);
         name = findViewById(R.id.nameTextField);
-        email = findViewById(R.id.emailTextField);
         chapter = findViewById(R.id.chapterButton);
         profilePic = findViewById(R.id.profilePic);
         sign_outBtn = findViewById(R.id.sign_outBtn);
@@ -71,7 +70,6 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
         chapterDisplay = findViewById(R.id.chapterTextView);
 
         setTitle("Profile");
-        email.setText(user.getEmail());
         String photo = String.valueOf(user.getPhotoUrl());
         Picasso.get().load(photo).into(profilePic);
 
