@@ -41,12 +41,10 @@ import com.hhsfbla.mad.data.UserType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a fragment that includes resources and information about the user's chapter
+ */
 public class MyChapterFragment extends Fragment implements UserAdapter.OnItemClickListener {
-
-
-    public static MyChapterFragment newInstance() {
-        return new MyChapterFragment();
-    }
 
     private Button editChapter;
     private TextView noUsersYet, aboutChap, locaChap;
@@ -63,6 +61,14 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
     private ProgressDialog progressDialog;
     private boolean isAdvisor = false;
 
+    /**
+     * Creates and inflates a new MyChapterFragment with the following parameters
+     *
+     * @param inflater to inflate the fragment
+     * @param container ViewGroup into which the fragment is inflated
+     * @param savedInstanceState used to save activity regarding this fragment
+     * @return the inflated fragment
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -166,6 +172,9 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
         return root;
     }
 
+    /**
+     * Initializes the RecyclerView of the chapter's members, retrieving data from Firebase Firestore
+     */
     public void initRecyclerView() {
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -204,11 +213,23 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
 
     }
 
+    /**
+     * Handles any action upon successful initialization of this fragment's parent activity
+     *
+     * @param savedInstanceState used to save activity ragarding this fragment or its parent activity
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
 
+    /**
+     * Handles any clicking action done inside this fragment
+     *
+     * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param v the View that will contain the click action
+     * @param position the numbered position of snapshot in the full item list
+     */
     @Override
     public void onItemClick(final DocumentSnapshot snapshot, View v, int position) {
 

@@ -18,16 +18,22 @@ import androidx.fragment.app.Fragment;
 
 import com.hhsfbla.mad.R;
 
+/**
+ * Represents a fragment consisting of various links to contact FBLA and report issues
+ */
 public class ContactFragment extends Fragment {
 
-    TextView fblaLink, formLink;
-    ImageButton facebook, insta, twitter, linkedin;
+    private TextView fblaLink, formLink;
+    private ImageButton facebook, insta, twitter, linkedin;
 
-
-    public static ContactFragment newInstance() {
-        return new ContactFragment();
-    }
-
+    /**
+     * Creates and inflates a new ContactFragment with the following parameters
+     *
+     * @param inflater to inflate the fragment
+     * @param container ViewGroup into which the fragment is inflated
+     * @param savedInstanceState used to save activity regarding this fragment
+     * @return the inflated fragment
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -82,6 +88,11 @@ public class ContactFragment extends Fragment {
 
     }
 
+    /**
+     * Handles actions upon successful creation of the host activity
+     *
+     * @param savedInstanceState used to save activity regarding this fragment
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
