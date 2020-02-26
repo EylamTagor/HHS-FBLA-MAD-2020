@@ -15,12 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Html;
+import android.text.method.CharacterPickerDialog;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
@@ -44,6 +46,13 @@ import java.util.List;
 
 public class MyChapterFragment extends Fragment implements UserAdapter.OnItemClickListener{
 
+
+
+    public static MyChapterFragment newInstance() {
+        return new MyChapterFragment();
+    }
+
+    private Button editChapter;
     private TextView noUsersYet, aboutChap, locaChap;
     private RecyclerView userRecyclerView;
     private UserAdapter adapter;
@@ -57,6 +66,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
     private ImageButton facebook, insta;
     private ProgressDialog progressDialog;
     private boolean isAdvisor = false;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -80,6 +90,13 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
         chapLink = root.findViewById(R.id.chapWebLink);
         facebook = root.findViewById(R.id.facebookBtn);
         insta = root.findViewById(R.id.instaBtn);
+        editChapter.findViewById(R.id.editChapter);
+        editChapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // arnav do ur thing
+            }
+        });
         initRecyclerView();
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
