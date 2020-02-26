@@ -90,7 +90,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
         chapLink = root.findViewById(R.id.chapWebLink);
         facebook = root.findViewById(R.id.facebookBtn);
         insta = root.findViewById(R.id.instaBtn);
-        editChapter.findViewById(R.id.editChapter);
+        editChapter = root.findViewById(R.id.editChapter);
         editChapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
