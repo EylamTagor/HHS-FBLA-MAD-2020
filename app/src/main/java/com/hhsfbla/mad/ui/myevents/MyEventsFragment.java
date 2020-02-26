@@ -98,8 +98,6 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        mViewModel = ViewModelProviders.of(this).get(MyEventsViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 

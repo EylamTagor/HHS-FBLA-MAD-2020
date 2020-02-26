@@ -44,12 +44,6 @@ import java.util.List;
 
 public class MyChapterFragment extends Fragment implements UserAdapter.OnItemClickListener{
 
-    private MyChapterViewModel mViewModel;
-
-    public static MyChapterFragment newInstance() {
-        return new MyChapterFragment();
-    }
-
     private TextView noUsersYet, aboutChap, locaChap;
     private RecyclerView userRecyclerView;
     private UserAdapter adapter;
@@ -198,8 +192,6 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(MyChapterViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     @Override
