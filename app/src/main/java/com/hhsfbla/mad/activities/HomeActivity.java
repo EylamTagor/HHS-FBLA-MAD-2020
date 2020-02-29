@@ -1,6 +1,7 @@
 package com.hhsfbla.mad.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.data.User;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -86,11 +88,16 @@ public class HomeActivity extends AppCompatActivity {
             db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    name.setText(documentSnapshot.get("name").toString());
+                    User thisuser = documentSnapshot.toObject(User.class);
+                    name.setText(thisuser.getName());
+                    if(thisuser.getPic() != null && !thisuser.getPic().equalsIgnoreCase("")) {
+                        Picasso.get().load(Uri.parse(thisuser.getPic())).into(profileImage);
+                    } else {
+                        Picasso.get().load(user.getPhotoUrl()).into(profileImage);
+                    }
                 }
             });
 
-            Picasso.get().load(user.getPhotoUrl()).into(profileImage);
         } else {
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }
