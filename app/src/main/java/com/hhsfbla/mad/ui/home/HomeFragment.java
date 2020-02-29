@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.AddEventActivity;
@@ -80,7 +81,7 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
                 if (currentUser.getUserType() != UserType.MEMBER) {
                     fab.setVisibility(View.VISIBLE);
                 }
-                db.collection("chapters").document(currentUser.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("chapters").document(currentUser.getChapter()).collection("events").orderBy("priority", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         events = queryDocumentSnapshots.toObjects(ChapterEvent.class);

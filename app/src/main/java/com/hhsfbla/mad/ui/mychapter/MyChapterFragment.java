@@ -181,7 +181,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 final String chap = documentSnapshot.get("chapter").toString();
-                db.collection("users").whereEqualTo("chapter", chap).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("users").whereEqualTo("chapter", chap).orderBy("name").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         users.clear();

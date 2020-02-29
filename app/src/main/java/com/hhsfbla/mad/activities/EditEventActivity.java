@@ -33,6 +33,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.dialogs.DatePicker;
@@ -104,7 +105,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
             @Override
             public void onClick(View view) {
                 if (uploadTask != null && uploadTask.isInProgress()) {
-                    Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_SHORT).show();
                 } else {
                     uploadFile(id);
                 }
@@ -182,7 +183,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
             if(memberLimit.getText().toString().trim().equalsIgnoreCase("") || memberLimit.getText().toString().trim().equalsIgnoreCase("no limit")) {
                 memberLimit.setText("No Limit");
             } else {
-                Toast.makeText(this, "Please enter a numeric limit", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Please enter a numeric limit", Toast.LENGTH_SHORT).show();
                 memberLimit.setText("No Limit");
                 return;
             }
@@ -195,7 +196,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                     @Override
                     public void onSuccess(DocumentSnapshot snapshot) {
 
-                        final ChapterEvent event = new ChapterEvent(
+                        ChapterEvent event = new ChapterEvent(
                                 nameEditTxt.getText().toString().trim(),
                                 dateEditTxt.getText().toString().trim(),
                                 timeEditTxt.getText().toString().trim(),
@@ -204,6 +205,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                                 linkEditTxt.getText().toString().trim(),
                                 uri == null ? snapshot.toObject(ChapterEvent.class).getPic() : uri.toString(),
                                 memberLimit.getText().toString().trim().equalsIgnoreCase("no limit") ? ChapterEvent.NO_LIMIT : Integer.parseInt(memberLimit.getText().toString().trim()));
+                        event.setAttendees(snapshot.toObject(ChapterEvent.class).getAttendees());
                         db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document(id).set(event, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -271,8 +273,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                         }
                     });
         } else {
-            //TODO add dialog
-            Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No Image Selected", Toast.LENGTH_SHORT).show();
             editEvent(null);
         }
     }

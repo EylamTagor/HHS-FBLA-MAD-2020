@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * Represents a class where users can choose their chapter or opt to create a new one
  */
-public class SignupActivity extends AppCompatActivity implements ChapterAdapter.OnItemClickListener{
+public class SignupActivity extends AppCompatActivity implements ChapterAdapter.OnItemClickListener {
     private RecyclerView recyclerView;
     private SearchView searchView;
     private ChapterAdapter adapter;
@@ -55,6 +55,7 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
      * with data of the existing event from the database
+     *
      * @param savedInstanceState the save state of the activity or page
      */
     @Override
@@ -88,7 +89,7 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
                 return false;
             }
         });
-        db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection("chapters").orderBy("name").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 chapterList = queryDocumentSnapshots.toObjects(Chapter.class);
@@ -108,53 +109,11 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
     }
 
     /**
-     * Writes the user to the database and sets their chapter to the one selected
-     * @param snapshot a snapshot of the data of the chapter from the databse
-     * @param uri the uri of the users profile picture
+     * Sets the users chapter to the parameter id, sets their status to member, and removes them from all their previous
+     * chapters events, if they were signed up. Also empties their event and competion signups
+     *
+     * @param id the id of the chapter selected
      */
-    public void updateUser(final DocumentSnapshot snapshot, final Uri uri) {
-        db.collection("chapters").document(snapshot.getId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot queryDocumentSnapshots) {
-//                                db.collection("users").document(fuser.getUid()).set(new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail()));
-                db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        User user = documentSnapshot.toObject(User.class);
-                        if(user == null) {
-                            user = new User(fuser.getDisplayName(), snapshot.getId(), fuser.getEmail());
-                            if(uri != null){
-                                user.setPic(uri.toString());
-                            }
-                            db.collection("users").document(fuser.getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
-//                                                    progressDialog.dismiss();
-                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                    startActivity(intent);
-                                    return;
-                                }
-                            });
-                        } else {
-                            db.collection("users").document(fuser.getUid()).update("chapter", snapshot.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    db.collection("chapters").document(snapshot.getId()).update("users", FieldValue.arrayUnion(fuser.getUid()));
-//                                                    progressDialog.dismiss();
-                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                    startActivity(intent);
-                                    return;
-                                }
-                            });
-                        }
-                    }
-                });
-
-            }
-        });
-    }
-
     private void changeChapter(final String id) {
         final DocumentReference userRef = db.collection("users").document(fuser.getUid());
         userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -165,7 +124,7 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
                 chapterRef.collection("events").whereArrayContains("attendees", fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for(DocumentSnapshot snap : queryDocumentSnapshots) {
+                        for (DocumentSnapshot snap : queryDocumentSnapshots) {
                             chapterRef.collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(fuser.getUid()));
                         }
                     }
@@ -177,7 +136,17 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
                         userRef.update("myEvents", new ArrayList<String>()).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                startActivity(new Intent(SignupActivity.this, HomeActivity.class));
+                                userRef.update("userType", UserType.MEMBER).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        userRef.update("comps", new ArrayList<String>()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                startActivity(new Intent(SignupActivity.this, HomeActivity.class));
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
                     }
@@ -189,6 +158,7 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
 
     /**
      * Adds the user to the database when a chapter is clicked
+     *
      * @param snapshot the chapter object pulled from Firebase Firestore, formatted as a DocumentSnapshot
      * @param position the numbered position of snapshot in the full chapter list
      */
@@ -199,7 +169,7 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
             @Override
             public void onSuccess(DocumentSnapshot snapshot) {
                 User user = snapshot.toObject(User.class);
-                if(user.getChapter().equals("")) {
+                if (user.getChapter().equals("")) {
                     db.collection("users").document(fuser.getUid()).update("chapter", id).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -211,7 +181,7 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
                             });
                         }
                     });
-                } else if(user.getChapter().equals(id)) {
+                } else if (user.getChapter().equals(id)) {
                     startActivity(new Intent(SignupActivity.this, HomeActivity.class));
                 } else {
                     changeChapter(id);

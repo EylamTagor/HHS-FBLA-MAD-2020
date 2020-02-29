@@ -115,7 +115,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
             @Override
             public void onClick(View view) {
                 if (uploadTask != null && uploadTask.isInProgress()) {
-                    Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_SHORT).show();
                 } else {
                     db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -175,7 +175,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
             if(limitEditText.getText().toString().trim().equalsIgnoreCase("") || limitEditText.getText().toString().trim().equalsIgnoreCase("no limit")) {
                 limitEditText.setText("No Limit");
             } else {
-                Toast.makeText(this, "Please enter a numeric limit", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Please enter a numeric limit", Toast.LENGTH_SHORT).show();
                 limitEditText.setText("No Limit");
                 return;
             }
@@ -260,7 +260,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
                         }
                     });
         } else {
-            Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No Image Selected", Toast.LENGTH_SHORT).show();
             addEvent(null, id);
         }
     }

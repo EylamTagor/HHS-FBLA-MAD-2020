@@ -138,7 +138,7 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
                     joinButton.setVisibility(View.GONE);
                 }
                 final String chap = documentSnapshot.get("chapter").toString();
-                db.collection("users").whereEqualTo("chapter", chap).whereArrayContains("comps", compName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("users").whereEqualTo("chapter", chap).whereArrayContains("comps", compName).orderBy("name").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         competitors.clear();

@@ -168,7 +168,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                             eventImage.setVisibility(View.GONE);
                         }
 
-                        db.collection("users").whereArrayContains("myEvents", id).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        db.collection("users").whereArrayContains("myEvents", id).orderBy("name").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 users.addAll(queryDocumentSnapshots.toObjects(User.class));

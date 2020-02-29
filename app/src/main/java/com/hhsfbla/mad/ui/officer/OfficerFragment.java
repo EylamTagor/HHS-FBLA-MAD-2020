@@ -80,7 +80,7 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 final String chap = documentSnapshot.get("chapter").toString();
-                db.collection("users").whereEqualTo("chapter", chap).whereEqualTo("userType", type).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("users").whereEqualTo("chapter", chap).whereEqualTo("userType", type).orderBy("name").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         officers.clear();

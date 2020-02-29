@@ -1,5 +1,7 @@
 package com.hhsfbla.mad.data;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -16,6 +18,7 @@ public class ChapterEvent {
     private String facebookLink;
     private String pic;
     private int memberLimit;
+    private long priority;
     public static final int NO_LIMIT = -1;
 
     /**
@@ -27,11 +30,12 @@ public class ChapterEvent {
 
     /**
      * Creates a new chapter event with the given parameters
-     * @param name the name of the event
-     * @param date the date of the event
-     * @param time the time of the event
-     * @param location the location of the event
-     * @param description a description of the event
+     *
+     * @param name         the name of the event
+     * @param date         the date of the event
+     * @param time         the time of the event
+     * @param location     the location of the event
+     * @param description  a description of the event
      * @param facebookLink a facebook link to the event
      */
     public ChapterEvent(String name, String date, String time, String location, String description, String facebookLink, String pic, int limit) {
@@ -44,10 +48,13 @@ public class ChapterEvent {
         this.pic = pic;
         attendees = new ArrayList<String>();
         this.memberLimit = limit;
+        if (!date.equalsIgnoreCase(""))
+            refreshPriority();
     }
 
     /**
      * Adds an attendee to the event
+     *
      * @param user the id of the new attendee
      */
     public void addAttendee(String user) {
@@ -56,6 +63,7 @@ public class ChapterEvent {
 
     /**
      * Removes an attendee from the event
+     *
      * @param user the id of the attendee to be removed
      */
     public void removeAttendee(User user) {
@@ -71,6 +79,7 @@ public class ChapterEvent {
 
     /**
      * Sets the name of the event
+     *
      * @param name the new name
      */
     public void setName(String name) {
@@ -86,6 +95,7 @@ public class ChapterEvent {
 
     /**
      * Sets the attendees of the event
+     *
      * @param attendees the new list of attendees
      */
     public void setAttendees(ArrayList<String> attendees) {
@@ -101,10 +111,13 @@ public class ChapterEvent {
 
     /**
      * Sets the date of the event
+     *
      * @param date the new date of the event in the format mm/dd/yyyy
      */
     public void setDate(String date) {
         this.date = date;
+        if (!date.equalsIgnoreCase(""))
+            refreshPriority();
     }
 
     /**
@@ -116,6 +129,7 @@ public class ChapterEvent {
 
     /**
      * Sets the location of the event
+     *
      * @param location the new location of the event
      */
     public void setLocation(String location) {
@@ -131,6 +145,7 @@ public class ChapterEvent {
 
     /**
      * Sets the description of the event
+     *
      * @param description the new description
      */
     public void setDescription(String description) {
@@ -146,6 +161,7 @@ public class ChapterEvent {
 
     /**
      * Sets the time of the event
+     *
      * @param time the new time of the event in the format hh:mm (military time)
      */
     public void setTime(String time) {
@@ -161,6 +177,7 @@ public class ChapterEvent {
 
     /**
      * Sets the uri of the event picture
+     *
      * @param pic the new uri
      */
     public void setPic(String pic) {
@@ -176,6 +193,7 @@ public class ChapterEvent {
 
     /**
      * Sets the facebook link of this event
+     *
      * @param facebookLink the new facebook link
      */
     public void setFacebookLink(String facebookLink) {
@@ -191,9 +209,66 @@ public class ChapterEvent {
 
     /**
      * Sets the new member limit for this event
+     *
      * @param memberLimit the new limit
      */
     public void setMemberLimit(int memberLimit) {
         this.memberLimit = memberLimit;
+    }
+
+    /**
+     * @return the priority, or how late the event is going to happen
+     */
+    public long getPriority() {
+        return priority;
+    }
+
+    /**
+     * Sets the priority, or how late the event is going to happen
+     *
+     * @param priority the new priority
+     */
+    public void setPriority(long priority) {
+        this.priority = priority;
+    }
+
+    private void refreshPriority() {
+        priority = 0;
+        int day = Integer.parseInt(date.substring(3, 5));
+        int month = Integer.parseInt(date.substring(0, 2));
+        int year = Integer.parseInt(date.substring(6));
+        while (month > 0) {
+            switch (month) {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 12:
+                    priority += 31;
+                    break;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    priority += 30;
+                    break;
+                case 2:
+                    if (((year % 4 == 0) &&
+                            !(year % 100 == 0))
+                            || (year % 400 == 0))
+                        priority += 29;
+                    else
+                        priority += 28;
+                    break;
+                default:
+                    Log.d("DATE PRIORITY", "refreshPriority: invalid month");
+                    break;
+            }
+            month--;
+        }
+        priority += 365 * year;
+        priority += day;
     }
 }
