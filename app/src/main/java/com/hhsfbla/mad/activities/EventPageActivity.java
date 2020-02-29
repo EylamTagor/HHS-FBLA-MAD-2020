@@ -349,4 +349,15 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     public void onItemClick(DocumentSnapshot snapshot, View v, int position) {
 
     }
+
+    /**
+     * Gets the file type of the given image uri: jpg, png, bmp, etc
+     * @param uri The uri of the image
+     * @return the file type extension
+     */
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
 }

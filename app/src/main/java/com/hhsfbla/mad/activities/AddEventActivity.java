@@ -3,6 +3,7 @@ package com.hhsfbla.mad.activities;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.exifinterface.media.ExifInterface;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,6 +46,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 
@@ -51,7 +55,7 @@ import java.util.Calendar;
  */
 public class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-    private static final int RESULT_LOAD_IMAGE = 1;
+    private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
     private StorageTask uploadTask;
     private ImageButton backBtn2, doneBtn, imageBtn;
@@ -63,6 +67,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     private StorageReference storageReference;
     private ProgressDialog progressDialog;
     private Button setDate, setTime;
+    private Bitmap bitmap;
 
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
@@ -121,9 +126,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
                         @Override
                         public void onSuccess(DocumentSnapshot snapshot) {
                             DocumentReference ref = db.collection("chapters").document(snapshot.toObject(User.class).getChapter()).collection("events").document();
-
                             uploadFile(ref.getId());
-
                         }
                     });
                 }
@@ -133,11 +136,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, RESULT_LOAD_IMAGE);
+                openFileChooser();
             }
         });
 
@@ -156,6 +155,14 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
                 timePicker.show(getSupportFragmentManager(), "time picker");
             }
         });
+    }
+
+    private void openFileChooser() {
+        //                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
     /**
@@ -217,51 +224,10 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-//
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-            Picasso.get().load(imageUri).into(imageBtn);
-        }
-    }
-
-    /**
-     * Uploads the event image to cloud storage with the file name as id
-     *
-     * @param id the name of the file
-     */
-    private void uploadFile(final String id) {
-        if (imageUri != null) {
-            Log.d(TAG, imageUri.toString());
-            progressDialog.setMessage("Uploading...");
-            progressDialog.show();
-            final StorageReference fileRef = storageReference.child(id);
-            uploadTask = fileRef.putFile(imageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    addEvent(uri, id);
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-
-                        }
-                    });
-        } else {
-            Toast.makeText(this, "No Image Selected", Toast.LENGTH_SHORT).show();
-            addEvent(null, id);
+            bitmap = getImageBitmap(imageUri);
+            imageBtn.setImageBitmap(bitmap);
         }
     }
 
@@ -293,5 +259,120 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         String hour = i < 10 ? "0" + i : i + "";
         String minute = i1 < 10 ? "0" + i1 : i1 + "";
         timeEditTxt.setText(hour + ":" + minute);
+    }
+
+    /**
+     * Gets the image bitmap from the uri, checks how much it is rotated, and returns a new bitmap with the proper orientation
+     * @param uri the uri of the image
+     * @return the rotated bitmap
+     */
+    private Bitmap getImageBitmap(Uri uri) {
+        Bitmap rotatedBitmap = null;
+
+        try {
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            InputStream imageStream = getContentResolver().openInputStream(uri);
+            Bitmap bitmap = BitmapFactory.decodeStream(imageStream, null, options);
+            InputStream input = getContentResolver().openInputStream(uri);
+            ExifInterface ei = new ExifInterface(input);
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotatedBitmap = rotateImage(bitmap, 90);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotatedBitmap = rotateImage(bitmap, 180);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotatedBitmap = rotateImage(bitmap, 270);
+                    break;
+
+                case ExifInterface.ORIENTATION_NORMAL:
+                default:
+                    rotatedBitmap = bitmap;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return rotatedBitmap;
+    }
+
+    /**
+     * Gets the file type of the given image uri: jpg, png, bmp, etc
+     * @param uri The uri of the image
+     * @return the file type extension
+     */
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    /**
+     * Rotates the bitmao a certain amount of angles
+     * @param source the bitmap to rotate
+     * @param angle the number of degrees to rotate
+     * @return the newly rotated bitmap
+     */
+    public Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+
+    /**
+     * Converts a bitmap to a byte array for database upload
+     * @param bitmap the bitmap to upload
+     * @return the byte array of the bitmap
+     */
+    public static byte[] getBytesFromBitmap(Bitmap bitmap){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        return baos.toByteArray();
+    }
+
+    /**
+     * Uploads the event image to cloud storage with the file name as id
+     *
+     * @param id the name of the file
+     */
+    private void uploadFile(final String id) {
+        if (imageUri != null && bitmap != null) {
+            progressDialog.setMessage("Uploading...");
+            progressDialog.show();
+            final StorageReference fileRef = storageReference.child(id);
+            byte[] file = getBytesFromBitmap(bitmap);
+            uploadTask = fileRef.putBytes(file)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    addEvent(uri, id);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "No Image Selected", Toast.LENGTH_SHORT).show();
+            addEvent(null, id);
+        }
     }
 }

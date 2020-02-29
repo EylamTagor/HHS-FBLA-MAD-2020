@@ -82,7 +82,6 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 adapter.getFilter().filter(newText);
