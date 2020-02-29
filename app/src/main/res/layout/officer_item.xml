@@ -33,7 +33,7 @@
                 app:layout_constraintStart_toEndOf="@+id/officerImageDetail"
                 app:layout_constraintTop_toTopOf="@+id/officerImageDetail" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/officerImageDetail"
                 android:layout_width="48dp"
                 android:layout_height="48dp"

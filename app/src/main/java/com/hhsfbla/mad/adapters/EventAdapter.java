@@ -69,10 +69,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.date.setText(event.getDate());
         holder.time.setText(event.getTime());
         holder.location.setText(event.getLocation());
-//        if(event.getPic() != "" && event.getPic() != null) {
-//            Picasso.get().load(Uri.parse(event.getPic())).fit().centerCrop().into(holder.pic);
-//        } else
-//            holder.pic.setVisibility(View.GONE);
+        holder.limit.setText(event.getMemberLimit() == ChapterEvent.NO_LIMIT ? "No Limit" : event.getAttendees().size() + "/" + event.getMemberLimit());
+        if(event.getPic() != "" && event.getPic() != null) {
+            Picasso.get().load(Uri.parse(event.getPic())).fit().centerCrop().into(holder.pic);
+        } else
+            holder.pic.setVisibility(View.GONE);
     }
 
     /**
@@ -100,8 +101,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         /**
          * the title, date, time and location of the event, to be displayed
          */
-        public TextView title, date, time, location;
-//        public ImageView pic;
+        public TextView title, date, time, location, limit;
+        /**
+         * the picture of the event, to be displayed
+         */
+        public ImageView pic;
 
         /**
          * the parent layout of the RecyclerView that utilizes EventAdapter
@@ -120,7 +124,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             date = itemView.findViewById(R.id.eventDate);
             time = itemView.findViewById(R.id.eventTime);
             location = itemView.findViewById(R.id.eventLocation);
-//            pic = itemView.findViewById(R.id.eventPic);
+            limit = itemView.findViewById(R.id.eventMemberLimit);
+            pic = itemView.findViewById(R.id.eventPic);
             constraintLayout = itemView.findViewById(R.id.eventConstraintLayout);
             constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

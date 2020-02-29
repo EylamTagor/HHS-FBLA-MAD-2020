@@ -27,6 +27,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Adapter for RecyclerViews that display a list of all officers (and details) in a chapter
  */
@@ -152,7 +154,7 @@ public class OfficerAdapter extends RecyclerView.Adapter<OfficerAdapter.ViewHold
         /**
          * the profile picture of the officer, to be displayed
          */
-        public ImageView pic;
+        public CircleImageView pic;
 
         /**
          * the parent layout of the RecyclerView that utilizes OfficerAdapter

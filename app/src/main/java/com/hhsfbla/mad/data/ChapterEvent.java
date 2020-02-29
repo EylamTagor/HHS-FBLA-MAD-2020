@@ -14,13 +14,15 @@ public class ChapterEvent {
     private String location;
     private String description;
     private String facebookLink;
-//    private String pic;
+    private String pic;
+    private int memberLimit;
+    public static final int NO_LIMIT = -1;
 
     /**
      * Creates a new chapter event with no name, date, time, location, description, or facebook link
      */
     public ChapterEvent() {
-        this("", "", "", "", "", ""/*, null*/);
+        this("", "", "", "", "", "", null, NO_LIMIT);
     }
 
     /**
@@ -32,15 +34,16 @@ public class ChapterEvent {
      * @param description a description of the event
      * @param facebookLink a facebook link to the event
      */
-    public ChapterEvent(String name, String date, String time, String location, String description, String facebookLink/*, String pic*/) {
+    public ChapterEvent(String name, String date, String time, String location, String description, String facebookLink, String pic, int limit) {
         this.name = name;
         this.date = date;
         this.time = time;
         this.location = location;
         this.description = description;
         this.facebookLink = facebookLink;
-//        this.pic = pic;
+        this.pic = pic;
         attendees = new ArrayList<String>();
+        this.memberLimit = limit;
     }
 
     /**
@@ -149,13 +152,20 @@ public class ChapterEvent {
         this.time = time;
     }
 
-//    public String getPic() {
-//        return pic;
-//    }
-//
-//    public void setPic(String pic) {
-//        this.pic = pic;
-//    }
+    /**
+     * @return the uri of the event picture
+     */
+    public String getPic() {
+        return pic;
+    }
+
+    /**
+     * Sets the uri of the event picture
+     * @param pic the new uri
+     */
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
 
     /**
      * @return a link to the facebook event corresponding to this event
@@ -170,5 +180,20 @@ public class ChapterEvent {
      */
     public void setFacebookLink(String facebookLink) {
         this.facebookLink = facebookLink;
+    }
+
+    /**
+     * @return the limit to the number of members that can sign up for this event
+     */
+    public int getMemberLimit() {
+        return memberLimit;
+    }
+
+    /**
+     * Sets the new member limit for this event
+     * @param memberLimit the new limit
+     */
+    public void setMemberLimit(int memberLimit) {
+        this.memberLimit = memberLimit;
     }
 }

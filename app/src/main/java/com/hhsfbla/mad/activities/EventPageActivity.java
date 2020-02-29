@@ -64,12 +64,12 @@ import java.util.List;
  */
 public class EventPageActivity extends AppCompatActivity implements DeleteEventDialog.DeleteEventDialogListener, UserAdapter.OnItemClickListener {
 
-//    private StorageReference storageReference;
+    private StorageReference storageReference;
     private ShareDialog shareDialog;
     private CallbackManager callbackManager;
     private LoginManager manager;
     private TextView title, date, time, location, desc, link, memberCount;
-//    private ImageView eventImage;
+    private ImageView eventImage;
     private ChapterEvent mainEvent;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -87,6 +87,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
      * with data of the existing event from the database
+     *
      * @param savedInstanceState the save state of the activity or page
      */
     @Override
@@ -97,7 +98,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         setTitle("Event Details");
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Deleting...");
-//        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
+        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
         title = findViewById(R.id.eventTitleDetail);
         date = findViewById(R.id.eventDateDetail);
         time = findViewById(R.id.eventTimeDetail);
@@ -115,7 +116,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         editButton = findViewById(R.id.editButton);
         back = findViewById(R.id.doneBtn4);
         deleteButton = findViewById(R.id.deleteEvent);
-//        eventImage = findViewById(R.id.eventPicDetail);
+        eventImage = findViewById(R.id.eventPicDetail);
         recyclerView = findViewById(R.id.attendeeRecylerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -143,12 +144,14 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                         String name = getIntent().getStringExtra("EVENT_POSITION");
                         for (final ChapterEvent event : events) {
                             if (event.getName().equals(name)) {
-                                if (event.getAttendees().contains(user.getUid())) {
-                                    joinButton.setVisibility(View.GONE);
-                                    unJoinButton.setVisibility(View.VISIBLE);
-                                } else {
-                                    joinButton.setVisibility(View.VISIBLE);
-                                    unJoinButton.setVisibility(View.GONE);
+                                if(event.getMemberLimit() == ChapterEvent.NO_LIMIT || event.getAttendees().size() < event.getMemberLimit()) {
+                                    if (event.getAttendees().contains(user.getUid())) {
+                                        joinButton.setVisibility(View.GONE);
+                                        unJoinButton.setVisibility(View.VISIBLE);
+                                    } else {
+                                        joinButton.setVisibility(View.VISIBLE);
+                                        unJoinButton.setVisibility(View.GONE);
+                                    }
                                 }
                                 mainEvent = event;
 
@@ -161,11 +164,11 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                                 link.setText(mainEvent.getFacebookLink());
                                 link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click here for more information</a>"));
                                 link.setMovementMethod(LinkMovementMethod.getInstance());
-//                                if(mainEvent.getPic() != null && mainEvent.getPic() != "") {
-//                                    Log.d(TAG, mainEvent.getPic());
-//                                    Picasso.get().load(Uri.parse(mainEvent.getPic())).fit().centerCrop().into(eventImage);
-//                                } else
-//                                    eventImage.setVisibility(View.GONE);
+                                if (mainEvent.getPic() != null && mainEvent.getPic() != "") {
+                                    Log.d(TAG, mainEvent.getPic());
+                                    Picasso.get().load(Uri.parse(mainEvent.getPic())).fit().centerCrop().into(eventImage);
+                                } else
+                                    eventImage.setVisibility(View.GONE);
 
                                 db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                     @Override
@@ -176,7 +179,11 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                                             }
                                         }
                                         adapter.setUsers(users);
-                                        memberCount.setText(users.size() + "");
+                                        if (mainEvent.getMemberLimit() == ChapterEvent.NO_LIMIT) {
+                                            memberCount.setText(users.size() + "");
+                                        } else {
+                                            memberCount.setText(users.size() + "/" + mainEvent.getMemberLimit());
+                                        }
                                         adapter.notifyDataSetChanged();
                                     }
                                 });
@@ -283,9 +290,9 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     }
 
     /**
-     *
+     *  Deletes the image of the event in the storage, as well as the event itself in the databse
      */
-    private void deleteInDB() {
+    public void deleteInDB() {
         progressDialog.show();
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -298,49 +305,50 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                         for (final DocumentSnapshot snap : queryDocumentSnapshots) {
                             ChapterEvent event = snap.toObject(ChapterEvent.class);
 
-                            if(event.getName().equals(name)) {
-//                                if(event.getPic() == null || event.getPic() == "") {
-                                    Log.d(TAG, "event has no pic");
-//                            if (event.getName().equals(name)) {
-//                                if (event.getPic() == null || event.getPic() == "") {
-                                    db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
-                                    db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            for (DocumentSnapshot snap : queryDocumentSnapshots) {
-                                                if (snap.toObject(User.class).getMyEvents().contains(snap.getId())) {
-                                                    db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
+                            if (event.getName().equals(name)) {
+                                if (event.getPic() == null || event.getPic() == "") {
+                                    if (event.getName().equals(name)) {
+                                        if (event.getPic() == null || event.getPic() == "") {
+                                            db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
+                                            db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                    for (DocumentSnapshot snap : queryDocumentSnapshots) {
+                                                        if (snap.toObject(User.class).getMyEvents().contains(snap.getId())) {
+                                                            db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
+                                                        }
+                                                    }
+                                                    progressDialog.dismiss();
+                                                    startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
                                                 }
-                                            }
-                                            progressDialog.dismiss();
-                                            startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
+                                            });
+                                            return;
                                         }
-                                    });
-//                                    return;
-//                                }
-//                                StorageReference storageRef = storageReference.child(snap.getId());
-//                                storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                    @Override
-//                                    public void onSuccess(Void aVoid) {
-//                                        Log.d(TAG, "deleted in storage");
-//                                        db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
-//                                        Log.d(TAG, "deleting in db");
-//                                        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                                            @Override
-//                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                                                for(DocumentSnapshot snap : queryDocumentSnapshots) {
-//                                                    if(snap.toObject(User.class).getMyEvents().contains(snap.getId())) {
-//                                                        Log.d(TAG, "hithere");
-//                                                        db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
-//                                                    }
-//                                                }
-//                                                progressDialog.dismiss();
-//                                                startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
-//                                            }
-//                                        });
-//                                    }
-//                                });
-                                    return;
+                                        StorageReference storageRef = storageReference.child(snap.getId());
+                                        storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "deleted in storage");
+                                                db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
+                                                Log.d(TAG, "deleting in db");
+                                                db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                        for (DocumentSnapshot snap : queryDocumentSnapshots) {
+                                                            if (snap.toObject(User.class).getMyEvents().contains(snap.getId())) {
+                                                                Log.d(TAG, "hithere");
+                                                                db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
+                                                            }
+                                                        }
+                                                        progressDialog.dismiss();
+                                                        startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        return;
+                                    }
+                                }
                             }
                         }
                     }
@@ -361,9 +369,10 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     /**
      * This method gets called after an action to get data from the user
      * handles callback for facebook sharing
+     *
      * @param requestCode the request code of the request
-     * @param resultCode a code representing the state of the result of the action
-     * @param data the data gained from the activity
+     * @param resultCode  a code representing the state of the result of the action
+     * @param data        the data gained from the activity
      */
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
@@ -373,6 +382,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
 
     /**
      * Gets the confirmation of whether or not to delete the event from the dialog and acts accordingly
+     *
      * @param confirm whether or not to delete the event
      */
     @Override
@@ -384,8 +394,9 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
 
     /**
      * Describes what to do when a user from the attendees recycler view is clicked, in this case nothing is necessary
+     *
      * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
-     * @param v the View that will contain the click action
+     * @param v        the View that will contain the click action
      * @param position the numbered position of snapshot in the full item list
      */
     @Override
