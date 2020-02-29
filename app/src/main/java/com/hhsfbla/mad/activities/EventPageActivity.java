@@ -83,6 +83,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     private UserAdapter adapter;
     private ArrayList<User> users;
     private static final String TAG = "Event Details Page";
+    private String id;
 
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
@@ -128,7 +129,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         shareDialog = new ShareDialog(this);
         //this loginManager helps you eliminate adding a LoginButton to your UI
         manager = LoginManager.getInstance();
-
+        id = getIntent().getStringExtra("EVENT_ID");
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -137,59 +138,50 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                     editButton.setVisibility(View.GONE);
                     deleteButton.setVisibility(View.GONE);
                 }
-                db.collection("chapters").document(currentUser.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("chapters").document(currentUser.getChapter()).collection("events").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<ChapterEvent> events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
-                        String name = getIntent().getStringExtra("EVENT_POSITION");
-                        for (final ChapterEvent event : events) {
-                            if (event.getName().equals(name)) {
-                                if(event.getMemberLimit() == ChapterEvent.NO_LIMIT || event.getAttendees().size() < event.getMemberLimit()) {
-                                    if (event.getAttendees().contains(user.getUid())) {
-                                        joinButton.setVisibility(View.GONE);
-                                        unJoinButton.setVisibility(View.VISIBLE);
-                                    } else {
-                                        joinButton.setVisibility(View.VISIBLE);
-                                        unJoinButton.setVisibility(View.GONE);
-                                    }
-                                }
-                                mainEvent = event;
-
-                                //set event details
-                                title.setText(mainEvent.getName());
-                                date.setText(mainEvent.getDate());
-                                time.setText(mainEvent.getTime());
-                                location.setText(mainEvent.getLocation());
-                                desc.setText(mainEvent.getDescription());
-                                link.setText(mainEvent.getFacebookLink());
-                                link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click here for more information</a>"));
-                                link.setMovementMethod(LinkMovementMethod.getInstance());
-                                if (mainEvent.getPic() != null && mainEvent.getPic() != "") {
-                                    Log.d(TAG, mainEvent.getPic());
-                                    Picasso.get().load(Uri.parse(mainEvent.getPic())).fit().centerCrop().into(eventImage);
-                                } else
-                                    eventImage.setVisibility(View.GONE);
-
-                                db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                        for (DocumentSnapshot user : queryDocumentSnapshots) {
-                                            if (event.getAttendees().contains(user.getId())) {
-                                                users.add(user.toObject(User.class));
-                                            }
-                                        }
-                                        adapter.setUsers(users);
-                                        if (mainEvent.getMemberLimit() == ChapterEvent.NO_LIMIT) {
-                                            memberCount.setText(users.size() + "");
-                                        } else {
-                                            memberCount.setText(users.size() + "/" + mainEvent.getMemberLimit());
-                                        }
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                });
-                                return;
-                            }
+                    public void onSuccess(DocumentSnapshot snapshot) {
+                        final ChapterEvent event = snapshot.toObject(ChapterEvent.class);
+                        mainEvent = event;
+                        if (event.getAttendees().contains(user.getUid())) {
+                            joinButton.setVisibility(View.GONE);
+                            unJoinButton.setVisibility(View.VISIBLE);
+                        } else if (event.getMemberLimit() == ChapterEvent.NO_LIMIT || event.getAttendees().size() < event.getMemberLimit()) {
+                            joinButton.setVisibility(View.VISIBLE);
+                            unJoinButton.setVisibility(View.GONE);
                         }
+
+
+                        //set event details
+                        title.setText(mainEvent.getName());
+                        date.setText(mainEvent.getDate());
+                        time.setText(mainEvent.getTime());
+                        location.setText(mainEvent.getLocation());
+                        desc.setText(mainEvent.getDescription());
+                        link.setText(mainEvent.getFacebookLink());
+                        link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click here for more information</a>"));
+                        link.setMovementMethod(LinkMovementMethod.getInstance());
+                        if (mainEvent.getPic() != null && mainEvent.getPic() != "") {
+                            Log.d(TAG, mainEvent.getPic());
+                            Picasso.get().load(Uri.parse(mainEvent.getPic())).fit().centerCrop().into(eventImage);
+                        } else {
+                            eventImage.setVisibility(View.GONE);
+                        }
+
+                        db.collection("users").whereArrayContains("myEvents", id).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                users.addAll(queryDocumentSnapshots.toObjects(User.class));
+                                adapter.setUsers(users);
+                                if (mainEvent.getMemberLimit() == ChapterEvent.NO_LIMIT) {
+                                    memberCount.setText(users.size() + "");
+                                } else {
+                                    memberCount.setText(users.size() + "/" + mainEvent.getMemberLimit());
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                        return;
                     }
                 });
             }
@@ -210,18 +202,12 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                 userdoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(final DocumentSnapshot userSnap) {
-                        final String name = getIntent().getStringExtra("EVENT_POSITION");
-                        db.collection("chapters").document(userSnap.toObject(User.class).getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        userdoc.update("myEvents", FieldValue.arrayUnion(id));
+                        db.collection("chapters").document(userSnap.toObject(User.class).getChapter()).collection("events").document(id).update("attendees", FieldValue.arrayUnion(user.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                for (QueryDocumentSnapshot event : queryDocumentSnapshots) {
-                                    if (event.get("name").equals(name)) {
-                                        userdoc.update("myEvents", FieldValue.arrayUnion(event.getId()));
-                                        db.collection("chapters").document(userSnap.toObject(User.class).getChapter()).collection("events").document(event.getId()).update("attendees", FieldValue.arrayUnion(user.getUid()));
-                                        finish();
-                                        startActivity(getIntent());
-                                    }
-                                }
+                            public void onSuccess(Void aVoid) {
+                                finish();
+                                startActivity(getIntent());
                             }
                         });
                     }
@@ -237,22 +223,12 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                 userdoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(final DocumentSnapshot userSnap) {
-                        final String name = getIntent().getStringExtra("EVENT_POSITION");
-                        db.collection("chapters").document(userSnap.toObject(User.class).getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        userdoc.update("myEvents", FieldValue.arrayRemove(id));
+                        db.collection("chapters").document(userSnap.toObject(User.class).getChapter()).collection("events").document(id).update("attendees", FieldValue.arrayRemove(user.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                for (QueryDocumentSnapshot event : queryDocumentSnapshots) {
-                                    if (event.get("name").equals(name)) {
-                                        userdoc.update("myEvents", FieldValue.arrayRemove(event.getId()));
-                                        db.collection("chapters").document(userSnap.toObject(User.class).getChapter()).collection("events").document(event.getId()).update("attendees", FieldValue.arrayRemove(user.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                finish();
-                                                startActivity(getIntent());
-                                            }
-                                        });
-                                    }
-                                }
+                            public void onSuccess(Void aVoid) {
+                                finish();
+                                startActivity(getIntent());
                             }
                         });
                     }
@@ -271,8 +247,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(EventPageActivity.this, EditEventActivity.class);
-                String name = getIntent().getStringExtra("EVENT_POSITION");
-                intent.putExtra("EVENT_NAME", name);
+                intent.putExtra("EVENT_ID", id);
                 startActivity(intent);
             }
         });
@@ -290,7 +265,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     }
 
     /**
-     *  Deletes the image of the event in the storage, as well as the event itself in the databse
+     * Deletes the image of the event in the storage, as well as the event itself in the databse
      */
     public void deleteInDB() {
         progressDialog.show();
@@ -298,59 +273,30 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 final User user = documentSnapshot.toObject(User.class);
-                db.collection("chapters").document(user.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("chapters").document(user.getChapter()).collection("events").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        String name = getIntent().getStringExtra("EVENT_POSITION");
-                        for (final DocumentSnapshot snap : queryDocumentSnapshots) {
-                            ChapterEvent event = snap.toObject(ChapterEvent.class);
-
-                            if (event.getName().equals(name)) {
-                                if (event.getPic() == null || event.getPic() == "") {
-                                    if (event.getName().equals(name)) {
-                                        if (event.getPic() == null || event.getPic() == "") {
-                                            db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
-                                            db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                                @Override
-                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                    for (DocumentSnapshot snap : queryDocumentSnapshots) {
-                                                        if (snap.toObject(User.class).getMyEvents().contains(snap.getId())) {
-                                                            db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
-                                                        }
-                                                    }
-                                                    progressDialog.dismiss();
-                                                    startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
-                                                }
-                                            });
-                                            return;
+                    public void onSuccess(DocumentSnapshot chapterEvent) {
+                        final ChapterEvent event = chapterEvent.toObject(ChapterEvent.class);
+                        db.collection("chapters").document(user.getChapter()).collection("events").document(id).delete();
+                        db.collection("users").whereArrayContains("myEvents", id).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for (DocumentSnapshot snap : queryDocumentSnapshots) {
+                                    db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
+                                }
+                                progressDialog.dismiss();
+                                if (!event.getPic().equals("")) {
+                                    storageReference.child(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
                                         }
-                                        StorageReference storageRef = storageReference.child(snap.getId());
-                                        storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d(TAG, "deleted in storage");
-                                                db.collection("chapters").document(user.getChapter()).collection("events").document(snap.getId()).delete();
-                                                Log.d(TAG, "deleting in db");
-                                                db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                                    @Override
-                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                        for (DocumentSnapshot snap : queryDocumentSnapshots) {
-                                                            if (snap.toObject(User.class).getMyEvents().contains(snap.getId())) {
-                                                                Log.d(TAG, "hithere");
-                                                                db.collection("users").document(snap.getId()).update("myEvents", FieldValue.arrayRemove(snap.getId()));
-                                                            }
-                                                        }
-                                                        progressDialog.dismiss();
-                                                        startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
-                                                    }
-                                                });
-                                            }
-                                        });
-                                        return;
-                                    }
+                                    });
+                                } else {
+                                    startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
                                 }
                             }
-                        }
+                        });
                     }
                 });
             }

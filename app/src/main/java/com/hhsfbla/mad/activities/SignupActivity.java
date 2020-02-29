@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,6 +31,7 @@ import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.adapters.ChapterAdapter;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.data.UserType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,43 +155,36 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
         });
     }
 
-    /**
-     * Uploads the profile picture of the user to cloud storage with the file name as id
-     * @param snapshot the id of the users chapter
-     */
-    public void uploadFile(final DocumentSnapshot snapshot) {
-        if(fuser.getPhotoUrl() != null) {
-//            progressDialog.setMessage("Uploading...");
-//            progressDialog.show();
-            final StorageReference fileRef = storageReference.child(fuser.getUid());
-            uploadTask = fileRef.putFile(fuser.getPhotoUrl())
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    updateUser(snapshot, uri);
-                                }
-                            });
+    private void changeChapter(final String id) {
+        final DocumentReference userRef = db.collection("users").document(fuser.getUid());
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot snapshot) {
+                final DocumentReference chapterRef = db.collection("chapters").document(snapshot.getId());
+                chapterRef.update("users", FieldValue.arrayRemove(fuser.getUid()));
+                chapterRef.collection("events").whereArrayContains("attendees", fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(DocumentSnapshot snap : queryDocumentSnapshots) {
+                            chapterRef.collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(fuser.getUid()));
                         }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
+                    }
+                });
 
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                userRef.update("chapter", id).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        userRef.update("myEvents", new ArrayList<String>()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                startActivity(new Intent(SignupActivity.this, HomeActivity.class));
+                            }
+                        });
+                    }
+                });
+            }
+        });
 
-                        }
-                    });
-        } else {
-            Toast.makeText(this, "No Image Selected", Toast.LENGTH_LONG).show();
-            updateUser(snapshot, null);
-        }
     }
 
     /**
@@ -199,6 +194,24 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
      */
     @Override
     public void onItemClick(DocumentSnapshot snapshot, int position) {
-        updateUser(snapshot, fuser.getPhotoUrl());
+        final String id = snapshot.getId();
+        db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot snapshot) {
+                User user = snapshot.toObject(User.class);
+                if(user.getChapter().equals("")) {
+                    db.collection("users").document(fuser.getUid()).update("chapter", id).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            startActivity(new Intent(SignupActivity.this, HomeActivity.class));
+                        }
+                    });
+                } else if(user.getChapter().equals(id)) {
+                    startActivity(new Intent(SignupActivity.this, HomeActivity.class));
+                } else {
+                    changeChapter(id);
+                }
+            }
+        });
     }
 }

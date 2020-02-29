@@ -67,6 +67,11 @@ public class MyCompsFragment extends Fragment implements CompsAdapter.OnItemClic
         adapter = new CompsAdapter(comps, root.getContext());
         adapter.setOnItemClickListener(this);
         compsRecyclerView.setAdapter(adapter);
+        initRecyclerView();
+        return root;
+    }
+
+    private void initRecyclerView() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -89,19 +94,18 @@ public class MyCompsFragment extends Fragment implements CompsAdapter.OnItemClic
                 }
             }
         });
-        return root;
     }
 
     /**
      * Handles any clicking action done inside the fragment
      *
-     * @param id the comp object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param snapshot the comp object pulled from Firebase Firestore, formatted as a DocumentSnapshot
      * @param position the numbered position of snapshot in the full comp list
      */
     @Override
-    public void onItemClick(String id, int position) {
+    public void onItemClick(DocumentSnapshot snapshot, int position) {
         Intent intent = new Intent(getContext(), CompDetailActivity.class);
-        intent.putExtra("COMP_POSITION", id);
+        intent.putExtra("COMP_ID", snapshot.getId());
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         getContext().startActivity(intent);
     }

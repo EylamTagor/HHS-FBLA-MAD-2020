@@ -108,13 +108,13 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
     /**
      * Handles any clicking action done inside this fragment
      *
-     * @param name the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
      * @param position the numbered position of snapshot in the full item list
      */
     @Override
-    public void onItemClick(String name, int position) {
+    public void onItemClick(DocumentSnapshot snapshot, int position) {
         Intent intent = new Intent(getContext(), EventPageActivity.class);
-        intent.putExtra("EVENT_POSITION", name);
+        intent.putExtra("EVENT_ID", snapshot.getId());
         getContext().startActivity(intent);
     }
 }

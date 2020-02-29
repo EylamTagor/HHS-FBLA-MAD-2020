@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
@@ -106,13 +107,13 @@ public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickL
     /**
      * Handles any clicking action done inside this fragment
      *
-     * @param id the comp object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param snapshot the comp object pulled from Firebase Firestore, formatted as a DocumentSnapshot
      * @param position the numbered position of snapshot in the full comp list
      */
     @Override
-    public void onItemClick(String id, int position) {
+    public void onItemClick(DocumentSnapshot snapshot, int position) {
         Intent intent = new Intent(getContext(), CompDetailActivity.class);
-        intent.putExtra("COMP_POSITION", id);
+        intent.putExtra("COMP_ID", snapshot.getId());
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         getContext().startActivity(intent);
     }

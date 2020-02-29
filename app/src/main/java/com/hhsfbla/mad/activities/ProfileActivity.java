@@ -55,6 +55,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
      * with data of the existing event from the database
+     *
      * @param savedInstanceState the save state of the activity or page
      */
     @Override
@@ -177,6 +178,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
 
     /**
      * Deletes the account based on confirmation and sends the user to the login screen
+     *
      * @param confirm whether or not to delete the account
      */
     @Override
@@ -190,13 +192,11 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                     db.collection("chapters").document(documentSnapshot.get("chapter").toString()).update("users", FieldValue.arrayRemove(user.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").whereArrayContains("attendees", user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                     for (DocumentSnapshot snap : queryDocumentSnapshots) {
-                                        if (((List<String>) snap.get("attendees")).contains(user.getUid())) {
-                                            db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
-                                        }
+                                        db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
                                     }
                                     db.collection("users").document(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
@@ -224,60 +224,13 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
 
     /**
      * Changes chapters based on the confirmation and sends the user to the chapter signup screen
+     *
      * @param confirm whether or not to change chapters
      */
     @Override
     public void sendChangeConfirmation(boolean confirm) {
         if (confirm) {
-            progressDialog.setMessage("Saving changes...");
-            progressDialog.show();
-            db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(final DocumentSnapshot documentSnapshot) {
-                    final String chapter = documentSnapshot.get("chapter").toString();
-                    db.collection("users").document(user.getUid()).update("chapter", "");
-                    db.collection("users").document(user.getUid()).update("userType", UserType.MEMBER);
-                    db.collection("chapters").document(chapter).update("users", FieldValue.arrayRemove(user.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            db.collection("chapters").document(chapter).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    if (documentSnapshot.toObject(Chapter.class).getUsers() == null || documentSnapshot.toObject(Chapter.class).getUsers().isEmpty()) {
-                                        db.collection("chapters").document(chapter).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                progressDialog.dismiss();
-                                                finish();
-                                                Intent intent = new Intent(ProfileActivity.this, SignupActivity.class);
-                                                startActivity(intent);
-                                            }
-                                        });
-                                    } else {
-                                        db.collection("chapters").document(chapter).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                for (DocumentSnapshot snap : queryDocumentSnapshots) {
-                                                    if (((List<String>) snap.get("attendees")).contains(user.getUid())) {
-                                                        db.collection("chapters").document(chapter).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
-                                                    }
-                                                }
-                                                progressDialog.dismiss();
-                                                finish();
-                                                Intent intent = new Intent(ProfileActivity.this, SignupActivity.class);
-                                                startActivity(intent);
-                                            }
-                                        });
-                                        if (documentSnapshot.toObject(Chapter.class).getUsers().size() == 1) {
-                                            db.collection("users").document(documentSnapshot.toObject(Chapter.class).getUsers().get(0)).update("userType", UserType.ADVISOR);
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+            startActivity(new Intent(ProfileActivity.this, SignupActivity.class));
         }
     }
 }

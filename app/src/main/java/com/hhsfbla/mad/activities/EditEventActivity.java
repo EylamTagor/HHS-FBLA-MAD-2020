@@ -59,10 +59,12 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     private static final String TAG = "EDIT EVENT PAGE";
     private ProgressDialog progressDialog;
     private boolean hasImageChanged;
+    private String id;
 
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
      * with data of the existing event from the database
+     *
      * @param savedInstanceState the save state of the activity or page
      */
     @Override
@@ -86,7 +88,8 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         imageBtn = findViewById(R.id.eventImageEdit);
         setDateButton = findViewById(R.id.editSetDateButton);
         setTimeButton = findViewById(R.id.editSetTimeButton);
-//        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
+        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
+        id = getIntent().getStringExtra("EVENT_ID");
 
         backBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,27 +103,11 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
             //TODO: save information typed on this page
             @Override
             public void onClick(View view) {
-                if(uploadTask != null && uploadTask.isInProgress()) {
+                if (uploadTask != null && uploadTask.isInProgress()) {
                     Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_LONG).show();
                 } else {
-                    db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot snapshot) {
-                            db.collection("chapters").document(snapshot.toObject(User.class).getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                @Override
-                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                                        String name = getIntent().getStringExtra("EVENT_NAME");
-                                        if(snap.toObject(ChapterEvent.class).getName().equalsIgnoreCase(name)) {
-                                            uploadFile(snap.getId());
-                                        }
-                                    }
-                                }
-                            });
-
-                        }
-                    });
-               }
+                    uploadFile(id);
+                }
             }
         });
 
@@ -154,30 +141,24 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currentUser = documentSnapshot.toObject(User.class);
-                db.collection("chapters").document(currentUser.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("chapters").document(currentUser.getChapter()).collection("events").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        String name = getIntent().getStringExtra("EVENT_NAME");
-
-                        List<ChapterEvent> events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
-                        for(ChapterEvent event : events) {
-                            if(event.getName().equalsIgnoreCase(name)) {
-                                nameEditTxt.setText(event.getName());
-                                dateEditTxt.setText(event.getDate());
-                                timeEditTxt.setText(event.getTime());
-                                locaEditTxt.setText(event.getLocation());
-                                descrEditTxt.setText(event.getDescription());
-                                linkEditTxt.setText(event.getFacebookLink());
-                                if(event.getMemberLimit() != ChapterEvent.NO_LIMIT) {
-                                    memberLimit.setText(event.getMemberLimit() + "");
-                                } else {
-                                    memberLimit.setText("No Limit");
-                                }
-                                if(event.getPic() != null && !event.getPic().equals("")) {
-                                    imageUri = Uri.parse(event.getPic());
-                                    Picasso.get().load(imageUri).fit().centerCrop().into(imageBtn);
-                                }
-                            }
+                    public void onSuccess(DocumentSnapshot snapshot) {
+                        ChapterEvent event = snapshot.toObject(ChapterEvent.class);
+                        nameEditTxt.setText(event.getName());
+                        dateEditTxt.setText(event.getDate());
+                        timeEditTxt.setText(event.getTime());
+                        locaEditTxt.setText(event.getLocation());
+                        descrEditTxt.setText(event.getDescription());
+                        linkEditTxt.setText(event.getFacebookLink());
+                        if (event.getMemberLimit() != ChapterEvent.NO_LIMIT) {
+                            memberLimit.setText(event.getMemberLimit() + "");
+                        } else {
+                            memberLimit.setText("No Limit");
+                        }
+                        if (event.getPic() != null && !event.getPic().equals("")) {
+                            imageUri = Uri.parse(event.getPic());
+                            Picasso.get().load(imageUri).fit().centerCrop().into(imageBtn);
                         }
                     }
                 });
@@ -191,36 +172,44 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
      * @param uri the new uri of the event image
      */
     public void editEvent(final Uri uri) {
-
+        try {
+            Integer.parseInt(memberLimit.getText().toString().trim());
+        } catch(NumberFormatException e) {
+            Log.d(TAG, "editEvent: " + e.getMessage());
+            if(memberLimit.getText().toString().trim().equalsIgnoreCase("") || memberLimit.getText().toString().trim().equalsIgnoreCase("no limit")) {
+                memberLimit.setText("No Limit");
+            } else {
+                Toast.makeText(this, "Please enter a numeric limit", Toast.LENGTH_LONG).show();
+                memberLimit.setText("No Limit");
+                return;
+            }
+        }
         progressDialog.setMessage("Saving...");
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(final DocumentSnapshot userSnap) {
-                db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        String name = getIntent().getStringExtra("EVENT_NAME");
-                        List<ChapterEvent> events = queryDocumentSnapshots.toObjects(ChapterEvent.class);
-                        for(DocumentSnapshot snap : queryDocumentSnapshots) {
-                            if(snap.toObject(ChapterEvent.class).getName().equalsIgnoreCase(name)) {
-                                final ChapterEvent event = new ChapterEvent(
-                                        nameEditTxt.getText().toString().trim(),
-                                        dateEditTxt.getText().toString().trim(),
-                                        timeEditTxt.getText().toString().trim(),
-                                        locaEditTxt.getText().toString().trim(),
-                                        descrEditTxt.getText().toString().trim(),
-                                        linkEditTxt.getText().toString().trim(),
-                                        uri == null ? snap.toObject(ChapterEvent.class).getPic() : uri.toString(), Integer.parseInt(memberLimit.getText().toString().trim()));
-                                db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document(snap.getId()).set(event, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        progressDialog.dismiss();
-                                        startActivity(new Intent(EditEventActivity.this, HomeActivity.class));
-                                    }
-                                });
+                    public void onSuccess(DocumentSnapshot snapshot) {
+
+                        final ChapterEvent event = new ChapterEvent(
+                                nameEditTxt.getText().toString().trim(),
+                                dateEditTxt.getText().toString().trim(),
+                                timeEditTxt.getText().toString().trim(),
+                                locaEditTxt.getText().toString().trim(),
+                                descrEditTxt.getText().toString().trim(),
+                                linkEditTxt.getText().toString().trim(),
+                                uri == null ? snapshot.toObject(ChapterEvent.class).getPic() : uri.toString(),
+                                memberLimit.getText().toString().trim().equalsIgnoreCase("no limit") ? ChapterEvent.NO_LIMIT : Integer.parseInt(memberLimit.getText().toString().trim()));
+                        db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document(id).set(event, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                progressDialog.dismiss();
+                                startActivity(new Intent(EditEventActivity.this, HomeActivity.class));
                             }
-                        }
+                        });
                     }
+
                 });
             }
         });
@@ -229,9 +218,10 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     /**
      * This method gets called after an action to get data from the user
      * Sets image to newly selected image
+     *
      * @param requestCode the request code of the request
-     * @param resultCode a code representing the state of the result of the action
-     * @param data the data gained from the activity
+     * @param resultCode  a code representing the state of the result of the action
+     * @param data        the data gained from the activity
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -245,10 +235,11 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 
     /**
      * Uploads the event image to cloud storage with the file name as id
+     *
      * @param id the name of the file
      */
     private void uploadFile(String id) {
-        if(imageUri != null && hasImageChanged) {
+        if (imageUri != null && hasImageChanged) {
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
             final StorageReference fileRef = storageReference.child(id);
@@ -285,14 +276,15 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 
     /**
      * Sets the date textfield to the newly selected data in the format mm/dd/yyyy
+     *
      * @param datePicker the dialog that chooses the date
-     * @param i the newly selected year
-     * @param i1 the newly selected month
-     * @param i2 the newly selected day
+     * @param i          the newly selected year
+     * @param i1         the newly selected month
+     * @param i2         the newly selected day
      */
     @Override
     public void onDateSet(android.widget.DatePicker datePicker, int i, int i1, int i2) {
-        String month = (i1 + 1) < 10 ? "0" + (i1 + 1) : (i1  +1) + "";
+        String month = (i1 + 1) < 10 ? "0" + (i1 + 1) : (i1 + 1) + "";
         String day = i2 < 10 ? "0" + i2 : i2 + "";
 
         dateEditTxt.setText(month + "/" + day + "/" + i);
@@ -300,9 +292,10 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 
     /**
      * Sets the time textfield to the newly selected time in the format hh:mm, military time
+     *
      * @param timePicker the dialog that chooses the time
-     * @param i the newly selected hour
-     * @param i1 the newly selected minute
+     * @param i          the newly selected hour
+     * @param i1         the newly selected minute
      */
     @Override
     public void onTimeSet(android.widget.TimePicker timePicker, int i, int i1) {

@@ -40,6 +40,7 @@ public class DateEventsActivity extends AppCompatActivity implements EventAdapte
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
      * with data of the events from the database
+     *
      * @param savedInstanceState the save state of the activity or page
      */
     @Override
@@ -79,12 +80,11 @@ public class DateEventsActivity extends AppCompatActivity implements EventAdapte
             public void onSuccess(final DocumentSnapshot documentSnapshot) {
                 User currentUser = documentSnapshot.toObject(User.class);
 
-                db.collection("chapters").document(currentUser.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("chapters").document(currentUser.getChapter()).collection("events").whereEqualTo("date", date).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments())
-                            if (snapshot.toObject(ChapterEvent.class).getDate().equals(date))
-                                events.add(snapshot.toObject(ChapterEvent.class));
+
+                        events.addAll(queryDocumentSnapshots.toObjects(ChapterEvent.class));
 
                         if (events.size() == 0) {
                             noEvents.setVisibility(View.VISIBLE);
@@ -102,13 +102,13 @@ public class DateEventsActivity extends AppCompatActivity implements EventAdapte
     /**
      * Sends the user to a page with the details of the event that is t=on the day they clicked
      *
-     * @param name the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
      * @param position the numbered position of snapshot in the full item list
      */
     @Override
-    public void onItemClick(String name, int position) {
+    public void onItemClick(DocumentSnapshot snapshot, int position) {
         Intent intent = new Intent(DateEventsActivity.this, EventPageActivity.class);
-        intent.putExtra("EVENT_POSITION", name);
+        intent.putExtra("EVENT_ID", snapshot.getId());
         startActivity(intent);
     }
 }

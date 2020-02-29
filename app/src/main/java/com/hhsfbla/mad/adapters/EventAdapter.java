@@ -13,6 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.squareup.picasso.Picasso;
@@ -28,7 +34,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     private Context context;
     private static final String TAG = "Event Adapter";
     private EventAdapter.OnItemClickListener listener;
-
+    private FirebaseFirestore db;
+    private FirebaseUser fuser;
 
     /**
      * Creates a new EventAdapter object with the following parameters
@@ -39,6 +46,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public EventAdapter(List<ChapterEvent> events, Context context) {
         this.events = events;
         this.context = context;
+        db = FirebaseFirestore.getInstance();
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @NonNull
@@ -69,7 +78,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.date.setText(event.getDate());
         holder.time.setText(event.getTime());
         holder.location.setText(event.getLocation());
-        holder.limit.setText(event.getMemberLimit() == ChapterEvent.NO_LIMIT ? "No Limit" : event.getAttendees().size() + "/" + event.getMemberLimit());
+        holder.limit.setText(event.getMemberLimit() == ChapterEvent.NO_LIMIT ? event.getAttendees().size() + "" : event.getAttendees().size() + "/" + event.getMemberLimit());
         if(event.getPic() != "" && event.getPic() != null) {
             Picasso.get().load(Uri.parse(event.getPic())).fit().centerCrop().into(holder.pic);
         } else
@@ -131,7 +140,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
-                        listener.onItemClick(events.get(getAdapterPosition()).getName(), getAdapterPosition());
+                        final ChapterEvent event = events.get(getAdapterPosition());
+                        db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot snapshot) {
+                                db.collection("chapters").document(snapshot.get("chapter").toString()).collection("events").whereEqualTo("name", event.getName()).whereEqualTo("description", event.getDescription()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                        listener.onItemClick(queryDocumentSnapshots.getDocuments().get(0), getAdapterPosition());
+                                    }
+                                });
+                            }
+                        });
                     }
                 }
             });
@@ -145,10 +165,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         /**
          * Specifies the action after clicking on the RecyclerView that utilizes this adapter
          *
-         * @param name the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+         * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
          * @param position the numbered position of snapshot in the full item list
          */
-        void onItemClick(String name, int position);
+        void onItemClick(DocumentSnapshot snapshot, int position);
     }
 
     /**

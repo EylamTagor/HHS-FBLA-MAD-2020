@@ -35,6 +35,7 @@ public class EditChapterActivity extends AppCompatActivity {
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
      * with data of the existing event from the database
+     *
      * @param savedInstanceState the save state of the activity or page
      */
     @Override
@@ -94,9 +95,6 @@ public class EditChapterActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
-
             }
         });
         edit.setOnClickListener(new View.OnClickListener() {

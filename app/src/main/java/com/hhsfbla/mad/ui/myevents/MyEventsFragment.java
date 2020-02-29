@@ -49,8 +49,8 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
     /**
      * Creates and inflates a new MyEventsFragment with the following parameters
      *
-     * @param inflater to inflate the fragment
-     * @param container ViewGroup into which the fragment is inflated
+     * @param inflater           to inflate the fragment
+     * @param container          ViewGroup into which the fragment is inflated
      * @param savedInstanceState used to save activity regarding this fragment
      * @return the inflated fragment
      */
@@ -76,16 +76,10 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 final User currentUser = documentSnapshot.toObject(User.class);
-                db.collection("chapters").document(currentUser.getChapter()).collection("events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("chapters").document(currentUser.getChapter()).collection("events").whereArrayContains("attendees", user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (DocumentSnapshot snap : queryDocumentSnapshots) {
-                            for (String event : currentUser.getMyEvents()) {
-                                if (event.equalsIgnoreCase(snap.getId())) {
-                                    events.add(snap.toObject(ChapterEvent.class));
-                                }
-                            }
-                        }
+                        events.addAll(queryDocumentSnapshots.toObjects(ChapterEvent.class));
                         if (events == null || events.size() == 0) {
                             noEventsYet.setVisibility(View.VISIBLE);
                             return;
@@ -114,13 +108,13 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
     /**
      * Handles any clicking action done inside this fragment
      *
-     * @param name the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
      * @param position the numbered position of snapshot in the full item list
      */
     @Override
-    public void onItemClick(String name, int position) {
+    public void onItemClick(DocumentSnapshot snapshot, int position) {
         Intent intent = new Intent(getContext(), EventPageActivity.class);
-        intent.putExtra("EVENT_POSITION", events.get(position).getName());
+        intent.putExtra("EVENT_ID", snapshot.getId());
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         getActivity().startActivity(intent);
     }

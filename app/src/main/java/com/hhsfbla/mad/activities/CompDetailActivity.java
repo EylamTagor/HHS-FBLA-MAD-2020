@@ -54,7 +54,7 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
         db = FirebaseFirestore.getInstance();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-        final String compName = getIntent().getStringExtra("COMP_POSITION");
+        final String compName = getIntent().getStringExtra("COMP_ID");
 
         noCompetitorsYet = findViewById(R.id.noCompetitorsYet);
         joinButton = findViewById(R.id.compJoinButton);

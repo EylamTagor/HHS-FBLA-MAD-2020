@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.CompType;
 import com.hhsfbla.mad.data.Competition;
@@ -31,6 +34,7 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
     private Context context;
     private static final String TAG = "Event Adapter";
     private CompsAdapter.OnItemClickListener listener;
+    private FirebaseFirestore db;
 
     /**
      * Creates a new CompsAdapter object with the following parameters
@@ -42,6 +46,7 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
         this.comps = comps;
         allItems = new ArrayList<Competition>(comps);
         this.context = context;
+        db = FirebaseFirestore.getInstance();
     }
 
     /**
@@ -180,7 +185,13 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
                 public void onClick(View view) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
                         Log.d(TAG, comps.get(getAdapterPosition()).getName());
-                        listener.onItemClick(comps.get(getAdapterPosition()).getName(), getAdapterPosition());
+                        String id = comps.get(getAdapterPosition()).getName();
+                        db.collection("comps").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                listener.onItemClick(documentSnapshot, getAdapterPosition());
+                            }
+                        });
                     }
                 }
             });
@@ -194,10 +205,10 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
         /**
          * Specifies the action after clicking on the RecyclerView that utilizes this adapter
          *
-         * @param id the comp object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+         * @param snapshot the comp object pulled from Firebase Firestore, formatted as a DocumentSnapshot
          * @param position the numbered position of snapshot in the full comp list
          */
-        void onItemClick(String id, int position);
+        void onItemClick(DocumentSnapshot snapshot, int position);
     }
 
     /**

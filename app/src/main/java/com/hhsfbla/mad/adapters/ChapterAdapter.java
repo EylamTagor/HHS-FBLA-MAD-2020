@@ -45,7 +45,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     /**
      * Creates a new ChapterAdapter object with the following parameters
      *
-     * @param context the Activity, Fragment, etc. hosting the RecyclerView that uses this adapter
+     * @param context     the Activity, Fragment, etc. hosting the RecyclerView that uses this adapter
      * @param chapterList a list of all existing chapters for users to pick from and join (each of which is an item in this adapter)
      */
     public ChapterAdapter(Context context, final List<Chapter> chapterList) {
@@ -61,7 +61,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     /**
      * Creates and inflates a new Chapter item ChapterViewHolder to be included in the corresponding RecyclerView
      *
-     * @param parent the parent ViewGroup of the ChapterViewHolder
+     * @param parent   the parent ViewGroup of the ChapterViewHolder
      * @param viewType the type of view, represented by numeric coding
      * @return the ChapterViewHolder object to be used in initializing the RecyclerView
      */
@@ -75,7 +75,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     /**
      * Sets the appropriate parameters for each chapter item according to its placement in the chapter list
      *
-     * @param holder the ChapterViewHolder to contain all of the chapter items
+     * @param holder   the ChapterViewHolder to contain all of the chapter items
      * @param position the position of the corresponding chapter item in the chapter list (to order the chapter item in the RecyclerView)
      */
     @Override
@@ -177,15 +177,11 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
                 @Override
                 public void onClick(View view) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
-
-                        db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        Chapter chapter = chapterList.get(getAdapterPosition());
+                        db.collection("chapters").whereEqualTo("name", chapter.getName()).whereEqualTo("location", chapter.getLocation()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                for (final DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
-                                    if (snapshot.toObject(Chapter.class).getName().equalsIgnoreCase(chapterList.get(getAdapterPosition()).getName())) {
-                                        listener.onItemClick(snapshot, getAdapterPosition());
-                                    }
-                                }
+                                listener.onItemClick(queryDocumentSnapshots.getDocuments().get(0), getAdapterPosition());
                             }
                         });
                     }

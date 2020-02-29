@@ -67,6 +67,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
      * with data from the database
+     *
      * @param savedInstanceState the save state of the activity or page
      */
     @Override
@@ -113,7 +114,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
             //TODO: save information typed on this page
             @Override
             public void onClick(View view) {
-                if(uploadTask != null && uploadTask.isInProgress()) {
+                if (uploadTask != null && uploadTask.isInProgress()) {
                     Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_LONG).show();
                 } else {
                     db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -161,9 +162,21 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
      * Creates a new chapter event in the database using the textfields on this page and selected image
      *
      * @param uri the uri of the event image
-     * @param id the id of the event in the database
+     * @param id  the id of the event in the database
      */
     public void addEvent(Uri uri, final String id) {
+        try {
+            Integer.parseInt(limitEditText.getText().toString().trim());
+        } catch(NumberFormatException e) {
+            Log.d(TAG, "editEvent: " + e.getMessage());
+            if(limitEditText.getText().toString().trim().equalsIgnoreCase("") || limitEditText.getText().toString().trim().equalsIgnoreCase("no limit")) {
+                limitEditText.setText("No Limit");
+            } else {
+                Toast.makeText(this, "Please enter a numeric limit", Toast.LENGTH_LONG).show();
+                limitEditText.setText("No Limit");
+                return;
+            }
+        }
         final ChapterEvent event = new ChapterEvent(
                 nameEditTxt.getText().toString().trim(),
                 dateEditTxt.getText().toString().trim(),
@@ -171,7 +184,8 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
                 locaEditTxt.getText().toString().trim(),
                 descrEditTxt.getText().toString().trim(),
                 linkEditTxt.getText().toString().trim(),
-                uri == null ? "" : uri.toString(), Integer.parseInt(limitEditText.getText().toString().trim()));
+                uri == null ? "" : uri.toString(),
+                limitEditText.getText().toString().trim().equalsIgnoreCase("no limit") ? ChapterEvent.NO_LIMIT : Integer.parseInt(limitEditText.getText().toString().trim()));
         progressDialog.setMessage("Saving...");
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -194,8 +208,8 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
      * This method gets called after an action to get data from the user
      *
      * @param requestCode the request code of the request
-     * @param resultCode a code representing the state of the result of the action
-     * @param data the data gained from the activity
+     * @param resultCode  a code representing the state of the result of the action
+     * @param data        the data gained from the activity
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -209,10 +223,11 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
 
     /**
      * Uploads the event image to cloud storage with the file name as id
+     *
      * @param id the name of the file
      */
     private void uploadFile(final String id) {
-        if(imageUri != null) {
+        if (imageUri != null) {
             Log.d(TAG, imageUri.toString());
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
@@ -249,14 +264,15 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
 
     /**
      * Sets the date textfield to the newly selected data in the format mm/dd/yyyy
+     *
      * @param datePicker the dialog that chooses the date
-     * @param i the newly selected year
-     * @param i1 the newly selected month
-     * @param i2 the newly selected day
+     * @param i          the newly selected year
+     * @param i1         the newly selected month
+     * @param i2         the newly selected day
      */
     @Override
     public void onDateSet(android.widget.DatePicker datePicker, int i, int i1, int i2) {
-        String month = (i1 + 1) < 10 ? "0" + (i1 + 1) : (i1  +1) + "";
+        String month = (i1 + 1) < 10 ? "0" + (i1 + 1) : (i1 + 1) + "";
         String day = i2 < 10 ? "0" + i2 : i2 + "";
 
         dateEditTxt.setText(month + "/" + day + "/" + i);
@@ -264,9 +280,10 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
 
     /**
      * Sets the time textfield to the newly selected time in the format hh:mm, military time
+     *
      * @param timePicker the dialog that chooses the time
-     * @param i the newly selected hour
-     * @param i1 the newly selected minute
+     * @param i          the newly selected hour
+     * @param i1         the newly selected minute
      */
     @Override
     public void onTimeSet(android.widget.TimePicker timePicker, int i, int i1) {

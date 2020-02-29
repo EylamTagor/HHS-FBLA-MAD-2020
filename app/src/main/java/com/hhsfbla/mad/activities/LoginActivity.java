@@ -2,11 +2,7 @@ package com.hhsfbla.mad.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -40,9 +36,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.data.User;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 /**
@@ -71,9 +66,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-//        mCallbackManager = CallbackManager.Factory.create();
+        mCallbackManager = CallbackManager.Factory.create();
         if (fuser != null)
-            addUser();
+            doesUserExist();
 
         setTitle("Login");
         // Configure Google Sign In
@@ -92,27 +87,27 @@ public class LoginActivity extends AppCompatActivity {
         });
         setGooglePlusButtonProperties();
 
-//        loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
-//
-//        loginFacebookBtn.setReadPermissions(Arrays.asList("email", "public_profile"));
-//        loginFacebookBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) {
-//                progressDialog.setMessage("Loading...");
-//                progressDialog.show();
-//                handleFacebookAccessToken(loginResult.getAccessToken());
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//
-//            }
-//
-//            @Override
-//            public void onError(FacebookException error) {
-//                Toast.makeText(LoginActivity.this, "Facebook Login Failed", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        loginFacebookBtn = findViewById(R.id.loginFacebookBtn);
+
+        loginFacebookBtn.setReadPermissions(Arrays.asList("email", "public_profile"));
+        loginFacebookBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                progressDialog.setMessage("Loading...");
+                progressDialog.show();
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(LoginActivity.this, "Facebook Login Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -122,8 +117,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 fuser = mAuth.getCurrentUser();
                 if (fuser != null) {
-                    addUser();
-
+                    doesUserExist();
                 } else {
 
                 }
@@ -145,14 +139,14 @@ public class LoginActivity extends AppCompatActivity {
      * Receives callback from sign in method and acts accordingly (tries to sign in with google or facebook)
      *
      * @param requestCode the request code of the request
-     * @param resultCode a code representing the state of the result of the action
-     * @param data the data gained from the activity
+     * @param resultCode  a code representing the state of the result of the action
+     * @param data        the data gained from the activity
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //Facebook
-//        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
         //Google
         if (requestCode == GOOGLE_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -173,16 +167,15 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Checks if the user has a chapter and is entered in the databse
      * If they are, sends them to home page
-     * if not, sneds them to choose chapter
+     * if not, sends them to choose chapter
      */
-    private void addUser() {
-        //Checks if fuser already exists
+    private void doesUserExist() {
         db.collection("users")
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    if(document.getId().equals(mAuth.getCurrentUser().getUid()) && !document.get("chapter").equals("")) {
+                    if (document.getId().equals(mAuth.getCurrentUser().getUid()) && !document.get("chapter").equals("")) {
                         progressDialog.dismiss();
                         updateUI();
                         return;
@@ -208,7 +201,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             fuser = mAuth.getCurrentUser();
-                            addUser();
+                            doesUserExist();
                         } else {
                             progressDialog.dismiss();
                             Toast.makeText(LoginActivity.this, "A user with this email exists already", Toast.LENGTH_SHORT).show();
@@ -232,6 +225,9 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void sendtoSignup() {
         fuser = mAuth.getCurrentUser();
+        User user = new User(fuser.getDisplayName(), "", fuser.getEmail());
+        user.setPic(fuser.getPhotoUrl().toString());
+        db.collection("users").document(fuser.getUid()).set(user);
         Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
         startActivity(intent);
         finish();
@@ -289,7 +285,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             fuser = mAuth.getCurrentUser();
-                            addUser();
+                            doesUserExist();
                         } else {
                             Toast.makeText(LoginActivity.this, "A user with this email exists already", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();

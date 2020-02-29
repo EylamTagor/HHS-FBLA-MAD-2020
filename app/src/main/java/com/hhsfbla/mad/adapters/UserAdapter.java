@@ -45,7 +45,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
      * Creates a new EventAdapter object with the following parameters
      *
      * @param context the Activity, Fragment, etc. hosting the RecyclerView that uses this adapter
-     * @param users a list of all existing users (each of which is an item in this adapter)
+     * @param users   a list of all existing users (each of which is an item in this adapter)
      */
     public UserAdapter(List<User> users, Context context) {
         this.users = users;
@@ -71,7 +71,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
     /**
      * Sets the appropriate parameters for each item according to its placement in the item list
      *
-     * @param holder the ViewHolder to contain all of the items
+     * @param holder   the ViewHolder to contain all of the items
      * @param position the position of the corresponding item in the list (to order the item in the RecyclerView)
      */
     @Override
@@ -182,14 +182,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
                 @Override
                 public void onClick(final View view) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
-                        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        db.collection("users").whereEqualTo("email", users.get(getAdapterPosition()).getEmail()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                for (DocumentSnapshot snap : queryDocumentSnapshots) {
-                                    if (snap.toObject(User.class).getName().equalsIgnoreCase(users.get(getAdapterPosition()).getName())) {
-                                        listener.onItemClick(snap, view, getAdapterPosition());
-                                    }
-                                }
+                                listener.onItemClick(queryDocumentSnapshots.getDocuments().get(0), view, getAdapterPosition());
+
                             }
                         });
                     }
@@ -207,7 +204,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
          *
          * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
          * @param position the numbered position of snapshot in the full item list
-         * @param v the View that will contain the click action
+         * @param v        the View that will contain the click action
          */
         void onItemClick(DocumentSnapshot snapshot, View v, int position);
     }

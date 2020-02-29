@@ -126,11 +126,10 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
      * Handles any clicking action done inside this fragment
      *
      * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
-     * @param v the view to host the click action
      * @param position the numbered position of snapshot in the full item list
      */
     @Override
-    public void onItemClick(DocumentSnapshot snapshot, View v, int position) {
+    public void onItemClick(DocumentSnapshot snapshot, int position) {
         // nothing (yet?)
     }
 }

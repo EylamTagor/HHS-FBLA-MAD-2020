@@ -178,12 +178,10 @@ public class OfficerAdapter extends RecyclerView.Adapter<OfficerAdapter.ViewHold
                 @Override
                 public void onClick(final View v) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
-                        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        db.collection("users").whereEqualTo("email", officers.get(getAdapterPosition()).getEmail()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                for (DocumentSnapshot snap : queryDocumentSnapshots)
-                                    if (snap.toObject(User.class).getName().equalsIgnoreCase(officers.get(getAdapterPosition()).getName()))
-                                        listener.onItemClick(snap, v, getAdapterPosition());
+                                listener.onItemClick(queryDocumentSnapshots.getDocuments().get(0), getAdapterPosition());
                             }
                         });
                     }
@@ -203,7 +201,7 @@ public class OfficerAdapter extends RecyclerView.Adapter<OfficerAdapter.ViewHold
          * @param position the numbered position of snapshot in the full item list
          * @param v the view to host the click action
          */
-        void onItemClick(DocumentSnapshot snapshot, View v, int position);
+        void onItemClick(DocumentSnapshot snapshot, int position);
     }
 
     /**
