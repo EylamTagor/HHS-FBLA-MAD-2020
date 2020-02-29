@@ -95,40 +95,6 @@
                     android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
-
-            <Button
-                android:id="@+id/chapterButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/button_border"
-                android:ems="10"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:text="Change Chapter"
-                android:textSize="18sp" />
-
-            <Button
-                android:id="@+id/deleteAccountButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/button_border"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:text="Delete Account"
-                android:textSize="18sp" />
-
-            <Button
-                android:id="@+id/sign_outBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/button_border"
-                android:ems="10"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:text="Sign Out"
-                android:textSize="18sp" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layout3"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -166,6 +132,38 @@
                     android:textSize="18sp"
                     android:visibility="gone" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/chapterButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_border"
+                android:ems="10"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:text="Change Chapter"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/deleteAccountButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_border"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:text="Delete Account"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/sign_outBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_border"
+                android:ems="10"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:text="Sign Out"
+                android:textSize="18sp" />
 
         </LinearLayout>
     </ScrollView>

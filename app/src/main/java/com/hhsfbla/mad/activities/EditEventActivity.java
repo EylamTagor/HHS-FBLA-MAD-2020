@@ -173,7 +173,10 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
      */
     public void editEvent(final Uri uri) {
         try {
-            Integer.parseInt(memberLimit.getText().toString().trim());
+            int x = Integer.parseInt(memberLimit.getText().toString().trim());
+            if(x == 0) {
+                memberLimit.setText("No Limit");
+            }
         } catch(NumberFormatException e) {
             Log.d(TAG, "editEvent: " + e.getMessage());
             if(memberLimit.getText().toString().trim().equalsIgnoreCase("") || memberLimit.getText().toString().trim().equalsIgnoreCase("no limit")) {

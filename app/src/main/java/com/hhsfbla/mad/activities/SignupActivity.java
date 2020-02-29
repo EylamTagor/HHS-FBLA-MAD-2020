@@ -203,7 +203,12 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
                     db.collection("users").document(fuser.getUid()).update("chapter", id).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            startActivity(new Intent(SignupActivity.this, HomeActivity.class));
+                            db.collection("chapters").document(id).update("users", FieldValue.arrayUnion(fuser.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    startActivity(new Intent(SignupActivity.this, HomeActivity.class));
+                                }
+                            });
                         }
                     });
                 } else if(user.getChapter().equals(id)) {

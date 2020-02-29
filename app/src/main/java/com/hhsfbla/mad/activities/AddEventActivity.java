@@ -166,7 +166,10 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
      */
     public void addEvent(Uri uri, final String id) {
         try {
-            Integer.parseInt(limitEditText.getText().toString().trim());
+            int x = Integer.parseInt(limitEditText.getText().toString().trim());
+            if(x == 0) {
+                limitEditText.setText("No Limit");
+            }
         } catch(NumberFormatException e) {
             Log.d(TAG, "editEvent: " + e.getMessage());
             if(limitEditText.getText().toString().trim().equalsIgnoreCase("") || limitEditText.getText().toString().trim().equalsIgnoreCase("no limit")) {

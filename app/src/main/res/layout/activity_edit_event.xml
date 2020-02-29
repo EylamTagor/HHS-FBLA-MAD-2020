@@ -241,7 +241,7 @@
                     android:id="@+id/eventMemberLimitEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter Description"
+                    android:hint="Enter Member Limit"
                     android:inputType="textMultiLine" />
 
 
