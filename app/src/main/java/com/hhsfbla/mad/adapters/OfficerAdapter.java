@@ -199,7 +199,6 @@ public class OfficerAdapter extends RecyclerView.Adapter<OfficerAdapter.ViewHold
          *
          * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
          * @param position the numbered position of snapshot in the full item list
-         * @param v the view to host the click action
          */
         void onItemClick(DocumentSnapshot snapshot, int position);
     }

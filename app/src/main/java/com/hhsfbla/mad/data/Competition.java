@@ -1,10 +1,5 @@
 package com.hhsfbla.mad.data;
 
-import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.adapters.CompsAdapter;
-
-import java.util.ArrayList;
-
 /**
  * Represents an FBLA competitive event, with a competition type such as written, speaking, or tech, a name, a description, and a picture
  */

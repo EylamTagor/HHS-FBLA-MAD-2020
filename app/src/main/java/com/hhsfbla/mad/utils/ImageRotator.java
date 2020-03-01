@@ -2,23 +2,13 @@ package com.hhsfbla.mad.utils;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
-import androidx.annotation.NonNull;
 import androidx.exifinterface.media.ExifInterface;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.hhsfbla.mad.activities.HomeActivity;
-import com.hhsfbla.mad.activities.ProfileActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
