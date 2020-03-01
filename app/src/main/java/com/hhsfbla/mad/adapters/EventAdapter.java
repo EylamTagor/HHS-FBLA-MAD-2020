@@ -1,6 +1,8 @@
 package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
+import com.hhsfbla.mad.utils.ImageRotator;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -79,8 +82,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.time.setText(event.getTime());
         holder.location.setText(event.getLocation());
         holder.limit.setText(event.getMemberLimit() == ChapterEvent.NO_LIMIT ? event.getAttendees().size() + "" : event.getAttendees().size() + "/" + event.getMemberLimit());
-        if(event.getPic() != "" && event.getPic() != null) {
-            Picasso.get().load(Uri.parse(event.getPic())).fit().centerCrop().into(holder.pic);
+        if(event.getPic() != null && !event.getPic().equals("")) {
+            new ImageRotator(context).loadImageWrapContent(context, holder.pic, event.getPic());
         } else
             holder.pic.setVisibility(View.GONE);
     }
