@@ -1,39 +1,25 @@
 package com.hhsfbla.mad.activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.share.ShareApi;
-import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,7 +28,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -55,8 +40,6 @@ import com.hhsfbla.mad.dialogs.DeleteEventDialog;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Represents a page where users can view further details about an event such as who is attending and join or leave the event
@@ -236,9 +219,15 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                         time.setText(event.getTime());
                         location.setText(event.getLocation());
                         desc.setText(event.getDescription());
-                        link.setText(event.getFacebookLink());
-                        link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click here for more information</a>"));
-                        link.setMovementMethod(LinkMovementMethod.getInstance());
+
+                        if (event.getFacebookLink() == null || event.getFacebookLink().equals(""))
+                            link.setVisibility(View.GONE);
+                        else {
+                            link.setText(event.getFacebookLink());
+                            link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click here for more information</a>"));
+                            link.setMovementMethod(LinkMovementMethod.getInstance());
+                        }
+
                         if (event.getPic() != null && event.getPic() != "") {
                             Picasso.get().load(Uri.parse(event.getPic())).fit().centerCrop().into(eventImage);
                         } else {
