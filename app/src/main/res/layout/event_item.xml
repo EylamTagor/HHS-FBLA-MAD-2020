@@ -63,14 +63,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="13/32/20"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/calendarIcon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/calendarIcon"
-                app:layout_constraintTop_toBottomOf="@+id/eventPic" />
+                app:layout_constraintTop_toTopOf="@+id/calendarIcon" />
 
             <ImageView
                 android:id="@+id/clockIcon"
@@ -87,14 +87,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="0:60pm-25:00pm"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/clockIcon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/clockIcon"
-                app:layout_constraintTop_toBottomOf="@+id/eventDate" />
+                app:layout_constraintTop_toTopOf="@+id/clockIcon" />
 
             <ImageView
                 android:id="@+id/locationIcon"
@@ -121,14 +121,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="1600 Pennsylvania Ave, Washington, D.C."
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/locationIcon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/clockIcon"
-                app:layout_constraintTop_toBottomOf="@+id/eventTime" />
+                app:layout_constraintTop_toTopOf="@+id/locationIcon" />
 
             <ImageView
                 android:id="@+id/memberCountIcon"
@@ -145,13 +145,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/memberCountIcon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/memberCountIcon"
-                app:layout_constraintTop_toBottomOf="@+id/eventLocation" />
+                app:layout_constraintTop_toTopOf="@+id/memberCountIcon" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
