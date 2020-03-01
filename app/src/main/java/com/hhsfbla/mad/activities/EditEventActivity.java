@@ -49,8 +49,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     private StorageTask uploadTask;
     private StorageReference storageReference;
     private ImageButton backBtn2, doneBtn, imageBtn;
-    private TextInputEditText nameEditTxt, dateEditTxt, timeEditTxt, locaEditTxt, descrEditTxt, memberLimit;
-    private EditText linkEditTxt;
+    private TextInputEditText nameEditTxt, dateEditTxt, timeEditTxt, locaEditTxt, descrEditTxt, memberLimit, linkEditTxt;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private Uri imageUri;

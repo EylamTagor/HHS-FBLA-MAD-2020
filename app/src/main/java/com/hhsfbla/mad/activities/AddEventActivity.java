@@ -50,8 +50,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     private Uri imageUri;
     private StorageTask uploadTask;
     private ImageButton backBtn2, doneBtn, imageBtn;
-    private TextInputEditText nameEditTxt, dateEditTxt, timeEditTxt, locaEditTxt, descrEditTxt, limitEditText;
-    private EditText linkEditTxt;
+    private TextInputEditText nameEditTxt, dateEditTxt, timeEditTxt, locaEditTxt, descrEditTxt, limitEditText, linkEditTxt;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private static final String TAG = "ADDEVENTPAGE";
