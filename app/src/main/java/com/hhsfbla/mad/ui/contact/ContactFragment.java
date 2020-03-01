@@ -42,11 +42,20 @@ public class ContactFragment extends Fragment {
         getActivity().setTitle("Contact Us");
 
         fblaLink = root.findViewById(R.id.fblaWebLinkTxtView);
+        facebook = root.findViewById(R.id.facebookButton);
+        insta = root.findViewById(R.id.instaButton);
+        twitter = root.findViewById(R.id.twitterButton);
+        linkedin = root.findViewById(R.id.linkedinButton);
+        formLink = root.findViewById(R.id.qaForm);
+
         fblaLink.setText(Html.fromHtml("<a href='https://www.fbla-pbl.org'>FBLA Website</androidx.constraintlayout.widget.ConstraintLayout</a>"));
         fblaLink.setMovementMethod(LinkMovementMethod.getInstance());
         fblaLink.setTextColor(Color.BLACK);
 
-        facebook = root.findViewById(R.id.facebookButton);
+        formLink.setText(Html.fromHtml("<a href='https://forms.gle/LMNjUUEDPGALoLpaA'>Q&A Form</androidx.constraintlayout.widget.ConstraintLayout</a>"));
+        formLink.setMovementMethod(LinkMovementMethod.getInstance());
+        formLink.setTextColor(Color.BLACK);
+
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +63,6 @@ public class ContactFragment extends Fragment {
             }
         });
 
-        insta = root.findViewById(R.id.instaButton);
         insta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +70,6 @@ public class ContactFragment extends Fragment {
             }
         });
 
-        twitter = root.findViewById(R.id.twitterButton);
         twitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +78,6 @@ public class ContactFragment extends Fragment {
         });
 
 
-        linkedin = root.findViewById(R.id.linkedinButton);
         linkedin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,11 +85,6 @@ public class ContactFragment extends Fragment {
             }
         });
 
-
-        formLink = root.findViewById(R.id.qaForm);
-        formLink.setText(Html.fromHtml("<a href='https://forms.gle/LMNjUUEDPGALoLpaA'>Q&A Form</androidx.constraintlayout.widget.ConstraintLayout</a>"));
-        formLink.setMovementMethod(LinkMovementMethod.getInstance());
-        formLink.setTextColor(Color.BLACK);
         return root;
 
     }

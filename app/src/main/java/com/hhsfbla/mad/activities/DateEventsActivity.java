@@ -75,6 +75,13 @@ public class DateEventsActivity extends AppCompatActivity implements EventAdapte
         adapter = new EventAdapter(events, this);
         adapter.setOnItemClickListener(this);
 
+        initRecyclerView();
+    }
+
+    /**
+     * Initializes the recyclerview with the events for that day
+     */
+    private void initRecyclerView() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(final DocumentSnapshot documentSnapshot) {

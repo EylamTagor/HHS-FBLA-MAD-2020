@@ -55,6 +55,46 @@ public class EditChapterActivity extends AppCompatActivity {
         insta = findViewById(R.id.editChapterInstagram);
         location = findViewById(R.id.editChapterLocation);
 
+        initPage();
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveChanges();
+            }
+        });
+    }
+
+    /**
+     * Updates the chapter in the database with the new changes
+     */
+    private void saveChanges() {
+        progressDialog.show();
+        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot snapshot) {
+
+                Chapter example = new Chapter(chapName.getText().toString(), location.getText().toString());
+                example.setInstagramTag(insta.getText().toString().trim());
+                example.setFacebookPage(facebookPage.getText().toString().trim());
+                example.setWebsite(website.getText().toString().trim());
+                example.setDescription(chapDesc.getText().toString().trim());
+                example.addMember(user.getUid());
+                db.collection("chapters").document(snapshot.toObject(User.class).getChapter()).set(example, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        progressDialog.dismiss();
+                        startActivity(new Intent(EditChapterActivity.this, HomeActivity.class));
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Initializes the textviews of the page with data from the database
+     */
+    private void initPage() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -93,31 +133,6 @@ public class EditChapterActivity extends AppCompatActivity {
                         } else {
                             website.setText("No Website");
                         }
-                    }
-                });
-            }
-        });
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressDialog.show();
-                db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot snapshot) {
-
-                        Chapter example = new Chapter(chapName.getText().toString(), location.getText().toString());
-                        example.setInstagramTag(insta.getText().toString().trim());
-                        example.setFacebookPage(facebookPage.getText().toString().trim());
-                        example.setWebsite(website.getText().toString().trim());
-                        example.setDescription(chapDesc.getText().toString().trim());
-                        example.addMember(user.getUid());
-                        db.collection("chapters").document(snapshot.toObject(User.class).getChapter()).set(example, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                progressDialog.dismiss();
-                                startActivity(new Intent(EditChapterActivity.this, HomeActivity.class));
-                            }
-                        });
                     }
                 });
             }

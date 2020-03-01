@@ -73,6 +73,12 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
         adapter.setOnItemClickListener(this);
         eventRecyclerView.setAdapter(adapter);
 
+        initRecyclerView();
+
+        return root;
+    }
+
+    private void initRecyclerView() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -92,8 +98,6 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
                 });
             }
         });
-
-        return root;
     }
 
     /**

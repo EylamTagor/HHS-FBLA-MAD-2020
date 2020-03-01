@@ -70,7 +70,6 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     private LoginManager manager;
     private TextView title, date, time, location, desc, link, memberCount;
     private ImageView eventImage;
-    private ChapterEvent mainEvent;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
     private FirebaseUser user;
@@ -110,7 +109,6 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = auth.getCurrentUser();
-        mainEvent = new ChapterEvent();
         joinButton = findViewById(R.id.joinButton);
         unJoinButton = findViewById(R.id.unJoinButton);
         shareButton = findViewById(R.id.shareButton);
@@ -130,63 +128,6 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         //this loginManager helps you eliminate adding a LoginButton to your UI
         manager = LoginManager.getInstance();
         id = getIntent().getStringExtra("EVENT_ID");
-        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User currentUser = documentSnapshot.toObject(User.class);
-                if (currentUser.getUserType() == UserType.MEMBER) {
-                    editButton.setVisibility(View.GONE);
-                    deleteButton.setVisibility(View.GONE);
-                }
-                db.collection("chapters").document(currentUser.getChapter()).collection("events").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot snapshot) {
-                        final ChapterEvent event = snapshot.toObject(ChapterEvent.class);
-                        mainEvent = event;
-                        if (event.getAttendees().contains(user.getUid())) {
-                            joinButton.setVisibility(View.GONE);
-                            unJoinButton.setVisibility(View.VISIBLE);
-                        } else if (event.getMemberLimit() == ChapterEvent.NO_LIMIT || event.getAttendees().size() < event.getMemberLimit()) {
-                            joinButton.setVisibility(View.VISIBLE);
-                            unJoinButton.setVisibility(View.GONE);
-                        }
-
-
-                        //set event details
-                        title.setText(mainEvent.getName());
-                        date.setText(mainEvent.getDate());
-                        time.setText(mainEvent.getTime());
-                        location.setText(mainEvent.getLocation());
-                        desc.setText(mainEvent.getDescription());
-                        link.setText(mainEvent.getFacebookLink());
-                        link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click here for more information</a>"));
-                        link.setMovementMethod(LinkMovementMethod.getInstance());
-                        if (mainEvent.getPic() != null && mainEvent.getPic() != "") {
-                            Log.d(TAG, mainEvent.getPic());
-                            Picasso.get().load(Uri.parse(mainEvent.getPic())).fit().centerCrop().into(eventImage);
-                        } else {
-                            eventImage.setVisibility(View.GONE);
-                        }
-
-                        db.collection("users").whereArrayContains("myEvents", id).orderBy("name").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                users.addAll(queryDocumentSnapshots.toObjects(User.class));
-                                adapter.setUsers(users);
-                                if (mainEvent.getMemberLimit() == ChapterEvent.NO_LIMIT) {
-                                    memberCount.setText(users.size() + "");
-                                } else {
-                                    memberCount.setText(users.size() + "/" + mainEvent.getMemberLimit());
-                                }
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                        return;
-                    }
-                });
-            }
-        });
-
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,10 +203,70 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                 }
             }
         });
+
+        initPage();
     }
 
     /**
-     * Deletes the image of the event in the storage, as well as the event itself in the databse
+     * Initializes the page components with the event data from the database
+     */
+    private void initPage() {
+        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User currentUser = documentSnapshot.toObject(User.class);
+                if (currentUser.getUserType() == UserType.MEMBER) {
+                    editButton.setVisibility(View.GONE);
+                    deleteButton.setVisibility(View.GONE);
+                }
+                db.collection("chapters").document(currentUser.getChapter()).collection("events").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot snapshot) {
+                        final ChapterEvent event = snapshot.toObject(ChapterEvent.class);
+                        if (event.getAttendees().contains(user.getUid())) {
+                            joinButton.setVisibility(View.GONE);
+                            unJoinButton.setVisibility(View.VISIBLE);
+                        } else if (event.getMemberLimit() == ChapterEvent.NO_LIMIT || event.getAttendees().size() < event.getMemberLimit()) {
+                            joinButton.setVisibility(View.VISIBLE);
+                            unJoinButton.setVisibility(View.GONE);
+                        }
+                        //set event details
+                        title.setText(event.getName());
+                        date.setText(event.getDate());
+                        time.setText(event.getTime());
+                        location.setText(event.getLocation());
+                        desc.setText(event.getDescription());
+                        link.setText(event.getFacebookLink());
+                        link.setText(Html.fromHtml("<a href='" + link.getText().toString() + "'>Click here for more information</a>"));
+                        link.setMovementMethod(LinkMovementMethod.getInstance());
+                        if (event.getPic() != null && event.getPic() != "") {
+                            Picasso.get().load(Uri.parse(event.getPic())).fit().centerCrop().into(eventImage);
+                        } else {
+                            eventImage.setVisibility(View.GONE);
+                        }
+
+                        db.collection("users").whereArrayContains("myEvents", id).orderBy("name").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                users.addAll(queryDocumentSnapshots.toObjects(User.class));
+                                adapter.setUsers(users);
+                                if (event.getMemberLimit() == ChapterEvent.NO_LIMIT) {
+                                    memberCount.setText(users.size() + "");
+                                } else {
+                                    memberCount.setText(users.size() + "/" + event.getMemberLimit());
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                        return;
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Deletes the image of the event from the storage, as well as the event itself from the database
      */
     public void deleteInDB() {
         progressDialog.show();
@@ -348,16 +349,5 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
     @Override
     public void onItemClick(DocumentSnapshot snapshot, View v, int position) {
 
-    }
-
-    /**
-     * Gets the file type of the given image uri: jpg, png, bmp, etc
-     * @param uri The uri of the image
-     * @return the file type extension
-     */
-    private String getFileExtension(Uri uri) {
-        ContentResolver cR = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 }

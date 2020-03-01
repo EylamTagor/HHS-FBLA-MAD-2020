@@ -3,16 +3,12 @@ package com.hhsfbla.mad.activities;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -21,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.exifinterface.media.ExifInterface;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,12 +37,8 @@ import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.dialogs.DatePicker;
 import com.hhsfbla.mad.dialogs.TimePicker;
-import com.squareup.picasso.Picasso;
+import com.hhsfbla.mad.utils.ImageRotator;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
 
 /**
@@ -68,6 +59,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     private ProgressDialog progressDialog;
     private Button setDate, setTime;
     private Bitmap bitmap;
+    private ImageRotator imageRotator;
 
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
@@ -98,14 +90,9 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         setDate = findViewById(R.id.setDateButton);
         setTime = findViewById(R.id.setTimeButton);
         storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
-        Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
-        onDateSet(null, year, month, day);
-        onTimeSet(null, hour, minute);
+        imageRotator = new ImageRotator(this);
+
+        setCurrentTime();
 
         backBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,8 +144,24 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         });
     }
 
+    /**
+     * Sets the time and date textfields to the current time
+     */
+    private void setCurrentTime() {
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+        onDateSet(null, year, month, day);
+        onTimeSet(null, hour, minute);
+    }
+
+    /**
+     * Opens a dialog for the user to choose images
+     */
     private void openFileChooser() {
-        //                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -226,7 +229,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-            bitmap = getImageBitmap(imageUri);
+            bitmap = imageRotator.getImageBitmap(imageUri);
             imageBtn.setImageBitmap(bitmap);
         }
     }
@@ -262,90 +265,16 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     }
 
     /**
-     * Gets the image bitmap from the uri, checks how much it is rotated, and returns a new bitmap with the proper orientation
-     * @param uri the uri of the image
-     * @return the rotated bitmap
-     */
-    private Bitmap getImageBitmap(Uri uri) {
-        Bitmap rotatedBitmap = null;
-
-        try {
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            InputStream imageStream = getContentResolver().openInputStream(uri);
-            Bitmap bitmap = BitmapFactory.decodeStream(imageStream, null, options);
-            InputStream input = getContentResolver().openInputStream(uri);
-            ExifInterface ei = new ExifInterface(input);
-            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotatedBitmap = rotateImage(bitmap, 90);
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotatedBitmap = rotateImage(bitmap, 180);
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotatedBitmap = rotateImage(bitmap, 270);
-                    break;
-
-                case ExifInterface.ORIENTATION_NORMAL:
-                default:
-                    rotatedBitmap = bitmap;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return rotatedBitmap;
-    }
-
-    /**
-     * Gets the file type of the given image uri: jpg, png, bmp, etc
-     * @param uri The uri of the image
-     * @return the file type extension
-     */
-    private String getFileExtension(Uri uri) {
-        ContentResolver cR = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
-
-    /**
-     * Rotates the bitmao a certain amount of angles
-     * @param source the bitmap to rotate
-     * @param angle the number of degrees to rotate
-     * @return the newly rotated bitmap
-     */
-    public Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
-
-    /**
-     * Converts a bitmap to a byte array for database upload
-     * @param bitmap the bitmap to upload
-     * @return the byte array of the bitmap
-     */
-    public static byte[] getBytesFromBitmap(Bitmap bitmap){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        return baos.toByteArray();
-    }
-
-    /**
      * Uploads the event image to cloud storage with the file name as id
      *
      * @param id the name of the file
      */
     private void uploadFile(final String id) {
-        if (imageUri != null && bitmap != null) {
+        if (bitmap != null) {
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
             final StorageReference fileRef = storageReference.child(id);
-            byte[] file = getBytesFromBitmap(bitmap);
+            byte[] file = imageRotator.getBytesFromBitmap(bitmap);
             uploadTask = fileRef.putBytes(file)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override

@@ -73,6 +73,20 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
         adapter.setOnItemClickListener(this);
         eventRecyclerView.setAdapter(adapter);
 
+        initRecyclerView();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(root.getContext(), AddEventActivity.class));
+            }
+        });
+        return root;
+    }
+
+    /**
+     * Initializes the recycler view with all the chapter events
+     */
+    private void initRecyclerView() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @SuppressLint("RestrictedApi")
             @Override
@@ -97,13 +111,6 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
 
             }
         });
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(root.getContext(), AddEventActivity.class));
-            }
-        });
-        return root;
     }
 
     /**

@@ -3,18 +3,12 @@ package com.hhsfbla.mad.activities;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.exifinterface.media.ExifInterface;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,7 +26,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -41,18 +33,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.dialogs.DatePicker;
 import com.hhsfbla.mad.dialogs.TimePicker;
+import com.hhsfbla.mad.utils.ImageRotator;
 import com.squareup.picasso.Picasso;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 
 /**
  * Represents a page where members and officers can join competitions,
@@ -74,6 +60,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     private boolean hasImageChanged;
     private String id;
     private Bitmap bitmap;
+    private ImageRotator imageRotator;
 
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
@@ -103,6 +90,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         setDateButton = findViewById(R.id.editSetDateButton);
         setTimeButton = findViewById(R.id.editSetTimeButton);
         storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
+        imageRotator = new ImageRotator(this);
         id = getIntent().getStringExtra("EVENT_ID");
 
         backBtn2.setOnClickListener(new View.OnClickListener() {
@@ -128,10 +116,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, RESULT_LOAD_IMAGE);
+                openFileChooser();
             }
         });
 
@@ -151,6 +136,13 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
             }
         });
 
+        initPage();
+    }
+
+    /**
+     * Initializes the pages textFields and image views with the event's current data
+     */
+    private void initPage() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -246,7 +238,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
-            bitmap = getImageBitmap(imageUri);
+            bitmap = imageRotator.getImageBitmap(imageUri);
             imageBtn.setImageBitmap(bitmap);
             hasImageChanged = true;
         }
@@ -283,90 +275,16 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     }
 
     /**
-     * Gets the image bitmap from the uri, checks how much it is rotated, and returns a new bitmap with the proper orientation
-     * @param uri the uri of the image
-     * @return the rotated bitmap
-     */
-    private Bitmap getImageBitmap(Uri uri) {
-        Bitmap rotatedBitmap = null;
-
-        try {
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            InputStream imageStream = getContentResolver().openInputStream(uri);
-            Bitmap bitmap = BitmapFactory.decodeStream(imageStream, null, options);
-            InputStream input = getContentResolver().openInputStream(uri);
-            ExifInterface ei = new ExifInterface(input);
-            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotatedBitmap = rotateImage(bitmap, 90);
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotatedBitmap = rotateImage(bitmap, 180);
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotatedBitmap = rotateImage(bitmap, 270);
-                    break;
-
-                case ExifInterface.ORIENTATION_NORMAL:
-                default:
-                    rotatedBitmap = bitmap;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return rotatedBitmap;
-    }
-
-    /**
-     * Gets the file type of the given image uri: jpg, png, bmp, etc
-     * @param uri The uri of the image
-     * @return the file type extension
-     */
-    private String getFileExtension(Uri uri) {
-        ContentResolver cR = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
-
-    /**
-     * Rotates the bitmao a certain amount of angles
-     * @param source the bitmap to rotate
-     * @param angle the number of degrees to rotate
-     * @return the newly rotated bitmap
-     */
-    public Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
-
-    /**
-     * Converts a bitmap to a byte array for database upload
-     * @param bitmap the bitmap to upload
-     * @return the byte array of the bitmap
-     */
-    public static byte[] getBytesFromBitmap(Bitmap bitmap){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        return baos.toByteArray();
-    }
-
-    /**
      * Uploads the event image to cloud storage with the file name as id
      *
      * @param id the name of the file
      */
     private void uploadFile(String id) {
-        if (imageUri != null && hasImageChanged && bitmap != null) {
+        if (hasImageChanged && bitmap != null) {
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
             final StorageReference fileRef = storageReference.child(id);
-            byte[] file = getBytesFromBitmap(bitmap);
+            byte[] file = imageRotator.getBytesFromBitmap(bitmap);
             uploadTask = fileRef.putBytes(file)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -392,8 +310,20 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                         }
                     });
         } else {
-            Toast.makeText(this, "No Image Selected", Toast.LENGTH_SHORT).show();
+            if(!hasImageChanged && bitmap != null) {
+                Toast.makeText(this, "No Image Selected", Toast.LENGTH_SHORT).show();
+            }
             editEvent(null);
         }
+    }
+
+    /**
+     * Opens a dialog for the user to choose images
+     */
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, RESULT_LOAD_IMAGE);
     }
 }

@@ -88,6 +88,14 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
                 return false;
             }
         });
+
+        createNewChapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SignupActivity.this, SetupActivity.class));
+            }
+        });
+
         db.collection("chapters").orderBy("name").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -97,14 +105,6 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
 
             }
         });
-
-        createNewChapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(SignupActivity.this, SetupActivity.class));
-            }
-        });
-
     }
 
     /**

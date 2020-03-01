@@ -58,48 +58,56 @@ public class SetupActivity extends AppCompatActivity {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.show();
-                db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                createChapter();
+            }
+        });
 
-                        if(doesChapterExist(queryDocumentSnapshots)) {
-                            return;
+    }
+
+    /**
+     * Creates the chapter with data from the page components, adds the current user into the new chapter,
+     * and sets the current user to advisor status
+     */
+    private void createChapter() {
+        progressDialog.show();
+        db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                if(doesChapterExist(queryDocumentSnapshots)) {
+                    return;
+                }
+                db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot snapshot) {
+                        DocumentReference ref = db.collection("chapters").document();
+                        String id = ref.getId();
+                        User test;
+                        if(snapshot.toObject(User.class) == null) {
+                            test = new User(user.getDisplayName(), id, user.getEmail());
+                            test.setPic(user.getPhotoUrl().toString());
+                            db.collection("users").document(user.getUid()).set(test);
+                        } else {
+                            db.collection("users").document(user.getUid()).update("chapter", id);
                         }
-                        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        db.collection("users").document(user.getUid()).update("userType", UserType.ADVISOR);
+                        Chapter example = new Chapter(chapName.getText().toString(), location.getText().toString());
+                        example.setInstagramTag(insta.getText().toString().trim());
+                        example.setFacebookPage(facebookPage.getText().toString().trim());
+                        example.setWebsite(website.getText().toString().trim());
+                        example.setDescription(chapDesc.getText().toString().trim());
+                        example.addMember(user.getUid());
+                        ref.set(example).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(DocumentSnapshot snapshot) {
-                                DocumentReference ref = db.collection("chapters").document();
-                                String id = ref.getId();
-                                User test;
-                                if(snapshot.toObject(User.class) == null) {
-                                    test = new User(user.getDisplayName(), id, user.getEmail());
-                                    test.setPic(user.getPhotoUrl().toString());
-                                    db.collection("users").document(user.getUid()).set(test);
-                                } else {
-                                    db.collection("users").document(user.getUid()).update("chapter", id);
-                                }
-                                db.collection("users").document(user.getUid()).update("userType", UserType.ADVISOR);
-                                Chapter example = new Chapter(chapName.getText().toString(), location.getText().toString());
-                                example.setInstagramTag(insta.getText().toString().trim());
-                                example.setFacebookPage(facebookPage.getText().toString().trim());
-                                example.setWebsite(website.getText().toString().trim());
-                                example.setDescription(chapDesc.getText().toString().trim());
-                                example.addMember(user.getUid());
-                                ref.set(example).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        progressDialog.dismiss();
-                                        startActivity(new Intent(SetupActivity.this, HomeActivity.class));
-                                    }
-                                });
+                            public void onSuccess(Void aVoid) {
+                                progressDialog.dismiss();
+                                startActivity(new Intent(SetupActivity.this, HomeActivity.class));
                             }
                         });
                     }
                 });
             }
         });
-
     }
 
     /**

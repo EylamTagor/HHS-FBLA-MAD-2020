@@ -28,7 +28,7 @@ import java.util.ArrayList;
 /**
  * Represents a page where officers and advisors can create chapter events
  */
-public class CompDetailActivity extends AppCompatActivity implements UserAdapter.OnItemClickListener{
+public class CompDetailActivity extends AppCompatActivity implements UserAdapter.OnItemClickListener {
 
     private FirebaseFirestore db;
     private FirebaseUser fuser;
@@ -44,6 +44,7 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
      * with data of the existing competition from the database
+     *
      * @param savedInstanceState the save state of the activity or page
      */
     @Override
@@ -122,18 +123,19 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
 
     /**
      * Initializes the recycler view, or the list of competitors competing in this competition
+     *
      * @param compName the name of the competition
      */
     public void initRecyclerView(final String compName) {
         db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.toObject(User.class).getComps().contains(compName)) {
+                if (documentSnapshot.toObject(User.class).getComps().contains(compName)) {
                     unJoinButton.setVisibility(View.VISIBLE);
                 } else {
                     joinButton.setVisibility(View.VISIBLE);
                 }
-                if(documentSnapshot.toObject(User.class).getUserType().equals(UserType.ADVISOR)) {
+                if (documentSnapshot.toObject(User.class).getUserType().equals(UserType.ADVISOR)) {
                     unJoinButton.setVisibility(View.GONE);
                     joinButton.setVisibility(View.GONE);
                 }
@@ -145,7 +147,7 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
                         competitors.addAll(queryDocumentSnapshots.toObjects(User.class));
                         adapter.notifyDataSetChanged();
                         adapter.setUsers(competitors);
-                        if(competitors.isEmpty()) {
+                        if (competitors.isEmpty()) {
                             noCompetitorsYet.setVisibility(View.VISIBLE);
                         } else {
                             noCompetitorsYet.setVisibility(View.GONE);
@@ -158,8 +160,9 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
 
     /**
      * Describes what to do when an item of the recycler view is clicked
+     *
      * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
-     * @param v the View that will contain the click action
+     * @param v        the View that will contain the click action
      * @param position the numbered position of snapshot in the full item list
      */
     @Override

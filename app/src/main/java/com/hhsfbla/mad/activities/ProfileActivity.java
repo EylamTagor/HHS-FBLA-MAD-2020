@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.exifinterface.media.ExifInterface;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,12 +41,8 @@ import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 import com.hhsfbla.mad.dialogs.ChangeChapterDialog;
 import com.hhsfbla.mad.dialogs.DeleteAccountDialog;
+import com.hhsfbla.mad.utils.ImageRotator;
 import com.squareup.picasso.Picasso;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -75,6 +68,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     private boolean hasImageChanged;
     private StorageTask uploadTask;
     private StorageReference storageReference;
+    private ImageRotator imageRotator;
 
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
@@ -102,7 +96,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
         blurb = findViewById(R.id.blurbTextField);
         deleteAccount = findViewById(R.id.deleteAccountButton);
         chapterDisplay = findViewById(R.id.chapterTextView);
-
+        imageRotator = new ImageRotator(this);
         setTitle("Profile");
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -125,7 +119,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
 
                 pos.setText(u.getOfficerPos());
                 blurb.setText(u.getBlurb());
-                if(u.getPic() != null && !u.getPic().equalsIgnoreCase("")) {
+                if (u.getPic() != null && !u.getPic().equalsIgnoreCase("")) {
                     Picasso.get().load(Uri.parse(u.getPic())).into(profilePic);
                 } else {
                     Picasso.get().load(user.getPhotoUrl()).into(profilePic);
@@ -143,7 +137,11 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uploadFile(user.getUid());
+                if (uploadTask != null && uploadTask.isInProgress()) {
+                    Toast.makeText(getApplicationContext(), "Upload In Progress", Toast.LENGTH_SHORT).show();
+                } else {
+                    uploadFile(user.getUid());
+                }
             }
         });
 
@@ -228,7 +226,8 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                                         db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
                                     }
                                     Log.d(TAG, "onSuccess: " + documentSnapshot.toObject(User.class).getPic());
-                                    if(documentSnapshot.toObject(User.class).getPic() != null && !documentSnapshot.toObject(User.class).getPic().equalsIgnoreCase("") && !documentSnapshot.toObject(User.class).getPic().equalsIgnoreCase(user.getPhotoUrl().toString())) {
+                                    Log.d(TAG, "onSuccess: " + user.getPhotoUrl());
+                                    if (documentSnapshot.toObject(User.class).getPic() != null && !documentSnapshot.toObject(User.class).getPic().equalsIgnoreCase("") && !documentSnapshot.toObject(User.class).getPic().equalsIgnoreCase(user.getPhotoUrl().toString())) {
                                         deleteFromStorage();
                                     } else {
 
@@ -258,6 +257,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     }
 
     private void deleteFromStorage() {
+        Log.d(TAG, "deleteFromStorage: ");
         storageReference.child(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -304,84 +304,10 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
-            bitmap = getImageBitmap(imageUri);
+            bitmap = imageRotator.getImageBitmap(imageUri);
             profilePic.setImageBitmap(bitmap);
             hasImageChanged = true;
         }
-    }
-
-    /**
-     * Gets the image bitmap from the uri, checks how much it is rotated, and returns a new bitmap with the proper orientation
-     * @param uri the uri of the image
-     * @return the rotated bitmap
-     */
-    private Bitmap getImageBitmap(Uri uri) {
-        Bitmap rotatedBitmap = null;
-
-        try {
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            InputStream imageStream = getContentResolver().openInputStream(uri);
-            Bitmap bitmap = BitmapFactory.decodeStream(imageStream, null, options);
-            InputStream input = getContentResolver().openInputStream(uri);
-            ExifInterface ei = new ExifInterface(input);
-            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotatedBitmap = rotateImage(bitmap, 90);
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotatedBitmap = rotateImage(bitmap, 180);
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotatedBitmap = rotateImage(bitmap, 270);
-                    break;
-
-                case ExifInterface.ORIENTATION_NORMAL:
-                default:
-                    rotatedBitmap = bitmap;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return rotatedBitmap;
-    }
-
-    /**
-     * Gets the file type of the given image uri: jpg, png, bmp, etc
-     * @param uri The uri of the image
-     * @return the file type extension
-     */
-    private String getFileExtension(Uri uri) {
-        ContentResolver cR = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
-
-    /**
-     * Rotates the bitmao a certain amount of angles
-     * @param source the bitmap to rotate
-     * @param angle the number of degrees to rotate
-     * @return the newly rotated bitmap
-     */
-    public Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
-
-    /**
-     * Converts a bitmap to a byte array for database upload
-     * @param bitmap the bitmap to upload
-     * @return the byte array of the bitmap
-     */
-    public static byte[] getBytesFromBitmap(Bitmap bitmap){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        return baos.toByteArray();
     }
 
     /**
@@ -390,11 +316,11 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
      * @param id the name of the file
      */
     private void uploadFile(String id) {
-        if (imageUri != null && hasImageChanged && bitmap != null) {
+        if (hasImageChanged && bitmap != null) {
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
             final StorageReference fileRef = storageReference.child(id);
-            byte[] file = getBytesFromBitmap(bitmap);
+            byte[] file = imageRotator.getBytesFromBitmap(bitmap);
             uploadTask = fileRef.putBytes(file)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -424,6 +350,9 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
         }
     }
 
+    /**
+     * Opens a dialog for the user to choose images
+     */
     public void openFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -435,7 +364,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
         db.collection("users").document(user.getUid()).update("name", name.getText().toString());
         db.collection("users").document(user.getUid()).update("officerPos", pos.getText().toString());
         db.collection("users").document(user.getUid()).update("blurb", blurb.getText().toString());
-        if(uri != null) {
+        if (uri != null) {
             db.collection("users").document(user.getUid()).update("pic", uri.toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
