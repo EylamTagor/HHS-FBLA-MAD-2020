@@ -19,6 +19,9 @@ public class ChapterEvent {
     private String pic;
     private int memberLimit;
     private long priority;
+    /**
+     * A number that represents no limit to the number of users an event can have
+     */
     public static final int NO_LIMIT = -1;
 
     /**

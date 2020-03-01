@@ -83,9 +83,6 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
         return root;
     }
 
-    /**
-     * Initializes the recycler view with all the chapter events
-     */
     private void initRecyclerView() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @SuppressLint("RestrictedApi")

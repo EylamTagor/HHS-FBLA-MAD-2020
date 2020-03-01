@@ -144,9 +144,6 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         });
     }
 
-    /**
-     * Sets the time and date textfields to the current time
-     */
     private void setCurrentTime() {
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -158,9 +155,6 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         onTimeSet(null, hour, minute);
     }
 
-    /**
-     * Opens a dialog for the user to choose images
-     */
     private void openFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -269,7 +263,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
      *
      * @param id the name of the file
      */
-    private void uploadFile(final String id) {
+    public void uploadFile(final String id) {
         if (bitmap != null) {
             progressDialog.setMessage("Uploading...");
             progressDialog.show();

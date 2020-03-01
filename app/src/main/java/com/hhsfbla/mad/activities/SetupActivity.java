@@ -68,7 +68,7 @@ public class SetupActivity extends AppCompatActivity {
      * Creates the chapter with data from the page components, adds the current user into the new chapter,
      * and sets the current user to advisor status
      */
-    private void createChapter() {
+    public void createChapter() {
         progressDialog.show();
         db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -115,7 +115,7 @@ public class SetupActivity extends AppCompatActivity {
      * @param queryDocumentSnapshots a list of the chapters from the database
      * @return whether the chapter exists or not
      */
-    private boolean doesChapterExist(QuerySnapshot queryDocumentSnapshots) {
+    public boolean doesChapterExist(QuerySnapshot queryDocumentSnapshots) {
         Chapter example = new Chapter(chapName.getText().toString(), location.getText().toString());
         example.setInstagramTag(insta.getText().toString().trim());
         example.setFacebookPage(facebookPage.getText().toString().trim());

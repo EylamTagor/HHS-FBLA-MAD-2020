@@ -113,7 +113,7 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
      *
      * @param id the id of the chapter selected
      */
-    private void changeChapter(final String id) {
+    public void changeChapter(final String id) {
         final DocumentReference userRef = db.collection("users").document(fuser.getUid());
         userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override

@@ -139,9 +139,6 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         initPage();
     }
 
-    /**
-     * Initializes the pages textFields and image views with the event's current data
-     */
     private void initPage() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -279,7 +276,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
      *
      * @param id the name of the file
      */
-    private void uploadFile(String id) {
+    public void uploadFile(String id) {
         if (hasImageChanged && bitmap != null) {
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
@@ -317,9 +314,6 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         }
     }
 
-    /**
-     * Opens a dialog for the user to choose images
-     */
     private void openFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");

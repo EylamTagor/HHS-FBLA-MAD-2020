@@ -169,7 +169,7 @@ public class LoginActivity extends AppCompatActivity {
      * If they are, sends them to home page
      * if not, sends them to choose chapter
      */
-    private void doesUserExist() {
+    public void doesUserExist() {
         db.collection("users")
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override

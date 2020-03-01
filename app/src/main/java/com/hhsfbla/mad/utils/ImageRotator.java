@@ -28,6 +28,10 @@ public class ImageRotator {
 
     private Context context;
 
+    /**
+     * Creates a new image rotator object with the context of the activity or fragment calling it
+     * @param context the context of the activity or fragment that is calling this class
+     */
     public ImageRotator(Context context) {
         this.context = context;
     }

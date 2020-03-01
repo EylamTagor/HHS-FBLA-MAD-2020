@@ -172,10 +172,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
         });
     }
 
-    /**
-     * Signs the user out
-     */
-    public void signOut() {
+    private void signOut() {
         Log.d(TAG, "SIGN OUT: " + user.getEmail());
         AuthUI.getInstance()
                 .signOut(this)
@@ -187,17 +184,11 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                 });
     }
 
-    /**
-     * Opens the dialog to confirm changing chapters
-     */
     private void openChangeChapterDialog() {
         ChangeChapterDialog dialog = new ChangeChapterDialog();
         dialog.show(getSupportFragmentManager(), "");
     }
 
-    /**
-     * Opens the dialog to confirm account deletion
-     */
     private void openDeleteAccountDialog() {
         DeleteAccountDialog dialog = new DeleteAccountDialog();
         dialog.show(getSupportFragmentManager(), "");
@@ -315,7 +306,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
      *
      * @param id the name of the file
      */
-    private void uploadFile(String id) {
+    public void uploadFile(String id) {
         if (hasImageChanged && bitmap != null) {
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
@@ -350,10 +341,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
         }
     }
 
-    /**
-     * Opens a dialog for the user to choose images
-     */
-    public void openFileChooser() {
+    private void openFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);

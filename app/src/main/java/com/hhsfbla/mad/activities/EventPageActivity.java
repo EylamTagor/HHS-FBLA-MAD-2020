@@ -207,9 +207,6 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         initPage();
     }
 
-    /**
-     * Initializes the page components with the event data from the database
-     */
     private void initPage() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -305,9 +302,6 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
 
     }
 
-    /**
-     * Opens the dialog to confirm deletion of an event
-     */
     private void openDialog() {
         DeleteEventDialog dialog = new DeleteEventDialog();
         dialog.show(getSupportFragmentManager(), "");

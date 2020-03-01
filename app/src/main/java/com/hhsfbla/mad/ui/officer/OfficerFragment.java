@@ -65,22 +65,17 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
         adapter = new OfficerAdapter(officers, root.getContext());
         adapter.setOnItemClickListener(this);
         officerRecyclerView.setAdapter(adapter);
-        initRecyclerView(UserType.OFFICER);
+        initRecyclerView();
 
         return root;
     }
 
-    /**
-     * Initializes the fragment's RecyclerView of officers by pulling officer data from Firebase Firestore
-     *
-     * @param type the rank of users wanted to be in the RecyclerView (i.e. officers only)
-     */
-    public void initRecyclerView(final UserType type) {
+    private void initRecyclerView() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 final String chap = documentSnapshot.get("chapter").toString();
-                db.collection("users").whereEqualTo("chapter", chap).whereEqualTo("userType", type).orderBy("name").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("users").whereEqualTo("chapter", chap).whereEqualTo("userType", UserType.OFFICER).orderBy("name").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         officers.clear();

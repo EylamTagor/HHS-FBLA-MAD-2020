@@ -172,10 +172,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
         return root;
     }
 
-    /**
-     * Initializes the RecyclerView of the chapter's members, retrieving data from Firebase Firestore
-     */
-    public void initRecyclerView() {
+    private void initRecyclerView() {
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override

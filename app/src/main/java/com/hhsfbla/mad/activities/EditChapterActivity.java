@@ -68,7 +68,7 @@ public class EditChapterActivity extends AppCompatActivity {
     /**
      * Updates the chapter in the database with the new changes
      */
-    private void saveChanges() {
+    public void saveChanges() {
         progressDialog.show();
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -91,9 +91,6 @@ public class EditChapterActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Initializes the textviews of the page with data from the database
-     */
     private void initPage() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
