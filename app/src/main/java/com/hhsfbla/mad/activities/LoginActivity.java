@@ -67,8 +67,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mCallbackManager = CallbackManager.Factory.create();
-        if (fuser != null)
+        if (fuser != null) {
+            progressDialog.setMessage("Loading...");
+            progressDialog.show();
             doesUserExist();
+        }
 
         setTitle("Login");
         // Configure Google Sign In
@@ -118,6 +121,8 @@ public class LoginActivity extends AppCompatActivity {
                 fuser = mAuth.getCurrentUser();
                 if (fuser != null) {
                     doesUserExist();
+                    progressDialog.setMessage("Loading...");
+                    progressDialog.show();
                 } else {
 
                 }
