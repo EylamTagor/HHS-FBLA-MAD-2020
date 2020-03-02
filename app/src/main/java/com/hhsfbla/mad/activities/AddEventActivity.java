@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,7 +57,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     private static final String TAG = "ADDEVENTPAGE";
     private StorageReference storageReference;
     private ProgressDialog progressDialog;
-    private Button setDate, setTime;
+    private Button setDate, setTime, removeImage;
     private Bitmap bitmap;
     private ImageRotator imageRotator;
 
@@ -88,6 +89,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         imageBtn = findViewById(R.id.addEventImageBtn);
         setDate = findViewById(R.id.setDateButton);
         setTime = findViewById(R.id.setTimeButton);
+        removeImage = findViewById(R.id.removeImageButton);
         storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
         imageRotator = new ImageRotator(this);
 
@@ -141,6 +143,21 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
                 timePicker.show(getSupportFragmentManager(), "time picker");
             }
         });
+
+        removeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeImage();
+            }
+        });
+    }
+
+    private void removeImage() {
+        imageUri = null;
+        bitmap = null;
+        removeImage.setVisibility(View.GONE);
+        imageBtn.setImageResource(R.drawable.camera_icon);
+        imageBtn.setPadding(0, 64, 0, 64);
     }
 
     private void setCurrentTime() {
@@ -224,6 +241,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
             imageUri = data.getData();
             bitmap = imageRotator.getImageBitmap(imageUri);
             imageBtn.setImageBitmap(bitmap);
+            removeImage.setVisibility(View.VISIBLE);
         }
     }
 

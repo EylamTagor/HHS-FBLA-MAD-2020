@@ -53,7 +53,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     private FirebaseFirestore db;
     private FirebaseUser user;
     private Uri imageUri;
-    private Button setDateButton, setTimeButton;
+    private Button setDateButton, setTimeButton, removeImageButton;
     private static final String TAG = "EDIT EVENT PAGE";
     private ProgressDialog progressDialog;
     private boolean hasImageChanged;
@@ -88,6 +88,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         imageBtn = findViewById(R.id.eventImageEdit);
         setDateButton = findViewById(R.id.editSetDateButton);
         setTimeButton = findViewById(R.id.editSetTimeButton);
+        removeImageButton = findViewById(R.id.editRemoveImageButton);
         storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
         imageRotator = new ImageRotator(this);
         id = getIntent().getStringExtra("EVENT_ID");
@@ -135,7 +136,22 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
             }
         });
 
+        removeImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeImageFromStorage();
+            }
+        });
         initPage();
+    }
+
+    private void removeImageFromStorage() {
+        imageUri = null;
+        bitmap = null;
+        hasImageChanged = true;
+        removeImageButton.setVisibility(View.GONE);
+        imageBtn.setImageResource(R.drawable.camera_icon);
+        imageBtn.setPadding(0, 64, 0, 64);
     }
 
     private void initPage() {
@@ -161,6 +177,9 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                         if (event.getPic() != null && !event.getPic().equals("")) {
                             imageUri = Uri.parse(event.getPic());
                             Picasso.get().load(imageUri).fit().centerCrop().into(imageBtn);
+                            removeImageButton.setVisibility(View.VISIBLE);
+                        } else {
+                            removeImageButton.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -204,7 +223,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                                 locaEditTxt.getText().toString().trim(),
                                 descrEditTxt.getText().toString().trim(),
                                 linkEditTxt.getText().toString().trim(),
-                                uri == null ? snapshot.toObject(ChapterEvent.class).getPic() : uri.toString(),
+                                uri == null ? "" : uri.toString(),
                                 memberLimit.getText().toString().trim().equalsIgnoreCase("no limit") ? ChapterEvent.NO_LIMIT : Integer.parseInt(memberLimit.getText().toString().trim()));
                         event.setAttendees(snapshot.toObject(ChapterEvent.class).getAttendees());
                         db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document(id).set(event, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -237,6 +256,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
             bitmap = imageRotator.getImageBitmap(imageUri);
             imageBtn.setImageBitmap(bitmap);
             hasImageChanged = true;
+            removeImageButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -308,8 +328,16 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         } else {
             if(!hasImageChanged && bitmap != null) {
                 Toast.makeText(this, "No Image Selected", Toast.LENGTH_SHORT).show();
+            } else if(bitmap == null && hasImageChanged) {
+                storageReference.child(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        editEvent(null);
+                    }
+                });
+            } else {
+                editEvent(imageUri);
             }
-            editEvent(null);
         }
     }
 

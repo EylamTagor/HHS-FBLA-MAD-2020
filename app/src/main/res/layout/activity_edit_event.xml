@@ -85,6 +85,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/eventNameEdit"
                 app:srcCompat="@drawable/camera_icon" />
 
+            <Button
+                android:id="@+id/editRemoveImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="22dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/button_border"
+                android:text="Remove Image"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
                 android:layout_width="match_parent"
