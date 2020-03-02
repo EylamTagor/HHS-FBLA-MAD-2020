@@ -67,7 +67,7 @@
             <ImageView
                 android:id="@+id/eventPicDetail"
                 android:layout_width="match_parent"
-                android:layout_height="192dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
@@ -91,13 +91,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/calendarIconDetail"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/locationIconDetail"
-                app:layout_constraintTop_toBottomOf="@+id/eventPicDetail" />
+                app:layout_constraintTop_toTopOf="@+id/calendarIconDetail" />
 
             <ImageView
                 android:id="@+id/clockIconDetail"
@@ -114,13 +114,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/clockIconDetail"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/clockIconDetail"
-                app:layout_constraintTop_toBottomOf="@+id/eventDateDetail" />
+                app:layout_constraintTop_toTopOf="@+id/clockIconDetail" />
 
             <ImageView
                 android:id="@+id/locationIconDetail"
@@ -147,27 +147,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/locationIconDetail"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/calendarIconDetail"
-                app:layout_constraintTop_toBottomOf="@+id/eventTimeDetail" />
+                app:layout_constraintTop_toTopOf="@+id/locationIconDetail" />
 
             <TextView
                 android:id="@+id/eventUserCount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/memberCountIconDetail"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/calendarIconDetail"
-                app:layout_constraintTop_toBottomOf="@+id/eventLocationDetail" />
+                app:layout_constraintTop_toTopOf="@+id/memberCountIconDetail" />
 
             <TextView
                 android:id="@+id/eventDescriptionDetail"

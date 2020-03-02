@@ -83,7 +83,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.location.setText(event.getLocation());
         holder.limit.setText(event.getMemberLimit() == ChapterEvent.NO_LIMIT ? event.getAttendees().size() + "" : event.getAttendees().size() + "/" + event.getMemberLimit());
         if(event.getPic() != null && !event.getPic().equals("")) {
-            new ImageRotator(context).loadImageWrapContent(context, holder.pic, event.getPic());
+            ImageRotator.loadImageWrapContent(context, holder.pic, event.getPic());
         } else
             holder.pic.setVisibility(View.GONE);
     }

@@ -37,6 +37,7 @@ import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 import com.hhsfbla.mad.dialogs.DeleteEventDialog;
+import com.hhsfbla.mad.utils.ImageRotator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -226,7 +227,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                         }
 
                         if (event.getPic() != null && event.getPic() != "") {
-                            Picasso.get().load(Uri.parse(event.getPic())).fit().centerCrop().into(eventImage);
+                            ImageRotator.loadImageWrapContent(getApplicationContext(), eventImage, event.getPic());
                         } else {
                             eventImage.setVisibility(View.GONE);
                         }

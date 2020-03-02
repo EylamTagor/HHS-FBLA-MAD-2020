@@ -39,6 +39,7 @@ import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.dialogs.DatePicker;
 import com.hhsfbla.mad.dialogs.TimePicker;
 import com.hhsfbla.mad.utils.ImageRotator;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -240,8 +241,8 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             bitmap = imageRotator.getImageBitmap(imageUri);
-            imageBtn.setImageBitmap(bitmap);
             removeImage.setVisibility(View.VISIBLE);
+            ImageRotator.loadImageWrapContent(this, imageBtn, imageUri.toString());
         }
     }
 
