@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -156,15 +157,16 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                         locaEditTxt.setText(event.getLocation());
                         descrEditTxt.setText(event.getDescription());
                         linkEditTxt.setText(event.getFacebookLink());
-                        if (event.getMemberLimit() != ChapterEvent.NO_LIMIT) {
+                        if (event.getMemberLimit() != ChapterEvent.NO_LIMIT)
                             memberLimit.setText(event.getMemberLimit() + "");
-                        } else {
+                        else
                             memberLimit.setText("No Limit");
-                        }
+
                         if (event.getPic() != null && !event.getPic().equals("")) {
                             imageUri = Uri.parse(event.getPic());
-                            Picasso.get().load(imageUri).fit().centerCrop().into(imageBtn);
-                        }
+                            ImageRotator.loadImageWrapContent(getApplicationContext(), imageBtn, imageUri.toString());
+                        } else
+                            imageBtn.setImageResource(R.drawable.camera_icon);
                     }
                 });
             }
@@ -179,12 +181,12 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     public void editEvent(final Uri uri) {
         try {
             int x = Integer.parseInt(memberLimit.getText().toString().trim());
-            if(x == 0) {
+            if (x == 0) {
                 memberLimit.setText("No Limit");
             }
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             Log.d(TAG, "editEvent: " + e.getMessage());
-            if(memberLimit.getText().toString().trim().equalsIgnoreCase("") || memberLimit.getText().toString().trim().equalsIgnoreCase("no limit")) {
+            if (memberLimit.getText().toString().trim().equalsIgnoreCase("") || memberLimit.getText().toString().trim().equalsIgnoreCase("no limit")) {
                 memberLimit.setText("No Limit");
             } else {
                 Toast.makeText(this, "Please enter a numeric limit", Toast.LENGTH_SHORT).show();
@@ -238,7 +240,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
             bitmap = imageRotator.getImageBitmap(imageUri);
-            imageBtn.setImageBitmap(bitmap);
+            ImageRotator.loadImageWrapContent(this, imageBtn, imageUri.toString());
             hasImageChanged = true;
         }
     }
@@ -309,7 +311,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                         }
                     });
         } else {
-            if(!hasImageChanged && bitmap != null) {
+            if (!hasImageChanged && bitmap != null) {
                 Toast.makeText(this, "No Image Selected", Toast.LENGTH_SHORT).show();
             }
             editEvent(null);

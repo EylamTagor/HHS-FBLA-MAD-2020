@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -99,6 +100,29 @@ public class ImageRotator {
                         return "key";
                     }
                 }).into(imageView);
+    }
+
+    public static void loadImageWrapContent(Context context, final ImageButton imageView, String url) {
+        Picasso.get().load(url).transform(new Transformation() {
+            @Override
+            public Bitmap transform(Bitmap source) {
+                int targetWidth = imageView.getWidth();
+                double aspectRatio = (double) source.getHeight() / (double) source.getWidth();
+                int targetHeight = (int) (targetWidth * aspectRatio);
+                if (targetHeight <= 0 || targetWidth <= 0) return source;
+                Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
+                if (result != source) {
+                    // Same bitmap is returned if sizes are the same
+                    source.recycle();
+                }
+                return result;
+            }
+
+            @Override
+            public String key() {
+                return "key";
+            }
+        }).into(imageView);
     }
 
     /**
