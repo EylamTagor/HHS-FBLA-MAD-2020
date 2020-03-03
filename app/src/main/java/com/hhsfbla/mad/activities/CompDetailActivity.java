@@ -2,6 +2,7 @@ package com.hhsfbla.mad.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -72,8 +73,6 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
         adapter.setOnItemClickListener(this);
         userRecyclerView.setAdapter(adapter);
 
-        initRecyclerView(compName);
-
         db.collection("comps").document(compName).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -119,6 +118,8 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
             }
         });
 
+        initRecyclerView(compName);
+        Log.d(TAG, "onCreate: " + compName);
     }
 
     /**
@@ -143,7 +144,6 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
                 db.collection("users").whereEqualTo("chapter", chap).whereArrayContains("comps", compName).orderBy("name").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        competitors.clear();
                         competitors.addAll(queryDocumentSnapshots.toObjects(User.class));
                         adapter.notifyDataSetChanged();
                         adapter.setUsers(competitors);

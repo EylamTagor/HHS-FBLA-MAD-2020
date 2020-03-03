@@ -6,6 +6,7 @@
         android:id="@+id/action_hide_calendar"
         android:icon="@drawable/calendar_icon"
         android:tooltipText="Hide"
+        android:title="Hide"
         app:showAsAction="always"/>
 
 </menu>
