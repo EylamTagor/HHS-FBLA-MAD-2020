@@ -271,7 +271,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                                                 } else if (snapshot.toObject(Chapter.class).getUsers().size() == 1) {
                                                     db.collection("users").document(snapshot.toObject(Chapter.class).getUsers().get(0)).update("userType", UserType.ADVISOR);
                                                 }
-                                                if (currentUser.getPic() != null && !currentUser.getPic().equalsIgnoreCase("")) {
+                                                if (currentUser.getPic() != null && !currentUser.getPic().equalsIgnoreCase("") && !currentUser.getPic().equalsIgnoreCase(user.getPhotoUrl().toString())) {
                                                     deleteFromStorage();
                                                 } else {
                                                     user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {

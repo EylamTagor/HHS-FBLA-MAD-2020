@@ -236,7 +236,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
             imageUri = data.getData();
             bitmap = imageRotator.getImageBitmap(imageUri);
             removeImage.setVisibility(View.VISIBLE);
-            ImageRotator.loadImageWrapContent(this, imageBtn, imageUri.toString());
+            ImageRotator.loadImageWrapContent(this, imageBtn, imageUri.toString(), bitmap);
         }
     }
 

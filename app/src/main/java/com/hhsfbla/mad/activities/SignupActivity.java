@@ -91,7 +91,16 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
         createNewChapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SignupActivity.this, SetupActivity.class));
+                db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot snapshot) {
+                        Intent intent = new Intent(SignupActivity.this, SetupActivity.class);
+                        if(snapshot.toObject(User.class).getChapter() != null && !snapshot.toObject(User.class).getChapter().equalsIgnoreCase("")) {
+                            intent.putExtra("CHANGE_CHAPTER", "TRUE");
+                        }
+                        startActivity(intent);
+                    }
+                });
             }
         });
 

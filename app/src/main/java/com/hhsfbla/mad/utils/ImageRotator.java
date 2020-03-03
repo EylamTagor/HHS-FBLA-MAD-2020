@@ -108,6 +108,7 @@ public class ImageRotator {
      * @param context   where the method is called from
      * @param imageView the image view to load the url into
      * @param url       the url of the image to load
+     * @param b         the rotated bitmap to load into the imageview
      */
     public static void loadImageWrapContent(Context context, final ImageView imageView, String url, final Bitmap b) {
         Picasso.get().load(url).transform(new Transformation() {

@@ -251,7 +251,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
             bitmap = imageRotator.getImageBitmap(imageUri);
-            ImageRotator.loadImageWrapContent(this, imageBtn, imageUri.toString());
+            ImageRotator.loadImageWrapContent(this, imageBtn, imageUri.toString(), bitmap);
             hasImageChanged = true;
             removeImageButton.setVisibility(View.VISIBLE);
         }
