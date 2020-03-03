@@ -106,8 +106,6 @@ public class SetupActivity extends AppCompatActivity {
                         ref.set(example).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                progressDialog.dismiss();
-                                startActivity(new Intent(SetupActivity.this, HomeActivity.class));
                                 String isChangingChapter = getIntent().getStringExtra("CHANGE_CHAPTER");
                                 if (isChangingChapter == null || isChangingChapter.equalsIgnoreCase("")) {
                                     db.collection("users").document(user.getUid()).update("chapter", id).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -116,6 +114,7 @@ public class SetupActivity extends AppCompatActivity {
                                             db.collection("users").document(user.getUid()).update("userType", UserType.ADVISOR).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
+                                                    progressDialog.dismiss();
                                                     startActivity(new Intent(SetupActivity.this, HomeActivity.class));
                                                 }
                                             });

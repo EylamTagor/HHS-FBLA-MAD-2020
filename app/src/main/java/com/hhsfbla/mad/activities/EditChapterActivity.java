@@ -108,32 +108,32 @@ public class EditChapterActivity extends AppCompatActivity {
                         if (!(chapter.getName() == null || chapter.getName().equalsIgnoreCase(""))) {
                             chapName.setText(chapter.getName());
                         } else {
-                            chapName.setText("No Description");
+                            chapName.setText("");
                         }
                         if (!(chapter.getDescription() == null || chapter.getDescription().equalsIgnoreCase(""))) {
                             chapDesc.setText(chapter.getDescription());
                         } else {
-                            chapDesc.setText("No Description");
+                            chapDesc.setText("");
                         }
                         if (!(chapter.getLocation() == null || chapter.getLocation().equalsIgnoreCase(""))) {
                             location.setText(chapter.getLocation());
                         } else {
-                            location.setText("No Location");
+                            location.setText("");
                         }
                         if (!(chapter.getFacebookPage() == null || chapter.getFacebookPage().equalsIgnoreCase(""))) {
                             facebookPage.setText(chapter.getFacebookPage());
                         } else {
-                            facebookPage.setText("No Facebook Page");
+                            facebookPage.setText("");
                         }
                         if (!(chapter.getInstagramTag() == null || chapter.getInstagramTag().equalsIgnoreCase(""))) {
                             insta.setText(chapter.getInstagramTag());
                         } else {
-                            insta.setText("No Instagram Account");
+                            insta.setText("");
                         }
                         if (!(chapter.getWebsite() == null || chapter.getWebsite().equalsIgnoreCase(""))) {
                             website.setText(chapter.getWebsite());
                         } else {
-                            website.setText("No Website");
+                            website.setText("");
                         }
                     }
                 });
