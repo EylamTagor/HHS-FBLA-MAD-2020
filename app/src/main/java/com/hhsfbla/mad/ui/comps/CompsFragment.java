@@ -113,6 +113,7 @@ public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickL
     public void onItemClick(DocumentSnapshot snapshot, int position) {
         Intent intent = new Intent(getContext(), CompDetailActivity.class);
         intent.putExtra("COMP_ID", snapshot.getId());
+        intent.putExtra("FROM_FRAGMENT", "Comps");
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         getContext().startActivity(intent);
     }

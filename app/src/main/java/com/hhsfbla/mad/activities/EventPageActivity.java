@@ -121,7 +121,7 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
                 else if (getIntent().getStringExtra("FROM_FRAGMENT") != null && getIntent().getStringExtra("FROM_FRAGMENT").equals("MyEvents"))
                     intent.putExtra("fragmentToLoad", "MyEventsFragment");
 
-                startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
+                startActivity(intent);
             }
         });
 

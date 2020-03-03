@@ -85,7 +85,12 @@ public class CompDetailActivity extends AppCompatActivity implements UserAdapter
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CompDetailActivity.this, HomeActivity.class);
-                intent.putExtra("fragmentToLoad", "CompsFragment");
+
+                if (getIntent().getStringExtra("FROM_FRAGMENT") != null && getIntent().getStringExtra("FROM_FRAGMENT").equals("Comps"))
+                    intent.putExtra("fragmentToLoad", "CompsFragment");
+                else if (getIntent().getStringExtra("FROM_FRAGMENT") != null && getIntent().getStringExtra("FROM_FRAGMENT").equals("MyComps"))
+                    intent.putExtra("fragmentToLoad", "MyCompsFragment");
+
                 startActivity(intent);
             }
         });

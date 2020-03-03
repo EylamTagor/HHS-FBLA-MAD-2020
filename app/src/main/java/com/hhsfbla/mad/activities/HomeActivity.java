@@ -3,6 +3,7 @@ package com.hhsfbla.mad.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -75,6 +76,9 @@ public class HomeActivity extends AppCompatActivity {
 
         if (getIntent().getStringExtra("fragmentToLoad") != null && getIntent().getStringExtra("fragmentToLoad").equals("CompsFragment"))
             navController.navigate(R.id.comps_action);
+
+        if (getIntent().getStringExtra("fragmentToLoad") != null && getIntent().getStringExtra("fragmentToLoad").equals("MyCompsFragment"))
+            navController.navigate(R.id.mycomps_action);
 
         if (getIntent().getStringExtra("fragmentToLoad") != null && getIntent().getStringExtra("fragmentToLoad").equals("CalendarFragment"))
             navController.navigate(R.id.calendar_action);
