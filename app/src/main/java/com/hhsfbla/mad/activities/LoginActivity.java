@@ -178,9 +178,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    if (document.getId().equals(mAuth.getCurrentUser().getUid()) && !document.get("chapter").equals("")) {
+                    try {
+                        if (document.getId().equals(fuser.getUid()) && !document.get("chapter").equals("")) {
+                            progressDialog.dismiss();
+                            sendToHomePage();
+                            return;
+                        }
+                    } catch(Exception e) {
                         progressDialog.dismiss();
-                        sendToHomePage();
                         return;
                     }
                 }
