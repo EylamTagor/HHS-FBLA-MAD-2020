@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -34,12 +35,15 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.Chapter;
+import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 import com.hhsfbla.mad.dialogs.ChangeChapterDialog;
 import com.hhsfbla.mad.dialogs.DeleteAccountDialog;
 import com.hhsfbla.mad.utils.ImageRotator;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -191,46 +195,38 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     }
 
     /**
-     * Deletes the account based on confirmation and sends the user to the login screen
+     * If the user is the last advisor in the chapter, and there are still members left, asks the user to first promote someone
+     * else to advisor, otherwise deletes account
      *
      * @param confirm whether or not to delete the account
      */
     @Override
     public void sendConfirmation(boolean confirm) {
         if (confirm) {
-            progressDialog.setMessage("Deleting...");
-            progressDialog.show();
             db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
-                public void onSuccess(final DocumentSnapshot documentSnapshot) {
-                    db.collection("chapters").document(documentSnapshot.get("chapter").toString()).update("users", FieldValue.arrayRemove(user.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
+                public void onSuccess(DocumentSnapshot snapshot) {
+                    if(!snapshot.toObject(User.class).getUserType().equals(UserType.ADVISOR)) {
+                        deleteAccount();
+                        return;
+                    }
+                    db.collection("chapters").document(snapshot.toObject(User.class).getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
-                        public void onSuccess(Void aVoid) {
-                            db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").whereArrayContains("attendees", user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        public void onSuccess(DocumentSnapshot snapshot) {
+                            if (snapshot.toObject(Chapter.class).getUsers().size() <= 2) {
+                                deleteAccount();
+                                return;
+                            }
+                            db.collection("users").whereEqualTo("chapter", snapshot.toObject(User.class).getChapter()).whereEqualTo("userType", UserType.ADVISOR).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    for (DocumentSnapshot snap : queryDocumentSnapshots) {
-                                        db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
-                                    }
-                                    if (documentSnapshot.toObject(User.class).getPic() != null && !documentSnapshot.toObject(User.class).getPic().equalsIgnoreCase("") && !documentSnapshot.toObject(User.class).getPic().equalsIgnoreCase(user.getPhotoUrl().toString())) {
-                                        deleteFromStorage();
+                                    if (queryDocumentSnapshots != null && queryDocumentSnapshots.size() != 0) {
+                                        startActivity(new Intent(ProfileActivity.this, HomeActivity.class));
+                                        Toast.makeText(getApplicationContext(), "Please set another advisor\nbefore deleting your account", Toast.LENGTH_LONG).show();
                                     } else {
-
-                                        db.collection("users").document(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        FirebaseAuth.getInstance().signOut();
-                                                        progressDialog.dismiss();
-                                                        startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-                                                    }
-                                                });
-
-                                            }
-                                        });
+                                        deleteAccount();
                                     }
+                                    return;
                                 }
                             });
                         }
@@ -238,25 +234,77 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
 
                 }
             });
+
         }
+    }
+
+    /**
+     * Deletes the user from the database, removes all references to the user from the database, and if
+     * the user uploaded a profile picture, removes it from storage
+     */
+    public void deleteAccount() {
+        progressDialog.setMessage("Deleting...");
+        progressDialog.show();
+        final DocumentReference userRef = db.collection("users").document(user.getUid());
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot snapshot) {
+                final User currentUser = snapshot.toObject(User.class);
+                final DocumentReference chapterRef = db.collection("chapters").document(currentUser.getChapter());
+                userRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        chapterRef.collection("events").whereArrayContains("attendees", user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for (DocumentSnapshot snap : queryDocumentSnapshots) {
+                                    chapterRef.collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
+                                }
+                                chapterRef.update("users", FieldValue.arrayRemove(user.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        chapterRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot snapshot) {
+                                                if (snapshot.toObject(Chapter.class).getUsers().size() == 0) {
+                                                    chapterRef.delete();
+                                                } else if (snapshot.toObject(Chapter.class).getUsers().size() == 1) {
+                                                    db.collection("users").document(snapshot.toObject(Chapter.class).getUsers().get(0)).update("userType", UserType.ADVISOR);
+                                                }
+                                                if (currentUser.getPic() != null && !currentUser.getPic().equalsIgnoreCase("")) {
+                                                    deleteFromStorage();
+                                                } else {
+                                                    user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            FirebaseAuth.getInstance().signOut();
+                                                            progressDialog.dismiss();
+                                                            startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     private void deleteFromStorage() {
         storageReference.child(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                db.collection("users").document(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                FirebaseAuth.getInstance().signOut();
-                                progressDialog.dismiss();
-                                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-                            }
-                        });
-
+                        FirebaseAuth.getInstance().signOut();
+                        progressDialog.dismiss();
+                        startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
                     }
                 });
             }
@@ -274,6 +322,10 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
             db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot snapshot) {
+                    if(!snapshot.toObject(User.class).getUserType().equals(UserType.ADVISOR)) {
+                        startActivity(new Intent(ProfileActivity.this, SignupActivity.class));
+                        return;
+                    }
                     db.collection("chapters").document(snapshot.toObject(User.class).getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot snapshot) {
@@ -299,6 +351,17 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                 }
             });
         }
+    }
+
+    private void removeFromEvents(final DocumentReference chapterRef) {
+        chapterRef.collection("events").whereArrayContains("attendees", user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot snap : queryDocumentSnapshots) {
+                    chapterRef.collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
+                }
+            }
+        });
     }
 
     /**

@@ -103,6 +103,36 @@ public class ImageRotator {
     }
 
     /**
+     * Loads the given url into the given imageview in a way that the image won't be restricted by the dimensions of the imageview
+     *
+     * @param context   where the method is called from
+     * @param imageView the image view to load the url into
+     * @param url       the url of the image to load
+     */
+    public static void loadImageWrapContent(Context context, final ImageView imageView, String url, final Bitmap b) {
+        Picasso.get().load(url).transform(new Transformation() {
+            @Override
+            public Bitmap transform(Bitmap source) {
+                int targetWidth = imageView.getWidth();
+                double aspectRatio = (double) b.getHeight() / (double) b.getWidth();
+                int targetHeight = (int) (targetWidth * aspectRatio);
+                if (targetHeight <= 0 || targetWidth <= 0) return b;
+                Bitmap result = Bitmap.createScaledBitmap(b, targetWidth, targetHeight, false);
+                if (result != b) {
+                    // Same bitmap is returned if sizes are the same
+                    source.recycle();
+                }
+                return result;
+            }
+
+            @Override
+            public String key() {
+                return "key";
+            }
+        }).into(imageView);
+    }
+
+    /**
      * Gets the file type of the given image uri: jpg, png, bmp, etc
      *
      * @param uri The uri of the image
