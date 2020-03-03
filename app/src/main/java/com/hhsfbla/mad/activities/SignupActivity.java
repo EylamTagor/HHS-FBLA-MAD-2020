@@ -3,6 +3,7 @@ package com.hhsfbla.mad.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
@@ -17,6 +18,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -30,6 +32,7 @@ import com.google.firebase.storage.UploadTask;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.adapters.ChapterAdapter;
 import com.hhsfbla.mad.data.Chapter;
+import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 
@@ -65,6 +68,7 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
         setTitle("User Setup");
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
         fuser = auth.getCurrentUser();
         storageReference = FirebaseStorage.getInstance().getReference("images").child("pfps");
         createNewChapter = findViewById(R.id.createNewChapter);
@@ -117,33 +121,78 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
         final DocumentReference userRef = db.collection("users").document(fuser.getUid());
         userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot snapshot) {
-                final DocumentReference chapterRef = db.collection("chapters").document(snapshot.getId());
-                chapterRef.update("users", FieldValue.arrayRemove(fuser.getUid()));
-                chapterRef.collection("events").whereArrayContains("attendees", fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (DocumentSnapshot snap : queryDocumentSnapshots) {
-                            chapterRef.collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(fuser.getUid()));
-                        }
-                    }
-                });
-
-                userRef.update("chapter", id).addOnSuccessListener(new OnSuccessListener<Void>() {
+            public void onSuccess(final DocumentSnapshot userSnap) {
+                Log.d(TAG, "onSuccess: hello");
+                final DocumentReference chapterRef = db.collection("chapters").document(userSnap.toObject(User.class).getChapter());
+                chapterRef.update("users", FieldValue.arrayRemove(fuser.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        userRef.update("myEvents", new ArrayList<String>()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        Log.d(TAG, "onSuccess: jello");
+                        chapterRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot snapshot) {
+                                Log.d(TAG, "onSuccess: bello");
+                                if(snapshot.toObject(Chapter.class).getUsers().size() == 0) {
+                                    deleteEventImages(chapterRef.collection("events"));
+                                    chapterRef.delete();
+                                    userRef.update("myEvents", new ArrayList<ChapterEvent>());
+                                } else {
+                                    if(snapshot.toObject(Chapter.class).getUsers().size() == 1) {
+                                        db.collection("users").document(snapshot.toObject(Chapter.class).getUsers().get(0)).update("userType", UserType.ADVISOR);
+                                    }
+                                    removeFromEvents(chapterRef);
+                                }
+                                updateUser(id);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+    }
+
+    private void deleteEventImages(CollectionReference ref) {
+        Log.d(TAG, "deleteEventImages: deleteImages");
+        ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot snap : queryDocumentSnapshots) {
+                    if(snap.toObject(ChapterEvent.class).getPic() != null && !snap.toObject(ChapterEvent.class).getPic().equalsIgnoreCase(""))
+                        storageReference.child(snap.getId()).delete();
+                }
+            }
+        });
+    }
+
+    private void removeFromEvents(final DocumentReference chapterRef) {
+        Log.d(TAG, "removeFromEvents: remove");
+        chapterRef.collection("events").whereArrayContains("attendees", fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot snap : queryDocumentSnapshots) {
+                    chapterRef.collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(fuser.getUid()));
+                }
+            }
+        });
+    }
+
+    private void updateUser(final String id) {
+        Log.d(TAG, "updateUser: update");
+        final DocumentReference userRef = db.collection("users").document(fuser.getUid());
+        userRef.update("chapter", id).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                userRef.update("myEvents", new ArrayList<String>()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        userRef.update("userType", UserType.MEMBER).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                userRef.update("userType", UserType.MEMBER).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                userRef.update("comps", new ArrayList<String>()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        userRef.update("comps", new ArrayList<String>()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                startActivity(new Intent(SignupActivity.this, HomeActivity.class));
-                                            }
-                                        });
+                                        startActivity(new Intent(SignupActivity.this, HomeActivity.class));
                                     }
                                 });
                             }
@@ -152,7 +201,6 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
                 });
             }
         });
-
     }
 
     /**

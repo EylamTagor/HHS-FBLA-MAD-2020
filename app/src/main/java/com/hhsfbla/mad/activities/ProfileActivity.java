@@ -278,7 +278,33 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     @Override
     public void sendChangeConfirmation(boolean confirm) {
         if (confirm) {
-            startActivity(new Intent(ProfileActivity.this, SignupActivity.class));
+            db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot snapshot) {
+                    db.collection("chapters").document(snapshot.toObject(User.class).getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot snapshot) {
+                            if(snapshot.toObject(Chapter.class).getUsers().size() <= 2) {
+                                startActivity(new Intent(ProfileActivity.this, SignupActivity.class));
+                                return;
+                            }
+                            db.collection("users").whereEqualTo("chapter", snapshot.toObject(User.class).getChapter()).whereEqualTo("userType", UserType.ADVISOR).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    if(queryDocumentSnapshots != null && queryDocumentSnapshots.size() != 0) {
+                                        startActivity(new Intent(ProfileActivity.this, HomeActivity.class));
+                                        Toast.makeText(getApplicationContext(), "Please set another advisor\nbefore leaving your chapter", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        startActivity(new Intent(ProfileActivity.this, SignupActivity.class));
+                                    }
+                                    return;
+                                }
+                            });
+                        }
+                    });
+
+                }
+            });
         }
     }
 
