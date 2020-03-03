@@ -116,7 +116,10 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
+//                if (getIntent().getStringExtra("FROM_FRAGMENT") != null && getIntent().getStringExtra("FROM_FRAGMENT").equals("Calendar")) {
+//                    // go to calendarfragment
+//                } else
+                    startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
             }
         });
 
