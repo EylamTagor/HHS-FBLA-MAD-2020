@@ -1,5 +1,6 @@
 package com.hhsfbla.mad.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,13 +48,13 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
     private SearchView searchView;
     private ChapterAdapter adapter;
     private List<Chapter> chapterList;
-    private StorageTask uploadTask;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private FirebaseUser fuser;
     private Button createNewChapter;
     private static final String TAG = "signupactivity";
     private StorageReference storageReference;
+    private ProgressDialog progressDialog;
 
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
@@ -66,6 +67,7 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         setTitle("User Setup");
+        progressDialog = new ProgressDialog(this);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("images").child("events");
@@ -133,11 +135,14 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
                             public void onSuccess(DocumentSnapshot snapshot) {
                                 Log.d(TAG, "onSuccess: bello");
                                 if(snapshot.toObject(Chapter.class).getUsers().size() == 0) {
+                                    Log.d(TAG, "onSuccess: bsdjkfoeqnfdoindoiwnefoiwe");
                                     deleteEventImages(chapterRef.collection("events"));
                                     chapterRef.delete();
                                     userRef.update("myEvents", new ArrayList<ChapterEvent>());
                                 } else {
+                                    Log.d(TAG, "onSuccess: nope");
                                     if(snapshot.toObject(Chapter.class).getUsers().size() == 1) {
+                                        Log.d(TAG, "onSuccess: bipbop");
                                         db.collection("users").document(snapshot.toObject(Chapter.class).getUsers().get(0)).update("userType", UserType.ADVISOR);
                                     }
                                     removeFromEvents(chapterRef);
@@ -192,6 +197,7 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
                                 userRef.update("comps", new ArrayList<String>()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        progressDialog.dismiss();
                                         startActivity(new Intent(SignupActivity.this, HomeActivity.class));
                                     }
                                 });
@@ -210,19 +216,22 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
      * @param position the numbered position of snapshot in the full chapter list
      */
     @Override
-    public void onItemClick(DocumentSnapshot snapshot, int position) {
+    public void onItemClick(DocumentSnapshot snapshot, final int position) {
         final String id = snapshot.getId();
         db.collection("users").document(fuser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot snapshot) {
                 User user = snapshot.toObject(User.class);
                 if (user.getChapter().equals("")) {
+                    progressDialog.setMessage("Joining...");
+                    progressDialog.show();
                     db.collection("users").document(fuser.getUid()).update("chapter", id).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             db.collection("chapters").document(id).update("users", FieldValue.arrayUnion(fuser.getUid())).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    progressDialog.dismiss();
                                     startActivity(new Intent(SignupActivity.this, HomeActivity.class));
                                 }
                             });
@@ -231,6 +240,8 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
                 } else if (user.getChapter().equals(id)) {
                     startActivity(new Intent(SignupActivity.this, HomeActivity.class));
                 } else {
+                    progressDialog.setMessage("Switching...");
+                    progressDialog.show();
                     changeChapter(id);
                 }
             }

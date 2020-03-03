@@ -103,7 +103,7 @@ public class EditChapterActivity extends AppCompatActivity {
                         if (!(chapter.getName() == null || chapter.getName().equalsIgnoreCase(""))) {
                             chapName.setText(chapter.getName());
                         } else {
-                            chapDesc.setText("No Description");
+                            chapName.setText("No Description");
                         }
                         if (!(chapter.getDescription() == null || chapter.getDescription().equalsIgnoreCase(""))) {
                             chapDesc.setText(chapter.getDescription());

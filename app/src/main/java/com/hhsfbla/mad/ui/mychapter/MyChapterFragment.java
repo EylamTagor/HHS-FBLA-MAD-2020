@@ -118,12 +118,12 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
                         if (!(chapter.getDescription() == null || chapter.getDescription().isEmpty())) {
                             aboutChap.setText(chapter.getDescription());
                         } else {
-                            aboutChap.setText("No Description");
+                            aboutChap.setVisibility(View.GONE);
                         }
                         if (!(chapter.getLocation() == null || chapter.getLocation().equalsIgnoreCase(""))) {
                             locaChap.setText(chapter.getLocation());
                         } else {
-                            locaChap.setText("No Location");
+                            locaChap.setVisibility(View.GONE);
                         }
                         if (!(chapter.getFacebookPage() == null || chapter.getFacebookPage().equalsIgnoreCase(""))) {
                             facebook.setOnClickListener(new View.OnClickListener() {
@@ -159,7 +159,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
                             chapLink.setText(Html.fromHtml("<a href=" + chapter.getWebsite() + ">" + chapter.getName().trim() + " Website</androidx.constraintlayout.widget.ConstraintLayout</a>"));
                             chapLink.setMovementMethod(LinkMovementMethod.getInstance());
                         } else {
-                            chapLink.setText("No Website");
+                            chapLink.setVisibility(View.GONE);
                         }
 
 
@@ -246,9 +246,24 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
                     promoteUser(snapshot, thisuser);
                     return true;
                 } else if (menuItem.getItemId() == R.id.demoteButton) {
-                    progressDialog.setMessage("Promoting...");
-                    progressDialog.show();
-                    demoteUser(snapshot, thisuser);
+                    if(thisuser.getUserType() != UserType.ADVISOR) {
+                        progressDialog.setMessage("Demoting...");
+                        progressDialog.show();
+                        demoteUser(snapshot, thisuser);
+                        return true;
+                    }
+                    db.collection("users").whereEqualTo("chapter", thisuser.getChapter()).whereEqualTo("userType", UserType.ADVISOR).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if(queryDocumentSnapshots != null && queryDocumentSnapshots.size() > 1) {
+                                progressDialog.setMessage("Demoting...");
+                                progressDialog.show();
+                                demoteUser(snapshot, thisuser);
+                            } else {
+                                Toast.makeText(getContext(), "Please set another advisor\nbefore demoting the last advisor", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
                     return true;
                 }
                 return false;
@@ -256,7 +271,6 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
         });
         menu.inflate(R.menu.promotion_popup_menu);
         menu.show();
-
     }
 
     private void promoteUser(DocumentSnapshot snapshot, User user) {
