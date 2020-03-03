@@ -2,7 +2,6 @@ package com.hhsfbla.mad.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -38,7 +37,6 @@ import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.data.UserType;
 import com.hhsfbla.mad.dialogs.DeleteEventDialog;
 import com.hhsfbla.mad.utils.ImageRotator;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -116,10 +114,14 @@ public class EventPageActivity extends AppCompatActivity implements DeleteEventD
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (getIntent().getStringExtra("FROM_FRAGMENT") != null && getIntent().getStringExtra("FROM_FRAGMENT").equals("Calendar")) {
-//                    // go to calendarfragment
-//                } else
-                    startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
+                Intent intent = new Intent(EventPageActivity.this, HomeActivity.class);
+
+                if (getIntent().getStringExtra("FROM_FRAGMENT") != null && getIntent().getStringExtra("FROM_FRAGMENT").equals("Calendar"))
+                    intent.putExtra("fragmentToLoad", "CalendarFragment");
+                else if (getIntent().getStringExtra("FROM_FRAGMENT") != null && getIntent().getStringExtra("FROM_FRAGMENT").equals("MyEvents"))
+                    intent.putExtra("fragmentToLoad", "MyEventsFragment");
+
+                startActivity(new Intent(EventPageActivity.this, HomeActivity.class));
             }
         });
 
