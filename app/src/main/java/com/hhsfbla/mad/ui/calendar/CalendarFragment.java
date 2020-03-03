@@ -2,7 +2,6 @@ package com.hhsfbla.mad.ui.calendar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -152,7 +151,6 @@ public class CalendarFragment extends Fragment implements EventAdapter.OnItemCli
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.home, menu);
-        Log.d("hola", "onCreateOptionsMenu: hello");
     }
 
     @Override

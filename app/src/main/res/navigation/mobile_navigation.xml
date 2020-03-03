@@ -18,6 +18,12 @@
         <action
             android:id="@+id/mycomps_action"
             app:destination="@id/nav_mycomps" />
+        <action
+            android:id="@+id/calendar_action"
+            app:destination="@id/nav_calendar" />
+        <action
+            android:id="@+id/myevents_action"
+            app:destination="@id/nav_my_events" />
     </fragment>
     <fragment
         android:id="@+id/nav_calendar"

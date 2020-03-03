@@ -66,7 +66,7 @@ public class SignupActivity extends AppCompatActivity implements ChapterAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        setTitle("User Setup");
+        setTitle("Find a Chapter");
         progressDialog = new ProgressDialog(this);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();

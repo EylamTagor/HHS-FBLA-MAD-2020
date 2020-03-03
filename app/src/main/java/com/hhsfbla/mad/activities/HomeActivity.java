@@ -78,6 +78,12 @@ public class HomeActivity extends AppCompatActivity {
         if (getIntent().getStringExtra("fragmentToLoad") != null && getIntent().getStringExtra("fragmentToLoad").equals("CompsFragment"))
             navController.navigate(R.id.comps_action);
 
+        if (getIntent().getStringExtra("fragmentToLoad") != null && getIntent().getStringExtra("fragmentToLoad").equals("CalendarFragment"))
+            navController.navigate(R.id.calendar_action);
+
+        if (getIntent().getStringExtra("fragmentToLoad") != null && getIntent().getStringExtra("fragmentToLoad").equals("MyEventsFragment"))
+            navController.navigate(R.id.myevents_action);
+
         View header = navigationView.getHeaderView(0);
         profileImage = header.findViewById(R.id.profileImage);
         profileButton = header.findViewById(R.id.profileButton);

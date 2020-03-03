@@ -120,6 +120,7 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
     public void onItemClick(DocumentSnapshot snapshot, int position) {
         Intent intent = new Intent(getContext(), EventPageActivity.class);
         intent.putExtra("EVENT_ID", snapshot.getId());
+        intent.putExtra("FROM_FRAGMENT", "MyEvents");
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         getActivity().startActivity(intent);
     }
