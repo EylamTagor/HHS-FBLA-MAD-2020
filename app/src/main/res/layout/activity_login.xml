@@ -27,7 +27,10 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginGoogleBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/loginGoogleBtn"
+        xmlns:facebook="http://schemas.android.com/apk/res-auto"
+        facebook:com_facebook_login_text="Continue with Facebook"
+        facebook:com_facebook_logout_text="Continue with Facebook"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/loginGoogleBtn"

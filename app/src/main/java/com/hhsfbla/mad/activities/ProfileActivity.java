@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -178,6 +179,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
+                        LoginManager.getInstance().logOut();
                         user = null;
                         startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
                     }
@@ -278,6 +280,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
                                                             FirebaseAuth.getInstance().signOut();
+                                                            LoginManager.getInstance().logOut();
                                                             progressDialog.dismiss();
                                                             startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
                                                         }
