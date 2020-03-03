@@ -1,10 +1,12 @@
 package com.hhsfbla.mad.ui.calendar;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
@@ -21,15 +23,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.activities.DateEventsActivity;
 import com.hhsfbla.mad.activities.EventPageActivity;
 import com.hhsfbla.mad.adapters.EventAdapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
-import com.hhsfbla.mad.data.UserType;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -69,6 +68,7 @@ public class CalendarFragment extends Fragment implements EventAdapter.OnItemCli
         View root = inflater.inflate(R.layout.fragment_calendar, container, false);
         getActivity().setTitle("Calendar");
 
+
         db = FirebaseFirestore.getInstance();
 
         auth = FirebaseAuth.getInstance();
@@ -106,7 +106,7 @@ public class CalendarFragment extends Fragment implements EventAdapter.OnItemCli
                 initRecyclerView();
             }
         });
-
+        setHasOptionsMenu(true);
         return root;
     }
 
@@ -146,5 +146,26 @@ public class CalendarFragment extends Fragment implements EventAdapter.OnItemCli
         intent.putExtra("EVENT_ID", snapshot.getId());
         intent.putExtra("FROM_FRAGMENT", "Calendar");
         getContext().startActivity(intent);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.home, menu);
+        Log.d("hola", "onCreateOptionsMenu: hello");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_hide_calendar:
+                if(calendar.getVisibility() == View.VISIBLE) {
+                    calendar.setVisibility(View.GONE);
+                } else {
+                    calendar.setVisibility(View.VISIBLE);
+                }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
