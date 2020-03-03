@@ -1,14 +1,11 @@
 package com.hhsfbla.mad.activities;
 
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -173,7 +170,6 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     }
 
     private void signOut() {
-        Log.d(TAG, "SIGN OUT: " + user.getEmail());
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -216,8 +212,6 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                                     for (DocumentSnapshot snap : queryDocumentSnapshots) {
                                         db.collection("chapters").document(documentSnapshot.get("chapter").toString()).collection("events").document(snap.getId()).update("attendees", FieldValue.arrayRemove(user.getUid()));
                                     }
-                                    Log.d(TAG, "onSuccess: " + documentSnapshot.toObject(User.class).getPic());
-                                    Log.d(TAG, "onSuccess: " + user.getPhotoUrl());
                                     if (documentSnapshot.toObject(User.class).getPic() != null && !documentSnapshot.toObject(User.class).getPic().equalsIgnoreCase("") && !documentSnapshot.toObject(User.class).getPic().equalsIgnoreCase(user.getPhotoUrl().toString())) {
                                         deleteFromStorage();
                                     } else {
@@ -248,7 +242,6 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
     }
 
     private void deleteFromStorage() {
-        Log.d(TAG, "deleteFromStorage: ");
         storageReference.child(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -284,14 +277,14 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
                     db.collection("chapters").document(snapshot.toObject(User.class).getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot snapshot) {
-                            if(snapshot.toObject(Chapter.class).getUsers().size() <= 2) {
+                            if (snapshot.toObject(Chapter.class).getUsers().size() <= 2) {
                                 startActivity(new Intent(ProfileActivity.this, SignupActivity.class));
                                 return;
                             }
                             db.collection("users").whereEqualTo("chapter", snapshot.toObject(User.class).getChapter()).whereEqualTo("userType", UserType.ADVISOR).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    if(queryDocumentSnapshots != null && queryDocumentSnapshots.size() != 0) {
+                                    if (queryDocumentSnapshots != null && queryDocumentSnapshots.size() != 0) {
                                         startActivity(new Intent(ProfileActivity.this, HomeActivity.class));
                                         Toast.makeText(getApplicationContext(), "Please set another advisor\nbefore leaving your chapter", Toast.LENGTH_LONG).show();
                                     } else {
@@ -333,7 +326,7 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
      * @param id the name of the file
      */
     public void uploadFile(String id) {
-        if(name.getText().toString().trim().equalsIgnoreCase("")) {
+        if (name.getText().toString().trim().equalsIgnoreCase("")) {
             Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show();
             name.requestFocus();
             return;

@@ -19,10 +19,11 @@ public class Competition {
 
     /**
      * Creates a new competition with the given name, description, type, and picture
-     * @param name the name of the competition
+     *
+     * @param name        the name of the competition
      * @param description a description of the competition
-     * @param compType the type of competition
-     * @param pic a picture representing the competition
+     * @param compType    the type of competition
+     * @param pic         a picture representing the competition
      */
     public Competition(String name, String description, CompType compType, int pic) {
         this.name = name;
@@ -40,6 +41,7 @@ public class Competition {
 
     /**
      * Sets the type of this competition
+     *
      * @param compType the new competition tpye
      */
     public void setCompType(CompType compType) {
@@ -55,6 +57,7 @@ public class Competition {
 
     /**
      * Sets the picture of the competition
+     *
      * @param pic the id of the new picture
      */
     public void setPic(int pic) {
@@ -70,6 +73,7 @@ public class Competition {
 
     /**
      * Sets the name of the competition
+     *
      * @param name the new name
      */
     public void setName(String name) {
@@ -85,6 +89,7 @@ public class Competition {
 
     /**
      * Sets the description of the competition
+     *
      * @param description the new description
      */
     public void setDescription(String description) {

@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -14,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.hhsfbla.mad.R;
+
 /**
  * Represents a dialog to confirm that a user wants to delete this event
  */
@@ -60,7 +60,7 @@ public class DeleteEventDialog extends AppCompatDialogFragment {
         super.onAttach(context);
         try {
             listener = (DeleteEventDialogListener) context;
-        } catch(ClassCastException e) {
+        } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "Implement method");
         }
     }

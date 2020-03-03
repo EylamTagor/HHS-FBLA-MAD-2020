@@ -7,10 +7,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -18,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,7 +36,6 @@ import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.dialogs.DatePicker;
 import com.hhsfbla.mad.dialogs.TimePicker;
 import com.hhsfbla.mad.utils.ImageRotator;
-import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -188,12 +184,11 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     public void addEvent(Uri uri, final String id) {
         try {
             int x = Integer.parseInt(limitEditText.getText().toString().trim());
-            if(x == 0) {
+            if (x == 0) {
                 limitEditText.setText("No Limit");
             }
-        } catch(NumberFormatException e) {
-            Log.d(TAG, "editEvent: " + e.getMessage());
-            if(limitEditText.getText().toString().trim().equalsIgnoreCase("") || limitEditText.getText().toString().trim().equalsIgnoreCase("no limit")) {
+        } catch (NumberFormatException e) {
+            if (limitEditText.getText().toString().trim().equalsIgnoreCase("") || limitEditText.getText().toString().trim().equalsIgnoreCase("no limit")) {
                 limitEditText.setText("No Limit");
             } else {
                 Toast.makeText(this, "Please enter a numeric limit", Toast.LENGTH_SHORT).show();
@@ -214,7 +209,6 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot userSnap) {
-                Log.d(TAG, "Adding event");
                 DocumentReference ref = db.collection("chapters").document(userSnap.get("chapter").toString()).collection("events").document(id);
                 ref.set(event).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -282,7 +276,7 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
      * @param id the name of the file
      */
     public void uploadFile(final String id) {
-        if(nameEditTxt.getText().toString().trim().equalsIgnoreCase("")) {
+        if (nameEditTxt.getText().toString().trim().equalsIgnoreCase("")) {
             Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show();
             nameEditTxt.requestFocus();
             return;

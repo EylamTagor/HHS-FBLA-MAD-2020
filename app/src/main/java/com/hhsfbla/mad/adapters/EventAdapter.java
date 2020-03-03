@@ -1,10 +1,6 @@
 package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.media.Image;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +20,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.utils.ImageRotator;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -44,7 +39,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
      * Creates a new EventAdapter object with the following parameters
      *
      * @param context the Activity, Fragment, etc. hosting the RecyclerView that uses this adapter
-     * @param events a list of all existing events for users to pick from and join (each of which is an item in this adapter)
+     * @param events  a list of all existing events for users to pick from and join (each of which is an item in this adapter)
      */
     public EventAdapter(List<ChapterEvent> events, Context context) {
         this.events = events;
@@ -70,7 +65,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     /**
      * Sets the appropriate parameters for each item according to its placement in the item list
      *
-     * @param holder the ViewHolder to contain all of the items
+     * @param holder   the ViewHolder to contain all of the items
      * @param position the position of the corresponding item in the list (to order the item in the RecyclerView)
      */
     @Override
@@ -82,7 +77,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.time.setText(event.getTime());
         holder.location.setText(event.getLocation());
         holder.limit.setText(event.getMemberLimit() == ChapterEvent.NO_LIMIT ? event.getAttendees().size() + "" : event.getAttendees().size() + "/" + event.getMemberLimit());
-        if(event.getPic() != null && !event.getPic().equals("")) {
+        if (event.getPic() != null && !event.getPic().equals("")) {
             ImageRotator.loadImageWrapContent(context, holder.pic, event.getPic());
         } else
             holder.pic.setVisibility(View.GONE);

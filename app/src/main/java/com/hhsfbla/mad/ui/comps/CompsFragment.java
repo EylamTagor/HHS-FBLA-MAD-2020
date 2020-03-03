@@ -2,7 +2,6 @@ package com.hhsfbla.mad.ui.comps;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 /**
  * Represents a fragment consisting of a list of all available  competitive events in FBLA as a RecyclerView
  */
-public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickListener{
+public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickListener {
 
     private RecyclerView eventRecyclerView;
     private CompsAdapter adapter;
@@ -47,8 +46,8 @@ public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickL
     /**
      * Creates and inflates a new CompsFragment with the following parameters
      *
-     * @param inflater to inflate the fragment
-     * @param container ViewGroup into which the fragment is inflated
+     * @param inflater           to inflate the fragment
+     * @param container          ViewGroup into which the fragment is inflated
      * @param savedInstanceState used to save activity regarding this fragment
      * @return the inflated fragment
      */

@@ -3,12 +3,9 @@ package com.hhsfbla.mad.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -48,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
      * with data of the existing event from the database
+     *
      * @param savedInstanceState the save state of the activity or page
      */
     @Override
@@ -98,7 +96,7 @@ public class HomeActivity extends AppCompatActivity {
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     User thisuser = documentSnapshot.toObject(User.class);
                     name.setText(thisuser.getName());
-                    if(thisuser.getPic() != null && !thisuser.getPic().equalsIgnoreCase("")) {
+                    if (thisuser.getPic() != null && !thisuser.getPic().equalsIgnoreCase("")) {
                         Picasso.get().load(Uri.parse(thisuser.getPic())).into(profileImage);
                     } else {
                         Picasso.get().load(user.getPhotoUrl()).into(profileImage);
@@ -121,6 +119,7 @@ public class HomeActivity extends AppCompatActivity {
 
     /**
      * Sets up navigation characteristics
+     *
      * @return whether navigation was successful
      */
     @Override

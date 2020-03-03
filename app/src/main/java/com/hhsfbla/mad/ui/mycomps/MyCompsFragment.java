@@ -2,7 +2,6 @@ package com.hhsfbla.mad.ui.mycomps;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +45,8 @@ public class MyCompsFragment extends Fragment implements CompsAdapter.OnItemClic
     /**
      * Creates and inflates a new MyCompsFragment with the following parameters
      *
-     * @param inflater to inflate the fragment
-     * @param container ViewGroup into which the fragment is inflated
+     * @param inflater           to inflate the fragment
+     * @param container          ViewGroup into which the fragment is inflated
      * @param savedInstanceState used to save activity regarding this fragment
      * @return the inflated fragment
      */
@@ -71,7 +70,10 @@ public class MyCompsFragment extends Fragment implements CompsAdapter.OnItemClic
         return root;
     }
 
-    private void initRecyclerView() {
+    /**
+     * Initializes the recyclerview with all the competitions the user is competing in
+     */
+    public void initRecyclerView() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {

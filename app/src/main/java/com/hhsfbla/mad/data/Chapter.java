@@ -26,6 +26,7 @@ public class Chapter {
 
     /**
      * Creates a new chapter with name as the name parameter and location as the location parameter, zero members and events
+     *
      * @param name
      * @param location
      */
@@ -38,6 +39,7 @@ public class Chapter {
 
     /**
      * Adds a member to the chapter
+     *
      * @param user the id of the new member
      */
     public void addMember(String user) {
@@ -46,6 +48,7 @@ public class Chapter {
 
     /**
      * Removes a member from the chapter
+     *
      * @param user the id of user to be removed
      */
     public void removeMember(String user) {
@@ -54,6 +57,7 @@ public class Chapter {
 
     /**
      * Adds an event to the chapter
+     *
      * @param event the event to be added
      */
     public void addEvent(ChapterEvent event) {
@@ -62,6 +66,7 @@ public class Chapter {
 
     /**
      * Removes an event from the chapter
+     *
      * @param event the event to be removed
      */
     public void removeEvent(ChapterEvent event) {
@@ -77,6 +82,7 @@ public class Chapter {
 
     /**
      * Sets the name of the chapter
+     *
      * @param name the new name
      */
     public void setName(String name) {
@@ -92,6 +98,7 @@ public class Chapter {
 
     /**
      * Sets the members of the chapter
+     *
      * @param users the new list of members
      */
     public void setUsers(ArrayList<String> users) {
@@ -107,6 +114,7 @@ public class Chapter {
 
     /**
      * Sets the events of the chapter
+     *
      * @param events the new list of events
      */
     public void setEvents(ArrayList<ChapterEvent> events) {
@@ -122,6 +130,7 @@ public class Chapter {
 
     /**
      * Sets the instagram tag of the chapter
+     *
      * @param instagramTag the new instagram tag
      */
     public void setInstagramTag(String instagramTag) {
@@ -137,6 +146,7 @@ public class Chapter {
 
     /**
      * Sets the faceboook username of the chapter
+     *
      * @param facebookPage the new facebook username
      */
     public void setFacebookPage(String facebookPage) {
@@ -152,6 +162,7 @@ public class Chapter {
 
     /**
      * Sets the description of the chapter
+     *
      * @param description the new description
      */
     public void setDescription(String description) {
@@ -167,6 +178,7 @@ public class Chapter {
 
     /**
      * Sets the location of the chapter
+     *
      * @param location the new location
      */
     public void setLocation(String location) {
@@ -182,6 +194,7 @@ public class Chapter {
 
     /**
      * Sets the chapter's website url
+     *
      * @param website the new url
      */
     public void setWebsite(String website) {

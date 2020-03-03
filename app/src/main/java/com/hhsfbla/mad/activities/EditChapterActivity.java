@@ -3,7 +3,6 @@ package com.hhsfbla.mad.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -70,7 +69,7 @@ public class EditChapterActivity extends AppCompatActivity {
      * Updates the chapter in the database with the new changes
      */
     public void saveChanges() {
-        if(chapName.getText().toString().trim().equalsIgnoreCase("")) {
+        if (chapName.getText().toString().trim().equalsIgnoreCase("")) {
             Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show();
             chapName.requestFocus();
             return;

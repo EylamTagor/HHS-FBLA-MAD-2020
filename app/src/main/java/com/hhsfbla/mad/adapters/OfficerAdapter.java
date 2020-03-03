@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,8 +14,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -43,7 +40,7 @@ public class OfficerAdapter extends RecyclerView.Adapter<OfficerAdapter.ViewHold
     /**
      * Creates a new OfficerAdapter object with the following parameters
      *
-     * @param context the Activity, Fragment, etc. hosting the RecyclerView that uses this adapter
+     * @param context  the Activity, Fragment, etc. hosting the RecyclerView that uses this adapter
      * @param officers a list of all officers (each of which is an item in this adapter)
      */
     public OfficerAdapter(List<User> officers, Context context) {
@@ -70,7 +67,7 @@ public class OfficerAdapter extends RecyclerView.Adapter<OfficerAdapter.ViewHold
     /**
      * Sets the appropriate parameters for each item according to its placement in the item list
      *
-     * @param holder the ViewHolder to contain all of the items
+     * @param holder   the ViewHolder to contain all of the items
      * @param position the position of the corresponding item in the list (to order the item in the RecyclerView)
      */
     @Override

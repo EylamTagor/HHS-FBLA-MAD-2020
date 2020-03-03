@@ -7,21 +7,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+
 import androidx.exifinterface.media.ExifInterface;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.hhsfbla.mad.R;
-import com.hhsfbla.mad.activities.HomeActivity;
-import com.hhsfbla.mad.activities.ProfileActivity;
+
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
+
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -31,6 +24,7 @@ public class ImageRotator {
 
     /**
      * Creates a new image rotator object with the context of the activity or fragment calling it
+     *
      * @param context the context of the activity or fragment that is calling this class
      */
     public ImageRotator(Context context) {
@@ -78,30 +72,14 @@ public class ImageRotator {
         return rotatedBitmap;
     }
 
+    /**
+     * Loads the given url into the given imageview in a way that the image won't be restricted by the dimensions of the imageview
+     *
+     * @param context   where the method is called from
+     * @param imageView the image view to load the url into
+     * @param url       the url of the image to load
+     */
     public static void loadImageWrapContent(Context context, final ImageView imageView, String url) {
-        Picasso.get().load(url).transform(new Transformation() {
-                    @Override
-                    public Bitmap transform(Bitmap source) {
-                        int targetWidth = imageView.getWidth();
-                        double aspectRatio = (double) source.getHeight() / (double) source.getWidth();
-                        int targetHeight = (int) (targetWidth * aspectRatio);
-                        if (targetHeight <= 0 || targetWidth <= 0) return source;
-                        Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
-                        if (result != source) {
-                            // Same bitmap is returned if sizes are the same
-                            source.recycle();
-                        }
-                        return result;
-                    }
-
-                    @Override
-                    public String key() {
-                        return "key";
-                    }
-                }).into(imageView);
-    }
-
-    public static void loadImageWrapContent(Context context, final ImageButton imageView, String url) {
         Picasso.get().load(url).transform(new Transformation() {
             @Override
             public Bitmap transform(Bitmap source) {

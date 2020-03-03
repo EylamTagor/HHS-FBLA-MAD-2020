@@ -2,7 +2,6 @@ package com.hhsfbla.mad.ui.myevents;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,7 +77,10 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
         return root;
     }
 
-    private void initRecyclerView() {
+    /**
+     * Initializes the recycler view with all the events the user is signed up for, ordered by date from most recent to least recent
+     */
+    public void initRecyclerView() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {

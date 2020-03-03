@@ -40,7 +40,7 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
      * Creates a new CompsAdapter object with the following parameters
      *
      * @param context the Activity, Fragment, etc. hosting the RecyclerView that uses this adapter
-     * @param comps a list of all existing chapters for users to pick from and join (each of which is an item in this adapter)
+     * @param comps   a list of all existing chapters for users to pick from and join (each of which is an item in this adapter)
      */
     public CompsAdapter(List<Competition> comps, Context context) {
         this.comps = comps;
@@ -52,7 +52,7 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
     /**
      * Creates and inflates a new competition item ViewHolder to be included in the corresponding RecyclerView
      *
-     * @param parent the parent ViewGroup of the ViewHolder
+     * @param parent   the parent ViewGroup of the ViewHolder
      * @param viewType the type of view, represented by numeric coding
      * @return the ViewHolder object to be used in initializing the RecyclerView
      */
@@ -66,7 +66,7 @@ public class CompsAdapter extends RecyclerView.Adapter<CompsAdapter.ViewHolder> 
     /**
      * Sets the appropriate parameters for each competition item according to its placement in the competition list
      *
-     * @param holder the ViewHolder to contain all of the competition items
+     * @param holder   the ViewHolder to contain all of the competition items
      * @param position the position of the corresponding competition item in the competition list (to order the compeititon item in the RecyclerView)
      */
     @Override

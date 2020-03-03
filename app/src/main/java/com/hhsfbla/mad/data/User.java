@@ -28,9 +28,10 @@ public class User {
 
     /**
      * Creates a new user with the given name, chapter, and email
-     * @param name the name of the user
+     *
+     * @param name    the name of the user
      * @param chapter the id of the chapter the user belogns to
-     * @param email the email of the user
+     * @param email   the email of the user
      */
     public User(String name, String chapter, String email) {
         this.name = name;
@@ -52,6 +53,7 @@ public class User {
 
     /**
      * Sets the name of the user
+     *
      * @param name the new name
      */
     public void setName(String name) {
@@ -67,6 +69,7 @@ public class User {
 
     /**
      * Sets the chapter the user belongs to
+     *
      * @param chapter the id of the new chapter
      */
     public void setChapter(String chapter) {
@@ -82,6 +85,7 @@ public class User {
 
     /**
      * Sets the type of user this is
+     *
      * @param userType the new user type
      */
     public void setUserType(UserType userType) {
@@ -97,6 +101,7 @@ public class User {
 
     /**
      * Sets the email of the user
+     *
      * @param email the new email
      */
     public void setEmail(String email) {
@@ -112,6 +117,7 @@ public class User {
 
     /**
      * Sets the list of events the user has signed up for
+     *
      * @param myEvents the new list of event ids
      */
     public void setMyEvents(ArrayList<String> myEvents) {
@@ -127,6 +133,7 @@ public class User {
 
     /**
      * Sets the blurb of the user
+     *
      * @param blurb the new blurb
      */
     public void setBlurb(String blurb) {
@@ -143,6 +150,7 @@ public class User {
 
     /**
      * Sets the phone number of the user
+     *
      * @param phoneNumber the new phone number
      */
     public void setPhoneNumber(String phoneNumber) {
@@ -158,6 +166,7 @@ public class User {
 
     /**
      * Sets the list of competitions the user is competing in
+     *
      * @param comps the new list of competition names
      */
     public void setComps(ArrayList<String> comps) {
@@ -173,6 +182,7 @@ public class User {
 
     /**
      * Sets the profile picture of the user
+     *
      * @param pic the string value of the uri of the new image
      */
     public void setPic(String pic) {
@@ -188,6 +198,7 @@ public class User {
 
     /**
      * Sets the title of the officer
+     *
      * @param officerPos the new title
      */
     public void setOfficerPos(String officerPos) {

@@ -69,7 +69,7 @@ public class SetupActivity extends AppCompatActivity {
      * and sets the current user to advisor status
      */
     public void createChapter() {
-        if(chapName.getText().toString().trim().equalsIgnoreCase("")) {
+        if (chapName.getText().toString().trim().equalsIgnoreCase("")) {
             Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show();
             chapName.requestFocus();
             return;
@@ -79,7 +79,7 @@ public class SetupActivity extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                if(doesChapterExist(queryDocumentSnapshots)) {
+                if (doesChapterExist(queryDocumentSnapshots)) {
                     return;
                 }
                 db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -88,7 +88,7 @@ public class SetupActivity extends AppCompatActivity {
                         DocumentReference ref = db.collection("chapters").document();
                         String id = ref.getId();
                         User test;
-                        if(snapshot.toObject(User.class) == null) {
+                        if (snapshot.toObject(User.class) == null) {
                             test = new User(user.getDisplayName(), id, user.getEmail());
                             test.setPic(user.getPhotoUrl().toString());
                             db.collection("users").document(user.getUid()).set(test);
@@ -117,6 +117,7 @@ public class SetupActivity extends AppCompatActivity {
 
     /**
      * Checks if the chapter that the user is creating is similar to one that already exists
+     *
      * @param queryDocumentSnapshots a list of the chapters from the database
      * @return whether the chapter exists or not
      */
@@ -126,8 +127,8 @@ public class SetupActivity extends AppCompatActivity {
         example.setFacebookPage(facebookPage.getText().toString().trim());
         example.setDescription(chapDesc.getText().toString().trim());
         example.setWebsite(website.getText().toString().trim());
-        for(Chapter chapter : queryDocumentSnapshots.toObjects(Chapter.class)) {
-            if(chapter.equals(example)) {
+        for (Chapter chapter : queryDocumentSnapshots.toObjects(Chapter.class)) {
+            if (chapter.equals(example)) {
                 progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(), "Chapter already Exists", Toast.LENGTH_LONG).show();
                 return true;

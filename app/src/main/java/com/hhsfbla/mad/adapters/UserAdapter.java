@@ -2,7 +2,6 @@ package com.hhsfbla.mad.adapters;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -118,8 +115,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> im
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<User> filteredUsers = new ArrayList<>();
-            Log.d(TAG, charSequence.toString());
-            Log.d(TAG, allItems.toString());
             if (charSequence == null || charSequence.length() == 0) {
 
                 filteredUsers.addAll(allItems);

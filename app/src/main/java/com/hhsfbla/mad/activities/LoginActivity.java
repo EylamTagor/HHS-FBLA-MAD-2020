@@ -3,7 +3,6 @@ package com.hhsfbla.mad.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -162,7 +161,6 @@ public class LoginActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 progressDialog.dismiss();
-                Log.d(TAG, e.getMessage());
                 Toast.makeText(LoginActivity.this, "Google Sign In Failed", Toast.LENGTH_SHORT).show();
             }
         }
@@ -182,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     if (document.getId().equals(mAuth.getCurrentUser().getUid()) && !document.get("chapter").equals("")) {
                         progressDialog.dismiss();
-                        updateUI();
+                        sendToHomePage();
                         return;
                     }
                 }
@@ -215,19 +213,13 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    /**
-     * Sends user to homepage
-     */
-    private void updateUI() {
+    private void sendToHomePage() {
         fuser = mAuth.getCurrentUser();
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
     }
 
-    /**
-     * Sends user to chapter signup page
-     */
     private void sendtoSignup() {
         fuser = mAuth.getCurrentUser();
         User user = new User(fuser.getDisplayName(), "", fuser.getEmail());
@@ -281,7 +273,7 @@ public class LoginActivity extends AppCompatActivity {
      *
      * @param acct the google account that was used to sign in
      */
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)

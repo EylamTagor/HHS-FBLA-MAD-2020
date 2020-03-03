@@ -59,10 +59,11 @@ public class DeleteAccountDialog extends AppCompatDialogFragment {
         super.onAttach(context);
         try {
             listener = (DeleteAccountDialog.DeleteAccountDialogListener) context;
-        } catch(ClassCastException e) {
+        } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "Implement method");
         }
     }
+
     /**
      * This interface is used to send the selection of this dialog to its attached activity
      */

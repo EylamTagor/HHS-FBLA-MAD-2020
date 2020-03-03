@@ -60,7 +60,7 @@ public class ChangeChapterDialog extends AppCompatDialogFragment {
         super.onAttach(context);
         try {
             listener = (ChangeChapterDialog.ChangeChapterDialogListener) context;
-        } catch(ClassCastException e) {
+        } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "Implement method");
         }
     }

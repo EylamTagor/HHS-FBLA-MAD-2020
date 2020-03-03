@@ -5,13 +5,10 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -39,7 +36,6 @@ import com.hhsfbla.mad.data.User;
 import com.hhsfbla.mad.dialogs.DatePicker;
 import com.hhsfbla.mad.dialogs.TimePicker;
 import com.hhsfbla.mad.utils.ImageRotator;
-import com.squareup.picasso.Picasso;
 
 /**
  * Represents a page where members and officers can join competitions,
@@ -201,7 +197,6 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                 memberLimit.setText("No Limit");
             }
         } catch (NumberFormatException e) {
-            Log.d(TAG, "editEvent: " + e.getMessage());
             if (memberLimit.getText().toString().trim().equalsIgnoreCase("") || memberLimit.getText().toString().trim().equalsIgnoreCase("no limit")) {
                 memberLimit.setText("No Limit");
             } else {
@@ -298,7 +293,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
      * @param id the name of the file
      */
     public void uploadFile(String id) {
-        if(nameEditTxt.getText().toString().trim().equalsIgnoreCase("")) {
+        if (nameEditTxt.getText().toString().trim().equalsIgnoreCase("")) {
             Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show();
             nameEditTxt.requestFocus();
             return;
@@ -335,7 +330,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         } else {
             if (!hasImageChanged && bitmap != null) {
                 Toast.makeText(this, "No Image Selected", Toast.LENGTH_SHORT).show();
-            } else if(bitmap == null && hasImageChanged) {
+            } else if (bitmap == null && hasImageChanged) {
                 storageReference.child(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

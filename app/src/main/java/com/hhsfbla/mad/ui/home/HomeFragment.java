@@ -51,8 +51,8 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
     /**
      * Creates and inflates a new HomeFragment with the following parameters
      *
-     * @param inflater to inflate the fragment
-     * @param container ViewGroup into which the fragment is inflated
+     * @param inflater           to inflate the fragment
+     * @param container          ViewGroup into which the fragment is inflated
      * @param savedInstanceState used to save activity regarding this fragment
      * @return the inflated fragment
      */
@@ -83,7 +83,10 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
         return root;
     }
 
-    private void initRecyclerView() {
+    /**
+     * Initializes the recyclerview with all the chapter's events, ordered by date from most recent to least recent
+     */
+    public void initRecyclerView() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @SuppressLint("RestrictedApi")
             @Override

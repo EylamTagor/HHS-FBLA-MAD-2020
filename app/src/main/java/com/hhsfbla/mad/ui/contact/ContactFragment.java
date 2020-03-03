@@ -29,8 +29,8 @@ public class ContactFragment extends Fragment {
     /**
      * Creates and inflates a new ContactFragment with the following parameters
      *
-     * @param inflater to inflate the fragment
-     * @param container ViewGroup into which the fragment is inflated
+     * @param inflater           to inflate the fragment
+     * @param container          ViewGroup into which the fragment is inflated
      * @param savedInstanceState used to save activity regarding this fragment
      * @return the inflated fragment
      */

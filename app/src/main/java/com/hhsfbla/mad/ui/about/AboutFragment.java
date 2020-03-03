@@ -1,16 +1,13 @@
 package com.hhsfbla.mad.ui.about;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.hhsfbla.mad.R;
 
@@ -22,8 +19,8 @@ public class AboutFragment extends Fragment {
     /**
      * Creates and inflates a new AboutFragment with the following parameters
      *
-     * @param inflater to inflate the fragment
-     * @param container ViewGroup into which the fragment is inflated
+     * @param inflater           to inflate the fragment
+     * @param container          ViewGroup into which the fragment is inflated
      * @param savedInstanceState used to save activity regarding this fragment
      * @return the inflated fragment
      */

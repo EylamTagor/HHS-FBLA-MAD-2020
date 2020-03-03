@@ -109,7 +109,10 @@ public class CalendarFragment extends Fragment implements EventAdapter.OnItemCli
         return root;
     }
 
-    private void initRecyclerView() {
+    /**
+     * Initializes the recycler view with the events from the date
+     */
+    public void initRecyclerView() {
         events.clear();
         adapter.setEvents(events);
         recyclerView.setAdapter(adapter);
@@ -139,6 +142,12 @@ public class CalendarFragment extends Fragment implements EventAdapter.OnItemCli
         }
     }
 
+    /**
+     * Sends the user to the event details page for the event clicked
+     *
+     * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
+     * @param position the numbered position of snapshot in the full item list
+     */
     @Override
     public void onItemClick(DocumentSnapshot snapshot, int position) {
         Intent intent = new Intent(getContext(), EventPageActivity.class);
@@ -147,17 +156,29 @@ public class CalendarFragment extends Fragment implements EventAdapter.OnItemCli
         getContext().startActivity(intent);
     }
 
+    /**
+     * Creates a menu with a button for users to hide or show the calendar
+     *
+     * @param menu     the menu to add to the layout
+     * @param inflater the menu inflater of the corresponding activity
+     */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.home, menu);
     }
 
+    /**
+     * Called when a button from the toolbar is clicked, checks which button is clicked and acts accordingly
+     *
+     * @param item the menu item that was clicked
+     * @return whether an item was clicked or not
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_hide_calendar:
-                if(calendar.getVisibility() == View.VISIBLE) {
+                if (calendar.getVisibility() == View.VISIBLE) {
                     calendar.setVisibility(View.GONE);
                 } else {
                     calendar.setVisibility(View.VISIBLE);

@@ -64,8 +64,8 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
     /**
      * Creates and inflates a new MyChapterFragment with the following parameters
      *
-     * @param inflater to inflate the fragment
-     * @param container ViewGroup into which the fragment is inflated
+     * @param inflater           to inflate the fragment
+     * @param container          ViewGroup into which the fragment is inflated
      * @param savedInstanceState used to save activity regarding this fragment
      * @return the inflated fragment
      */
@@ -108,7 +108,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
                 if (currentUSer.getUserType() == UserType.ADVISOR) {
                     isAdvisor = true;
                 }
-                if(currentUSer.getUserType() != UserType.MEMBER) {
+                if (currentUSer.getUserType() != UserType.MEMBER) {
                     editChapter.setVisibility(View.VISIBLE);
                 }
                 db.collection("chapters").document(currentUSer.getChapter()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -172,7 +172,10 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
         return root;
     }
 
-    private void initRecyclerView() {
+    /**
+     * Initializes the recylerview with all the users from that chapter, ordered alphabetically by name
+     */
+    public void initRecyclerView() {
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -224,7 +227,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
      * Handles any clicking action done inside this fragment
      *
      * @param snapshot the object pulled from Firebase Firestore, formatted as a DocumentSnapshot
-     * @param v the View that will contain the click action
+     * @param v        the View that will contain the click action
      * @param position the numbered position of snapshot in the full item list
      */
     @Override
@@ -246,7 +249,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
                     promoteUser(snapshot, thisuser);
                     return true;
                 } else if (menuItem.getItemId() == R.id.demoteButton) {
-                    if(thisuser.getUserType() != UserType.ADVISOR) {
+                    if (thisuser.getUserType() != UserType.ADVISOR) {
                         progressDialog.setMessage("Demoting...");
                         progressDialog.show();
                         demoteUser(snapshot, thisuser);
@@ -255,7 +258,7 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
                     db.collection("users").whereEqualTo("chapter", thisuser.getChapter()).whereEqualTo("userType", UserType.ADVISOR).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            if(queryDocumentSnapshots != null && queryDocumentSnapshots.size() > 1) {
+                            if (queryDocumentSnapshots != null && queryDocumentSnapshots.size() > 1) {
                                 progressDialog.setMessage("Demoting...");
                                 progressDialog.show();
                                 demoteUser(snapshot, thisuser);

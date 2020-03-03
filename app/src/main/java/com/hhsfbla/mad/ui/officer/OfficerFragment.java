@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Represents a fragment that consists of a list of all of the user's chapter's officers with details
  */
-public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemClickListener{
+public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemClickListener {
 
     private RecyclerView officerRecyclerView;
     private OfficerAdapter adapter;
@@ -44,8 +44,8 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
     /**
      * Creates and inflates a new AboutFragment with the following parameters
      *
-     * @param inflater to inflate the fragment
-     * @param container ViewGroup into which the fragment is inflated
+     * @param inflater           to inflate the fragment
+     * @param container          ViewGroup into which the fragment is inflated
      * @param savedInstanceState used to save activity regarding this fragment
      * @return the inflated fragment
      */
@@ -70,7 +70,10 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
         return root;
     }
 
-    private void initRecyclerView() {
+    /**
+     * Initializes the recyclerview with all the officers from this users chapter, ordered by name alphabetically
+     */
+    public void initRecyclerView() {
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -82,7 +85,7 @@ public class OfficerFragment extends Fragment implements OfficerAdapter.OnItemCl
                         officers.addAll(queryDocumentSnapshots.toObjects(User.class));
                         adapter.notifyDataSetChanged();
                         adapter.setOfficers(officers);
-                        if(officers.isEmpty()) {
+                        if (officers.isEmpty()) {
                             noOfficersYet.setVisibility(View.VISIBLE);
                         } else {
                             noOfficersYet.setVisibility(View.GONE);
