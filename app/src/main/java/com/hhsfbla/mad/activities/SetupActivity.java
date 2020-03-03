@@ -69,6 +69,11 @@ public class SetupActivity extends AppCompatActivity {
      * and sets the current user to advisor status
      */
     public void createChapter() {
+        if(chapName.getText().toString().trim().equalsIgnoreCase("")) {
+            Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show();
+            chapName.requestFocus();
+            return;
+        }
         progressDialog.show();
         db.collection("chapters").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override

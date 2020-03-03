@@ -298,6 +298,11 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
      * @param id the name of the file
      */
     public void uploadFile(String id) {
+        if(nameEditTxt.getText().toString().trim().equalsIgnoreCase("")) {
+            Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show();
+            nameEditTxt.requestFocus();
+            return;
+        }
         if (hasImageChanged && bitmap != null) {
             progressDialog.setMessage("Uploading...");
             progressDialog.show();

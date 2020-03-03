@@ -333,6 +333,11 @@ public class ProfileActivity extends AppCompatActivity implements DeleteAccountD
      * @param id the name of the file
      */
     public void uploadFile(String id) {
+        if(name.getText().toString().trim().equalsIgnoreCase("")) {
+            Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show();
+            name.requestFocus();
+            return;
+        }
         if (hasImageChanged && bitmap != null) {
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
