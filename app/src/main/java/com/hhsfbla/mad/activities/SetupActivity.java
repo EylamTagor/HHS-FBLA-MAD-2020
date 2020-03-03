@@ -3,7 +3,6 @@ package com.hhsfbla.mad.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -42,6 +41,7 @@ public class SetupActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private static final String TAG = "Setup Activity";
     private StorageReference storageReference;
+
     /**
      * Creates the page and initializes all page components, such as textviews, image views, buttons, and dialogs,
      *
@@ -109,11 +109,19 @@ public class SetupActivity extends AppCompatActivity {
                                 progressDialog.dismiss();
                                 startActivity(new Intent(SetupActivity.this, HomeActivity.class));
                                 String isChangingChapter = getIntent().getStringExtra("CHANGE_CHAPTER");
-                                if(isChangingChapter == null || isChangingChapter.equalsIgnoreCase("")) {
-                                    Log.d(TAG, "onSuccess: hello");
-                                    db.collection("users").document(user.getUid()).update("chapter", id);
-                                    db.collection("users").document(user.getUid()).update("userType", UserType.ADVISOR);
-                                    startActivity(new Intent(SetupActivity.this, HomeActivity.class));
+                                if (isChangingChapter == null || isChangingChapter.equalsIgnoreCase("")) {
+                                    db.collection("users").document(user.getUid()).update("chapter", id).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            db.collection("users").document(user.getUid()).update("userType", UserType.ADVISOR).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    startActivity(new Intent(SetupActivity.this, HomeActivity.class));
+                                                }
+                                            });
+                                        }
+                                    });
+
                                 } else {
                                     changeChapter(id);
                                 }
@@ -154,7 +162,6 @@ public class SetupActivity extends AppCompatActivity {
      * @param id the id of the chapter selected
      */
     public void changeChapter(final String id) {
-        Log.d(TAG, "changeChapter: hello");
         final DocumentReference userRef = db.collection("users").document(user.getUid());
         userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
