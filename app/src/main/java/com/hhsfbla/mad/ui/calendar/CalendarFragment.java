@@ -25,9 +25,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.EventPageActivity;
+import com.hhsfbla.mad.activities.HomeActivity;
 import com.hhsfbla.mad.adapters.EventAdapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.data.UserType;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -122,6 +124,11 @@ public class CalendarFragment extends Fragment implements EventAdapter.OnItemCli
                 @Override
                 public void onSuccess(final DocumentSnapshot documentSnapshot) {
                     User currentUser = documentSnapshot.toObject(User.class);
+
+                    if (currentUser.getUserType().equals(UserType.ADVISOR))
+                        ((HomeActivity) getContext()).hideMyCompsItem();
+                    else
+                        ((HomeActivity) getContext()).showMyCompsItem();
 
                     db.collection("chapters").document(currentUser.getChapter()).collection("events").whereEqualTo("date", date).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override

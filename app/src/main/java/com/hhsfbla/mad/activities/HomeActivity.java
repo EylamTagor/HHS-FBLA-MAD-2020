@@ -3,6 +3,8 @@ package com.hhsfbla.mad.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.data.UserType;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -39,6 +42,8 @@ public class HomeActivity extends AppCompatActivity {
     private TextView name;
     private TextView email;
     private FirebaseFirestore db;
+
+    private NavigationView navigationView;
 
     private static final String TAG = "DASHBOARD";
 
@@ -60,7 +65,7 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_my_events, R.id.nav_calendar,
@@ -75,6 +80,9 @@ public class HomeActivity extends AppCompatActivity {
 
         if (getIntent().getStringExtra("fragmentToLoad") != null && getIntent().getStringExtra("fragmentToLoad").equals("CompsFragment"))
             navController.navigate(R.id.comps_action);
+
+        if (getIntent().getStringExtra("fragmentToLoad") != null && getIntent().getStringExtra("fragmentToLoad").equals("MyCompsFragment"))
+            navController.navigate(R.id.mycomps_action);
 
         if (getIntent().getStringExtra("fragmentToLoad") != null && getIntent().getStringExtra("fragmentToLoad").equals("CalendarFragment"))
             navController.navigate(R.id.calendar_action);
@@ -94,10 +102,14 @@ public class HomeActivity extends AppCompatActivity {
             db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    User thisuser = documentSnapshot.toObject(User.class);
-                    name.setText(thisuser.getName());
-                    if (thisuser.getPic() != null && !thisuser.getPic().equalsIgnoreCase("")) {
-                        Picasso.get().load(Uri.parse(thisuser.getPic())).into(profileImage);
+                    User thisUser = documentSnapshot.toObject(User.class);
+                    if (thisUser.getUserType().equals(UserType.ADVISOR))
+                        hideMyCompsItem();
+                    else
+                        showMyCompsItem();
+                    name.setText(thisUser.getName());
+                    if (thisUser.getPic() != null && !thisUser.getPic().equalsIgnoreCase("")) {
+                        Picasso.get().load(Uri.parse(thisUser.getPic())).into(profileImage);
                     } else {
                         Picasso.get().load(user.getPhotoUrl()).into(profileImage);
                     }
@@ -114,7 +126,6 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
             }
         });
-
     }
 
     /**
@@ -127,5 +138,21 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    /**
+     * Hides the MyComps drawer menu item, since advisors do not need it
+     */
+    public void hideMyCompsItem() {
+        Menu menu = navigationView.getMenu();
+        menu.findItem(R.id.nav_mycomps).setVisible(false);
+    }
+
+    /**
+     * Shows the MyComps drawer menu item, since members and officers do need it
+     */
+    public void showMyCompsItem() {
+        Menu menu = navigationView.getMenu();
+        menu.findItem(R.id.nav_mycomps).setVisible(true);
     }
 }
