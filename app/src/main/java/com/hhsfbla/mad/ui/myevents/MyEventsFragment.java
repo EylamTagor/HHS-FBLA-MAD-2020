@@ -22,9 +22,11 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.EventPageActivity;
+import com.hhsfbla.mad.activities.HomeActivity;
 import com.hhsfbla.mad.adapters.EventAdapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.data.UserType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +87,10 @@ public class MyEventsFragment extends Fragment implements EventAdapter.OnItemCli
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 final User currentUser = documentSnapshot.toObject(User.class);
+                if (documentSnapshot.toObject(User.class).getUserType() == UserType.ADVISOR)
+                    ((HomeActivity) getContext()).hideMyCompsItem();
+                else
+                    ((HomeActivity) getContext()).showMyCompsItem();
                 db.collection("chapters").document(currentUser.getChapter()).collection("events").whereArrayContains("attendees", user.getUid()).orderBy("priority", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

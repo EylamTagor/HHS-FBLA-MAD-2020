@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.AddEventActivity;
 import com.hhsfbla.mad.activities.EventPageActivity;
+import com.hhsfbla.mad.activities.HomeActivity;
 import com.hhsfbla.mad.adapters.EventAdapter;
 import com.hhsfbla.mad.data.ChapterEvent;
 import com.hhsfbla.mad.data.User;
@@ -92,9 +93,14 @@ public class HomeFragment extends Fragment implements EventAdapter.OnItemClickLi
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currentUser = documentSnapshot.toObject(User.class);
-                if (currentUser.getUserType() != UserType.MEMBER) {
+                if (currentUser.getUserType() != UserType.MEMBER)
                     fab.setVisibility(View.VISIBLE);
-                }
+
+                if (currentUser.getUserType() == UserType.ADVISOR)
+                    ((HomeActivity) getContext()).hideMyCompsItem();
+                else
+                    ((HomeActivity) getContext()).showMyCompsItem();
+
                 db.collection("chapters").document(currentUser.getChapter()).collection("events").orderBy("priority", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

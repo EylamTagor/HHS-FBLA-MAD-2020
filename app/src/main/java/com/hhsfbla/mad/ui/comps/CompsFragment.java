@@ -21,8 +21,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.CompDetailActivity;
+import com.hhsfbla.mad.activities.HomeActivity;
 import com.hhsfbla.mad.adapters.CompsAdapter;
 import com.hhsfbla.mad.data.Competition;
+import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.data.UserType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +79,16 @@ public class CompsFragment extends Fragment implements CompsAdapter.OnItemClickL
             }
         });
 
+
+        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.toObject(User.class).getUserType() == UserType.ADVISOR)
+                    ((HomeActivity) getContext()).hideMyCompsItem();
+                else
+                    ((HomeActivity) getContext()).showMyCompsItem();
+            }
+        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

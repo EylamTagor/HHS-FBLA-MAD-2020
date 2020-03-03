@@ -16,7 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.activities.HomeActivity;
+import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.data.UserType;
 
 /**
  * Represents a fragment consisting of various links to contact FBLA and report issues
@@ -40,6 +47,17 @@ public class ContactFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_contact, container, false);
         getActivity().setTitle("Contact Us");
+
+        FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.toObject(User.class).getUserType() == UserType.ADVISOR)
+                    ((HomeActivity) getContext()).hideMyCompsItem();
+                else
+                    ((HomeActivity) getContext()).showMyCompsItem();
+
+            }
+        });
 
         fblaLink = root.findViewById(R.id.fblaWebLinkTxtView);
         facebook = root.findViewById(R.id.facebookButton);

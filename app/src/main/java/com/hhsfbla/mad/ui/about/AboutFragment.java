@@ -9,7 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hhsfbla.mad.R;
+import com.hhsfbla.mad.activities.HomeActivity;
+import com.hhsfbla.mad.data.User;
+import com.hhsfbla.mad.data.UserType;
 
 /**
  * Represents the About FBLA page, including a mission statement and core values
@@ -28,6 +35,17 @@ public class AboutFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         getActivity().setTitle("About FBLA");
+
+        FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.toObject(User.class).getUserType() == UserType.ADVISOR)
+                    ((HomeActivity) getContext()).hideMyCompsItem();
+                else
+                    ((HomeActivity) getContext()).showMyCompsItem();
+            }
+        });
+
         return inflater.inflate(R.layout.fragment_about, container, false);
     }
 

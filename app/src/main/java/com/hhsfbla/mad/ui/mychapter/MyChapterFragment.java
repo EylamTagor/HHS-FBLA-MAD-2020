@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hhsfbla.mad.R;
 import com.hhsfbla.mad.activities.EditChapterActivity;
+import com.hhsfbla.mad.activities.HomeActivity;
 import com.hhsfbla.mad.adapters.UserAdapter;
 import com.hhsfbla.mad.data.Chapter;
 import com.hhsfbla.mad.data.User;
@@ -180,6 +181,11 @@ public class MyChapterFragment extends Fragment implements UserAdapter.OnItemCli
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.toObject(User.class).getUserType() == UserType.ADVISOR)
+                    ((HomeActivity) getContext()).hideMyCompsItem();
+                else
+                    ((HomeActivity) getContext()).showMyCompsItem();
+
                 final String chap = documentSnapshot.get("chapter").toString();
                 db.collection("users").whereEqualTo("chapter", chap).orderBy("name").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
